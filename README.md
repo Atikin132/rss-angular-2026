@@ -11,7 +11,7 @@ NovaKrama is a modern full-featured e-commerce web application built with Angula
 
 The platform allows users to browse products, search and filter catalog items, manage a shopping cart, apply promo codes, create personal accounts, and place orders through a responsive and user-friendly interface.
 
-### Состав команды:
+### Team members:
 
 
 * Mikita [Atikin132](https://github.com/Atikin132) 
