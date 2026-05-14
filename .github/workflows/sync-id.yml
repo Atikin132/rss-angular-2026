@@ -1,0 +1,30 @@
+name: Add RSA Label
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  add-label:
+    runs-on: ubuntu-latest
+
+    permissions:
+      issues: write
+
+    steps:
+      - name: Add RSA label to issue
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          ISSUE_NUMBER: ${{ github.event.issue.number }}
+          REPO: ${{ github.repository }}
+        run: |
+          LABEL="RSA-$ISSUE_NUMBER"
+
+          gh label create "$LABEL" \
+            --repo "$REPO" \
+            --color "0052cc" \
+            --description "Auto-generated RSA identifier" || true
+
+          gh issue edit "$ISSUE_NUMBER" \
+            --add-label "$LABEL" \
+            --repo "$REPO"
