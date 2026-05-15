@@ -5,6 +5,7 @@ import { LoginPage } from './pages/login.page/login.page';
 import { RegisterPage } from './pages/register.page/register.page';
 import { UnknownPage } from './pages/unknown.page/unknown.page';
 import { MainPage } from './pages/main.page/main.page';
+import { CatalogPage } from './pages/catalog.page/catalog.page';
 
 export const routes: Routes = [
   {
@@ -14,6 +15,10 @@ export const routes: Routes = [
       {
         path: '',
         component: MainPage,
+      },
+      {
+        path: 'catalog',
+        component: CatalogPage,
       },
     ],
   },
