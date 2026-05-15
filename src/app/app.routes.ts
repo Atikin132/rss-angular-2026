@@ -6,6 +6,7 @@ import { RegisterPage } from './pages/register.page/register.page';
 import { UnknownPage } from './pages/unknown.page/unknown.page';
 import { MainPage } from './pages/main.page/main.page';
 import { CatalogPage } from './pages/catalog.page/catalog.page';
+import { ProductDetailsPage } from './pages/product-details.page/product-details.page';
 
 export const routes: Routes = [
   {
@@ -19,6 +20,10 @@ export const routes: Routes = [
       {
         path: 'catalog',
         component: CatalogPage,
+      },
+      {
+        path: 'catalog/product/:id',
+        component: ProductDetailsPage,
       },
     ],
   },
