@@ -4,11 +4,18 @@ import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component
 import { LoginPage } from './pages/login.page/login.page';
 import { RegisterPage } from './pages/register.page/register.page';
 import { UnknownPage } from './pages/unknown.page/unknown.page';
+import { MainPage } from './pages/main.page/main.page';
 
 export const routes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
+    children: [
+      {
+        path: '',
+        component: MainPage,
+      },
+    ],
   },
   {
     path: '',
