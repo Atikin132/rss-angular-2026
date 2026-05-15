@@ -1,0 +1,16 @@
+.footer {
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.year,
+.github-link {
+  display: flex;
+  align-items: center;
+}
+
+.github-link {
+  text-decoration: none;
+}
