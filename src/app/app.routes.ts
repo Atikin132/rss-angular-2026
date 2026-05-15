@@ -9,6 +9,7 @@ import { CatalogPage } from './pages/catalog.page/catalog.page';
 import { ProductDetailsPage } from './pages/product-details.page/product-details.page';
 import { CartPage } from './pages/cart.page/cart.page';
 import { ProfilePage } from './pages/profile.page/profile.page';
+import { AboutPage } from './pages/about.page/about.page';
 
 export const routes: Routes = [
   {
@@ -34,6 +35,10 @@ export const routes: Routes = [
       {
         path: 'profile',
         component: ProfilePage,
+      },
+      {
+        path: 'about',
+        component: AboutPage,
       },
     ],
   },
