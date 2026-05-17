@@ -5,12 +5,20 @@
 .toolbar {
   display: flex;
   justify-content: space-between;
+  gap: 1rem;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .nav-list {
   display: flex;
   list-style: none;
   gap: 0.5rem;
+  padding: 0;
 }
 
 .link {

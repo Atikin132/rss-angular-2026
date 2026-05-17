@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, output } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -11,6 +11,8 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
   styleUrl: './header.scss',
 })
 export class Header {
+  logout = output<void>();
+
   navItems = [
     {
       label: 'Main',
@@ -38,4 +40,8 @@ export class Header {
       route: '/about',
     },
   ];
+
+  onLogout(): void {
+    this.logout.emit();
+  }
 }
