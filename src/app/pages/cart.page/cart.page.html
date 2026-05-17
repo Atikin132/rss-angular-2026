@@ -1,1 +1,8 @@
-<p>cart.page works!</p>
+<section class="cart-page">
+  <app-cart-list
+    [items]="cartItems"
+    (increase)="onIncrease($event)"
+    (decrease)="onDecrease($event)"
+    (remove)="onRemove($event)"
+  />
+</section>
