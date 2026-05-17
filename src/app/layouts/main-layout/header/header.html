@@ -1,13 +1,29 @@
 <header class="header">
-  <h2>NovaKrama</h2>
+  <mat-toolbar class="toolbar">
+    <div class="app-name">NovaKrama</div>
 
-  <nav>
-    <ul class="nav-list">
-      <li><a routerLink="/">Main</a></li>
-      <li><a routerLink="/catalog">Catalog</a></li>
-      <li><a routerLink="/cart">Cart</a></li>
-      <li><a routerLink="/profile">Profile</a></li>
-      <li><a routerLink="/about">About</a></li>
-    </ul>
-  </nav>
+    <nav>
+      <ul class="nav-list">
+        @for (item of navItems; track item.route) {
+          <li>
+            <a
+              class="link"
+              mat-button
+              [routerLink]="item.route"
+              routerLinkActive="active-link"
+              [routerLinkActiveOptions]="{ exact: true }"
+            >
+              <mat-icon>
+                {{ item.icon }}
+              </mat-icon>
+
+              <span>
+                {{ item.label }}
+              </span>
+            </a>
+          </li>
+        }
+      </ul>
+    </nav>
+  </mat-toolbar>
 </header>
