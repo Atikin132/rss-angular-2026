@@ -43,7 +43,7 @@ nav {
   .nav {
     position: absolute;
     top: 100%;
-    right: 10px;
+    right: 20px;
     background: var(--mat-sys-surface);
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
     border-radius: 20px;
@@ -53,6 +53,7 @@ nav {
     transform: scaleY(0);
     transform-origin: top;
     transition: 0.3s ease;
+    z-index: 100;
   }
 
   .nav.open {

@@ -3,10 +3,18 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive } from '@angular/router';
+import { CartBadgeComponent } from '../../../features/cart/components/cart-badge.component/cart-badge.component';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, RouterLinkActive, MatToolbarModule, MatButtonModule, MatIconModule],
+  imports: [
+    RouterLink,
+    RouterLinkActive,
+    MatToolbarModule,
+    MatButtonModule,
+    MatIconModule,
+    CartBadgeComponent,
+  ],
   templateUrl: './header.html',
   styleUrl: './header.scss',
 })
@@ -25,26 +33,29 @@ export class Header {
 
   navItems = [
     {
+      type: 'link',
       label: 'Main',
       icon: 'home',
       route: '/',
     },
     {
+      type: 'link',
       label: 'Catalog',
       icon: 'menu_book',
       route: '/catalog',
     },
     {
-      label: 'Cart',
-      icon: 'shopping_cart',
+      type: 'cart',
       route: '/cart',
     },
     {
+      type: 'link',
       label: 'Profile',
       icon: 'person',
       route: '/profile',
     },
     {
+      type: 'link',
       label: 'About',
       icon: 'info',
       route: '/about',

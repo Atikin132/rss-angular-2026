@@ -12,22 +12,29 @@
       <ul class="nav-list">
         @for (item of navItems; track item.route) {
           <li>
-            <a
-              class="link"
-              mat-button
-              [routerLink]="item.route"
-              routerLinkActive="active-link"
-              [routerLinkActiveOptions]="{ exact: true }"
-              (click)="closeMenu()"
-            >
-              <mat-icon>
-                {{ item.icon }}
-              </mat-icon>
+            @switch (item.type) {
+              @case ('link') {
+                <a
+                  class="link"
+                  mat-button
+                  [routerLink]="item.route"
+                  routerLinkActive="active-link"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="closeMenu()"
+                >
+                  <mat-icon>
+                    {{ item.icon }}
+                  </mat-icon>
 
-              <span class="link-text">
-                {{ item.label }}
-              </span>
-            </a>
+                  <span class="link-text">
+                    {{ item.label }}
+                  </span>
+                </a>
+              }
+              @case ('cart') {
+                <app-cart-badge [count]="3" (click)="closeMenu()"> </app-cart-badge>
+              }
+            }
           </li>
         }
         <li>

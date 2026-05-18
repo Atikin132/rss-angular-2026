@@ -1,3 +1,12 @@
-<a routerLink="/cart" class="cart-badge" [matBadge]="count()" matBadgeColor="primary">
+<a
+  routerLink="/cart"
+  mat-button
+  class="cart-badge"
+  [matBadge]="count()"
+  matBadgeColor="primary"
+  routerLinkActive="active-link"
+  [routerLinkActiveOptions]="{ exact: true }"
+>
   <mat-icon>shopping_cart</mat-icon>
+  <span> Сart </span>
 </a>
