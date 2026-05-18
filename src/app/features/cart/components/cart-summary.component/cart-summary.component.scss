@@ -1,0 +1,12 @@
+.cart-summary {
+  padding: 24px;
+  border-radius: 16px;
+  background: #f5f5f5;
+
+  &__row {
+    display: flex;
+    justify-content: space-between;
+
+    margin-top: 16px;
+  }
+}
