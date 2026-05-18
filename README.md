@@ -13,9 +13,12 @@ The platform allows users to browse products, search and filter catalog items, m
 
 ## Team members
 
-* Mikita [Atikin132](https://github.com/Atikin132) 
-* Artur [agtugchik](https://github.com/agtugchik)
-* Oleg [KostevOleg](https://github.com/KostevOleg)
+* Mikita [Atikin132](https://github.com/Atikin132) - [notes](https://github.com/Atikin132/rss-angular-2026/tree/main/development-notes/Atikin132)
+* Artur [agtugchik](https://github.com/agtugchik) - [notes](https://github.com/Atikin132/rss-angular-2026/tree/main/development-notes/agtugchik)
+* Oleg [KostevOleg](https://github.com/KostevOleg) - [notes](https://github.com/Atikin132/rss-angular-2026/tree/main/development-notes/KostevOleg)
+
+## Meeting Notes
+- [Meeting — 2026-05-16](https://github.com/Atikin132/rss-angular-2026/blob/main/meetings-notes/meeting-2026-05-16.md)
 
 ## Tech stack
 
