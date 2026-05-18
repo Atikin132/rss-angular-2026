@@ -17,16 +17,19 @@
                 {{ item.icon }}
               </mat-icon>
 
-              <span>
+              <span class="link-text">
                 {{ item.label }}
               </span>
             </a>
           </li>
         }
+        <li>
+          <button mat-button (click)="onLogout()">
+            <mat-icon>logout</mat-icon>
+            <span class="link-text">Logout</span>
+          </button>
+        </li>
       </ul>
-      <button mat-icon-button (click)="onLogout()">
-        <mat-icon>logout</mat-icon>
-      </button>
     </nav>
   </mat-toolbar>
 </header>
