@@ -1,4 +1,4 @@
-import { Component, output } from '@angular/core';
+import { Component, HostListener, output, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -12,6 +12,16 @@ import { RouterLink, RouterLinkActive } from '@angular/router';
 })
 export class Header {
   logout = output<void>();
+
+  isMenuOpen = signal<boolean>(false);
+
+  toggleMenu(): void {
+    this.isMenuOpen.update((v) => !v);
+  }
+
+  closeMenu(): void {
+    this.isMenuOpen.set(false);
+  }
 
   navItems = [
     {
@@ -43,5 +53,15 @@ export class Header {
 
   onLogout(): void {
     this.logout.emit();
+    this.closeMenu();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    const target = event.target as HTMLElement;
+
+    if (!target.closest('.toolbar')) {
+      this.closeMenu();
+    }
   }
 }
