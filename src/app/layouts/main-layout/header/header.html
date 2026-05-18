@@ -1,0 +1,49 @@
+<header class="header">
+  <mat-toolbar class="toolbar">
+    <div class="app-name">NovaKrama</div>
+
+    <button class="burger" mat-icon-button (click)="toggleMenu()">
+      <mat-icon>
+        {{ isMenuOpen() ? 'close' : 'menu' }}
+      </mat-icon>
+    </button>
+
+    <nav class="nav" [class.open]="isMenuOpen()">
+      <ul class="nav-list">
+        @for (item of navItems; track item.route) {
+          <li>
+            @switch (item.type) {
+              @case ('link') {
+                <a
+                  class="link"
+                  mat-button
+                  [routerLink]="item.route"
+                  routerLinkActive="active-link"
+                  [routerLinkActiveOptions]="{ exact: true }"
+                  (click)="closeMenu()"
+                >
+                  <mat-icon>
+                    {{ item.icon }}
+                  </mat-icon>
+
+                  <span class="link-text">
+                    {{ item.label }}
+                  </span>
+                </a>
+              }
+              @case ('cart') {
+                <app-cart-badge [count]="3" (click)="closeMenu()"> </app-cart-badge>
+              }
+            }
+          </li>
+        }
+        <li>
+          <button mat-button (click)="onLogout()">
+            <mat-icon>logout</mat-icon>
+            <span class="link-text">Logout</span>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </mat-toolbar>
+</header>
