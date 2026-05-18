@@ -1,0 +1,43 @@
+.cart-item {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+
+  &__image {
+    width: 180px;
+    height: 180px;
+    object-fit: cover;
+    border-radius: 12px;
+  }
+
+  &__content {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    gap: 16px;
+  }
+
+  &__info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  &__price {
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  &__actions {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: flex-end;
+  }
+
+  &__quantity {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+}

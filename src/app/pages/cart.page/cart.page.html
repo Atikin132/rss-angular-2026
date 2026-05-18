@@ -1,1 +1,17 @@
-<p>cart.page works!</p>
+<section class="cart-page">
+  @if (cartItems.length) {
+    <div class="cart-page__content">
+      <app-cart-list
+        class="cart-page__list"
+        [items]="cartItems"
+        (increase)="onIncrease($event)"
+        (decrease)="onDecrease($event)"
+        (remove)="onRemove($event)"
+      />
+
+      <app-cart-summary class="cart-page__summary" [items]="cartItems" />
+    </div>
+  } @else {
+    <app-empty-cart />
+  }
+</section>

@@ -1,0 +1,10 @@
+<div class="cart-list">
+  @for (item of items(); track item.id) {
+    <app-cart-item
+      [item]="item"
+      (increase)="onIncrease($event)"
+      (decrease)="onDecrease($event)"
+      (remove)="onRemove($event)"
+    />
+  }
+</div>
