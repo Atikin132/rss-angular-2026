@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { CartListComponent } from '../../features/cart/components/cart-list.component/cart-list.component';
-import { CartSummaryComponent } from '../../features/cart/components/cart-summary.component/cart-summary.component';
-import { EmptyCartComponent } from '../../features/cart/components/empty-cart.component/empty-cart.component';
-import { MOCK_CART_ITEMS } from '../../features/cart/mock/mock-cart-items';
+import { CartListComponent } from '../components/cart-list.component/cart-list.component';
+import { CartSummaryComponent } from '../components/cart-summary.component/cart-summary.component';
+import { EmptyCartComponent } from '../components/empty-cart.component/empty-cart.component';
+import { MOCK_CART_ITEMS } from '../mock/mock-cart-items';
 
 @Component({
   selector: 'app-cart.page',
