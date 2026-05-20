@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, input, output } from '@angular/core';
-import { CartItem } from '../../interfaces/cart-item.interface';
 import { CartItemComponent } from '../cart-item.component/cart-item.component';
+import { CartItem } from '../interfaces/cart-item.interface';
 
 @Component({
   selector: 'app-cart-list',
