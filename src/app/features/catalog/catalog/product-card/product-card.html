@@ -1,0 +1,68 @@
+<div class="card" [routerLink]="['product', product().slug]">
+  <img class="poster" [src]="product().image" [alt]="product().name" />
+
+  <div class="card-info">
+    <div class="info">
+      <h3 class="product-name">{{ product().name }}</h3>
+
+      <div class="price-block">
+        <span class="price">
+          {{ product().discountedPrice ?? product().price | price: product().currency }}
+        </span>
+
+        @if (product().discountedPrice) {
+          <span class="old-price">
+            {{ product().price | price: product().currency }}
+          </span>
+        }
+      </div>
+    </div>
+
+    <button
+      mat-flat-button
+      class="add-to-cart-btn"
+      [class.added]="addedToCart()"
+      [class.remove]="addedToCart() && hovered()"
+      (click)="toggleCart($event)"
+      (mouseenter)="hovered.set(true)"
+      (mouseleave)="hovered.set(false)"
+    >
+      <mat-icon>
+        @if (addedToCart() && hovered()) {
+          remove_shopping_cart
+        } @else if (addedToCart()) {
+          check
+        } @else {
+          add_shopping_cart
+        }
+      </mat-icon>
+
+      @if (addedToCart() && hovered()) {
+        Remove
+      } @else if (addedToCart()) {
+        In Cart
+      } @else {
+        Add to Cart
+      }
+    </button>
+  </div>
+  <button
+    mat-icon-button
+    class="wishlist-btn"
+    [class.active]="isFavorite()"
+    (click)="toggleFavorite($event)"
+  >
+    <mat-icon>
+      {{ isFavorite() ? 'favorite' : 'favorite_border' }}
+    </mat-icon>
+  </button>
+
+  <button
+    mat-icon-button
+    class="compare-btn"
+    [class.active]="isCompared()"
+    (click)="toggleCompare($event)"
+  >
+    <mat-icon>balance</mat-icon>
+  </button>
+</div>

@@ -1,1 +1,5 @@
-<p>catalog.page works!</p>
+<div class="products-grid">
+  @for (product of products(); track product.id) {
+    <app-product-card [product]="product" />
+  }
+</div>
