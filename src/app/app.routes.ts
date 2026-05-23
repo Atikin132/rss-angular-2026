@@ -1,15 +1,15 @@
 import { Routes } from '@angular/router';
-import { MainLayoutComponent } from './layouts/main-layout/main-layout.component/main-layout.component';
-import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component/auth-layout.component';
-import { LoginPage } from './pages/login.page/login.page';
-import { RegisterPage } from './pages/register.page/register.page';
-import { UnknownPage } from './pages/unknown.page/unknown.page';
-import { MainPage } from './pages/main.page/main.page';
-import { CatalogPage } from './pages/catalog.page/catalog.page';
-import { ProductDetailsPage } from './pages/product-details.page/product-details.page';
-import { CartPage } from './pages/cart.page/cart.page';
-import { ProfilePage } from './pages/profile.page/profile.page';
-import { AboutPage } from './pages/about.page/about.page';
+import { MainLayoutComponent } from './core/layouts/main-layout/main-layout.component/main-layout.component';
+import { MainPage } from './features/main/page/main.page';
+import { CatalogPage } from './features/catalog/catalog/page/catalog.page';
+import { ProductDetailsPage } from './features/catalog/product-details/page/product-details.page';
+import { ProfilePage } from './features/profile/page/profile.page';
+import { AboutPage } from './features/about/page/about.page';
+import { AuthLayoutComponent } from './core/layouts/auth-layout/auth-layout.component/auth-layout.component';
+import { LoginPage } from './features/auth/login/page/login.page';
+import { RegisterPage } from './features/auth/register/page/register.page';
+import { UnknownPage } from './features/wildcard-route/page/unknown.page';
+import { CartPage } from './features/cart/cart.page';
 
 export const routes: Routes = [
   {

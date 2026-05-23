@@ -3,7 +3,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { CartBadgeComponent } from '../../../features/cart/components/cart-badge.component/cart-badge.component';
+import { CartBadgeComponent } from '../../../../features/cart/cart-badge.component/cart-badge.component';
 
 @Component({
   selector: 'app-header',
