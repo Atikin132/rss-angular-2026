@@ -1,10 +1,12 @@
 <div class="page-content">
-  <app-search [value]="search()" (valueChange)="onSearchChange($event)" />
-
+  <div class="sort-search">
+    <app-sort [value]="sort()" (valueChange)="onSortChange($event)" />
+    <app-search [value]="search()" (valueChange)="onSearchChange($event)" />
+  </div>
   <div class="catalog-page">
-    @if (searchedProducts().length > 0) {
+    @if (filteredAndSortedProducts().length > 0) {
       <div class="grid">
-        @for (product of searchedProducts(); track product.id) {
+        @for (product of filteredAndSortedProducts(); track product.id) {
           <app-product-card [product]="product" />
         }
       </div>

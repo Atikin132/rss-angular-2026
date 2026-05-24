@@ -5,6 +5,12 @@
   margin: 0 auto;
 }
 
+.sort-search {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
 .catalog-page {
   display: flex;
   flex-direction: column;
