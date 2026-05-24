@@ -1,0 +1,14 @@
+<div class="search-container">
+  <div class="search-wrapper">
+    <mat-icon class="search-icon">search</mat-icon>
+
+    <input
+      class="search"
+      type="text"
+      name="search-field"
+      placeholder="Search products..."
+      [value]="value()"
+      (input)="onInput($event)"
+    />
+  </div>
+</div>

@@ -1,7 +1,8 @@
-:host {
+.page-content {
   display: flex;
   flex-direction: column;
-  flex: 1;
+  max-width: 972px;
+  margin: 0 auto;
 }
 
 .catalog-page {

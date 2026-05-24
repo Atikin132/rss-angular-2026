@@ -1,11 +1,15 @@
-<div class="catalog-page">
-  @if (products().length > 0) {
-    <div class="grid">
-      @for (product of products(); track product.id) {
-        <app-product-card [product]="product" />
-      }
-    </div>
-  } @else {
-    <p class="nothing-found-text">Nothing found</p>
-  }
+<div class="page-content">
+  <app-search [value]="search()" (valueChange)="onSearchChange($event)" />
+
+  <div class="catalog-page">
+    @if (searchedProducts().length > 0) {
+      <div class="grid">
+        @for (product of searchedProducts(); track product.id) {
+          <app-product-card [product]="product" />
+        }
+      </div>
+    } @else {
+      <p class="nothing-found-text">Nothing found</p>
+    }
+  </div>
 </div>
