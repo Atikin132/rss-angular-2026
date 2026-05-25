@@ -19,14 +19,19 @@ export class ProductsService {
   }
 
   getProductsByCategory(category: string) {
-    return computed(() => this.productsSignal().filter((p) => p.categories.includes(category)));
+    return computed(() => this.productsSignal().filter((p) => p.category === category));
   }
 
   getCategories() {
     return computed(() => {
       const products = this.productsSignal();
-
-      return [...new Set(products.flatMap((p) => p.categories))];
+      return [...new Set(products.map((p) => p.category))].sort();
+    });
+  }
+  getBrands() {
+    return computed(() => {
+      const products = this.productsSignal();
+      return [...new Set(products.map((p) => p.brand))].sort();
     });
   }
 }

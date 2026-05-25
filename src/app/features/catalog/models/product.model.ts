@@ -8,7 +8,7 @@ export interface Product {
   price: number;
   discountedPrice?: number;
   currency: string;
-  categories: string[];
-  brand?: string;
+  category: string;
+  brand: string;
   inStock: boolean;
 }
