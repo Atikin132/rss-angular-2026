@@ -1,18 +1,20 @@
-<div class="card" [routerLink]="['product', product().slug]">
-  <img class="poster" [src]="product().image" [alt]="product().name" />
+@let productItem = product();
+
+<div class="card" [routerLink]="['product', productItem.slug]">
+  <img class="poster" [src]="productItem.image" [alt]="productItem.name" />
 
   <div class="card-info">
     <div class="info">
-      <h3 class="product-name">{{ product().name }}</h3>
+      <h3 class="product-name">{{ productItem.name }}</h3>
 
       <div class="price-block">
         <span class="price">
-          {{ product().discountedPrice ?? product().price | price: product().currency }}
+          {{ actualPrice() | currency: productItem.currency }}
         </span>
 
-        @if (product().discountedPrice) {
+        @if (hasDiscount()) {
           <span class="old-price">
-            {{ product().price | price: product().currency }}
+            {{ productItem.price | currency: productItem.currency }}
           </span>
         }
       </div>
@@ -21,29 +23,15 @@
     <button
       mat-flat-button
       class="add-to-cart-btn"
-      [class.added]="addedToCart()"
-      [class.remove]="addedToCart() && hovered()"
+      [class.added]="cartButtonState().added"
+      [class.remove]="cartButtonState().remove"
       (click)="toggleCart($event)"
       (mouseenter)="hovered.set(true)"
       (mouseleave)="hovered.set(false)"
     >
-      <mat-icon>
-        @if (addedToCart() && hovered()) {
-          remove_shopping_cart
-        } @else if (addedToCart()) {
-          check
-        } @else {
-          add_shopping_cart
-        }
-      </mat-icon>
+      <mat-icon>{{ cartButtonState().icon }}</mat-icon>
 
-      @if (addedToCart() && hovered()) {
-        Remove
-      } @else if (addedToCart()) {
-        In Cart
-      } @else {
-        Add to Cart
-      }
+      {{ cartButtonState().text }}
     </button>
   </div>
   <button
