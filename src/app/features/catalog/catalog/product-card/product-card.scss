@@ -121,3 +121,13 @@
     }
   }
 }
+
+@media (max-width: 800px) {
+  .card {
+    width: 150px;
+
+    .poster {
+      height: 150px;
+    }
+  }
+}
