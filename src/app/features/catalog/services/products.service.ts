@@ -1,14 +1,31 @@
-import { computed, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
+
 import { Product } from '../models/product.model';
-import { PRODUCTS_MOCK } from '../mock/products.mock';
+import { mapProduct } from '../../../core/services/commercetools/mapper';
+import { ApiService } from '../../../core/services/commercetools/commercetools-api.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProductsService {
-  private readonly productsSignal = signal<Product[]>(PRODUCTS_MOCK);
+  private readonly productsSignal = signal<Product[]>([]);
 
   public readonly products = this.productsSignal.asReadonly();
+
+  private readonly apiService = inject(ApiService);
+
+  constructor() {
+    this.loadProducts();
+  }
+  async loadProducts() {
+    const data = await this.apiService.request(
+      '/product-projections?limit=50&expand=categories[*]',
+    );
+
+    const mappedProducts = data.results.map(mapProduct);
+
+    this.productsSignal.set(mappedProducts);
+  }
 
   private readonly productsMap = computed(
     () => new Map(this.productsSignal().map((p) => [p.slug, p])),
@@ -28,6 +45,7 @@ export class ProductsService {
       return [...new Set(products.map((p) => p.category))].sort();
     });
   }
+
   getBrands() {
     return computed(() => {
       const products = this.productsSignal();
