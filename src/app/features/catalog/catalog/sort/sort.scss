@@ -1,0 +1,33 @@
+.sort-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 20px;
+  width: fit-content;
+}
+
+.select-wrapper {
+  position: relative;
+}
+
+.sort-select {
+  appearance: none;
+  padding: 10px 42px 10px 12px;
+  border: 0;
+  border-radius: 10px;
+  background-color: var(--mat-sys-inverse-on-surface);
+  cursor: pointer;
+
+  &:focus {
+    outline: 1.5px solid var(--mat-sys-primary);
+  }
+}
+
+.select-icon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #999;
+}
