@@ -1,3 +1,5 @@
+@let products = filteredAndSortedProducts();
+
 <div class="page-content">
   <app-filters
     [value]="filters()"
@@ -11,9 +13,9 @@
       <app-search [value]="search()" (valueChange)="onSearchChange($event)" />
     </div>
 
-    @if (filteredAndSortedProducts().length > 0) {
+    @if (products.length > 0) {
       <div class="grid">
-        @for (product of filteredAndSortedProducts(); track product.id) {
+        @for (product of products; track product.id) {
           <app-product-card [product]="product" />
         }
       </div>

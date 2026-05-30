@@ -1,9 +1,9 @@
-import { Component, computed, inject, signal } from '@angular/core';
-import { ProductsService } from '../../services/products.service';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { ProductCard } from '../product-card/product-card';
 import { Search } from '../search/search';
 import { Sort, SortType } from '../sort/sort';
 import { CatalogFilters, Filters } from '../filters/filters';
+import { ProductsStore } from '../../products.store';
 import { filterProducts } from '../../utils/filter-products';
 import { sortMap } from '../../utils/sort-map';
 
@@ -13,16 +13,19 @@ import { sortMap } from '../../utils/sort-map';
   templateUrl: './catalog.page.html',
   styleUrl: './catalog.page.scss',
 })
-export class CatalogPage {
-  private productsService = inject(ProductsService);
+export class CatalogPage implements OnInit {
+  private store = inject(ProductsStore);
 
-  products = this.productsService.products;
+  products = this.store.products;
+
+  categories = this.store.categories;
+  brands = this.store.brands;
+
+  loading = this.store.loading;
+  error = this.store.error;
 
   search = signal('');
   sort = signal<SortType>('name-asc');
-
-  categories = this.productsService.getCategories();
-  brands = this.productsService.getBrands();
 
   filters = signal<CatalogFilters>({
     categories: [],
@@ -30,6 +33,10 @@ export class CatalogPage {
     minPrice: null,
     maxPrice: null,
   });
+
+  ngOnInit() {
+    this.store.loadProducts();
+  }
 
   filteredAndSortedProducts = computed(() => {
     return filterProducts(this.products(), this.search(), this.filters())

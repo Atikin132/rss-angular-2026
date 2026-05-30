@@ -46,3 +46,18 @@ export interface CommercetoolsProductProjection {
   masterVariant: ProductVariant;
   attributes?: ProductAttribute[];
 }
+
+export interface PagedResponse<T> {
+  results: T[];
+  limit: number;
+  offset: number;
+  count: number;
+  total: number;
+}
+
+export interface AuthResponse {
+  access_token: string;
+  expires_in: number;
+  token_type: string;
+  scope: string;
+}
