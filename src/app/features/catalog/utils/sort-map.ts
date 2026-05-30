@@ -1,4 +1,4 @@
-import { SortType } from '../catalog/sort/sort';
+import { SortType } from '../sort/sort';
 import { Product } from '../models/product.model';
 import { getProductPrice } from './product-price';
 

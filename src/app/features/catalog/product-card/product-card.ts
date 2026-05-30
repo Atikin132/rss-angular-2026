@@ -1,9 +1,9 @@
 import { Component, computed, input, signal } from '@angular/core';
-import { Product } from '../../models/product.model';
 import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CurrencyPipe } from '@angular/common';
+import { Product } from '../models/product.model';
 
 @Component({
   selector: 'app-product-card',

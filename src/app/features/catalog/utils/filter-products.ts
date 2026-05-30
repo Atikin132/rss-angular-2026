@@ -1,4 +1,4 @@
-import { CatalogFilters } from '../catalog/filters/filters';
+import { CatalogFilters } from '../filters/filters';
 import { Product } from '../models/product.model';
 import { getProductPrice } from './product-price';
 
