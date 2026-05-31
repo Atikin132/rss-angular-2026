@@ -33,9 +33,7 @@
         <mat-checkbox [checked]="rememberMe()" (change)="toggleRememberMe()">
           Remember me
         </mat-checkbox>
-        <button type="button" class="login__forgot" (click)="forgotPassword()">
-          Forgot password?
-        </button>
+        <a routerLink="/reset-password"> Forgot password? </a>
       </div>
       <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">
         Login
