@@ -1,10 +1,11 @@
 import { Routes } from '@angular/router';
-
 import { AuthLayoutComponent } from '../../core/layouts/auth-layout/auth-layout.component/auth-layout.component';
+import { authReverseGuard } from './guards/auth-reverse.guard';
 
 export const authRoutes: Routes = [
   {
     path: '',
+    canActivate: [authReverseGuard],
     component: AuthLayoutComponent,
     children: [
       {

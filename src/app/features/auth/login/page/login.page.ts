@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatIconModule } from '@angular/material/icon';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-login-page',
@@ -30,6 +31,7 @@ import { MatIconModule } from '@angular/material/icon';
 export class LoginPage {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
 
   protected readonly isPasswordVisible = signal(false);
   protected readonly rememberMe = signal(false);
@@ -56,6 +58,7 @@ export class LoginPage {
       this.loginForm.markAllAsTouched();
       return;
     }
+    this.authService.login();
     // eslint-disable-next-line no-console
     console.log({
       ...this.loginForm.getRawValue(),
