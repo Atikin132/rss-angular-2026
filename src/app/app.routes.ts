@@ -6,8 +6,8 @@ import { ProductDetailsPage } from './features/catalog/product-details/page/prod
 import { ProfilePage } from './features/profile/page/profile.page';
 import { AboutPage } from './features/about/page/about.page';
 import { CartPage } from './features/cart/cart.page';
-import { UnknownPage } from './features/wildcard-route/page/unknown.page';
 import { authRoutes } from './features/auth/auth.routes';
+import { wildcardRoutes } from './features/wildcard/wildcard.routes';
 
 export const routes: Routes = [
   {
@@ -43,8 +43,5 @@ export const routes: Routes = [
 
   ...authRoutes,
 
-  {
-    path: '**',
-    component: UnknownPage,
-  },
+  ...wildcardRoutes,
 ];
