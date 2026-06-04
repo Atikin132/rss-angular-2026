@@ -1,0 +1,36 @@
+<section class="security-page">
+  <article class="security-card">
+    <header class="security-card__header">
+      <div>
+        <h1>Security</h1>
+        <p>Update your password and keep your account protected.</p>
+      </div>
+
+      <div class="security-icon" aria-hidden="true">
+        <mat-icon>shield</mat-icon>
+      </div>
+    </header>
+
+    <form class="security-form">
+      <mat-form-field appearance="outline">
+        <mat-label>Current Password</mat-label>
+        <input matInput type="password" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>New Password</mat-label>
+        <input matInput type="password" />
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Confirm New Password</mat-label>
+        <input matInput type="password" />
+      </mat-form-field>
+
+      <button mat-flat-button type="button">
+        <mat-icon aria-hidden="true">lock_reset</mat-icon>
+        <span>Update Password</span>
+      </button>
+    </form>
+  </article>
+</section>

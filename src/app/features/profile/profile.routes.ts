@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+import { ProfilePage } from './page/profile.page';
 import { AddressesComponent } from './pages/addresses/addresses.component';
 import { ProfileComponent } from './pages/profile/profile.component';
 import { SecurityComponent } from './pages/security/security.component';
@@ -6,7 +7,7 @@ import { SecurityComponent } from './pages/security/security.component';
 export const ProfileRoutes: Routes = [
   {
     path: '',
-    component: ProfileComponent,
+    component: ProfilePage,
     children: [
       {
         path: '',
