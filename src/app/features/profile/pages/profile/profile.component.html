@@ -25,25 +25,25 @@
     }
   </header>
 
-  <form class="personal-form">
+  <form class="personal-form" [formGroup]="profileForm">
     <mat-form-field appearance="outline">
       <mat-label>First Name</mat-label>
-      <input [disabled]="!isEditMode()" matInput type="text" />
+      <input matInput type="text" formControlName="firstName" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Last Name</mat-label>
-      <input [disabled]="!isEditMode()" matInput type="text" />
+      <input matInput type="text" formControlName="lastName" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Email Address</mat-label>
-      <input [disabled]="!isEditMode()" matInput type="email" />
+      <input matInput type="email" formControlName="email" />
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Date of Birth</mat-label>
-      <input [disabled]="!isEditMode()" matInput [matDatepicker]="birthDatePicker" />
+      <input matInput [matDatepicker]="birthDatePicker" formControlName="dateOfBirth" />
       <mat-datepicker-toggle matIconSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #birthDatePicker></mat-datepicker>
     </mat-form-field>

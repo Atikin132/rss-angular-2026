@@ -1,6 +1,7 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { ProfileService } from '../services/profile.service';
 
 @Component({
   selector: 'app-profile-page',
@@ -8,4 +9,6 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
   templateUrl: './profile.page.html',
   styleUrl: './profile.page.scss',
 })
-export class ProfilePage {}
+export class ProfilePage {
+  readonly profile = inject(ProfileService).profile;
+}

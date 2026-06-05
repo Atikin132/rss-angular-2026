@@ -1,12 +1,11 @@
-import { Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { Injectable, signal } from '@angular/core';
 import { UserProfile } from '../interfaces/user-profile.interface';
 
 @Injectable({
   providedIn: 'root',
 })
 export class ProfileService {
-  private readonly userProfile: UserProfile = {
+  private readonly userProfile = signal<UserProfile>({
     firstName: 'Alex',
     lastName: 'Johnson',
     email: 'alex.j@example.com',
@@ -22,9 +21,11 @@ export class ProfileService {
         isDefaultBilling: true,
       },
     ],
-  };
+  });
 
-  getUserProfile(): Observable<UserProfile> {
-    return of(this.userProfile);
+  readonly profile = this.userProfile.asReadonly();
+
+  getUserProfile(): UserProfile {
+    return this.userProfile();
   }
 }

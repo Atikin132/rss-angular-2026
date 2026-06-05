@@ -11,23 +11,38 @@
       </div>
     </header>
 
-    <form class="security-form">
+    <form class="security-form" [formGroup]="passwordForm">
       <mat-form-field appearance="outline">
         <mat-label>Current Password</mat-label>
-        <input matInput type="password" />
+        <input matInput type="password" formControlName="currentPassword" />
+        @if (passwordForm.controls.currentPassword.hasError('required')) {
+          <mat-error>Current password is required</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>New Password</mat-label>
-        <input matInput type="password" />
+        <input matInput type="password" formControlName="newPassword" />
+        @if (passwordForm.controls.newPassword.hasError('required')) {
+          <mat-error>New password is required</mat-error>
+        } @else if (passwordForm.controls.newPassword.hasError('minlength')) {
+          <mat-error>Password must be at least 8 characters</mat-error>
+        } @else if (passwordForm.controls.newPassword.hasError('pattern')) {
+          <mat-error>Password must contain letters and digits</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Confirm New Password</mat-label>
-        <input matInput type="password" />
+        <input matInput type="password" formControlName="confirmPassword" />
+        @if (passwordForm.controls.confirmPassword.hasError('required')) {
+          <mat-error>Password confirmation is required</mat-error>
+        } @else if (!passwordsMatch()) {
+          <mat-error>Passwords do not match</mat-error>
+        }
       </mat-form-field>
 
-      <button mat-flat-button type="button">
+      <button mat-flat-button type="button" (click)="savePassword()">
         <mat-icon aria-hidden="true">lock_reset</mat-icon>
         <span>Update Password</span>
       </button>

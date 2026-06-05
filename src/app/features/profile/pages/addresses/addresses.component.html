@@ -6,55 +6,61 @@
         <p>Manage shipping and billing addresses for your account.</p>
       </div>
 
-      <button mat-flat-button type="button" (click)="editAddress()">
-        <mat-icon aria-hidden="true">add</mat-icon>
-        <span>Add Address</span>
-      </button>
+      @if (!isEditMode()) {
+        <button mat-stroked-button type="button" (click)="editAddress()">
+          <mat-icon aria-hidden="true">edit</mat-icon>
+          <span>Edit Address</span>
+        </button>
+      }
     </header>
 
     <div class="address-list">
-      <article class="address-item">
-        <div class="address-item__icon" aria-hidden="true">
-          <mat-icon>location_on</mat-icon>
-        </div>
-
-        <div class="address-item__content">
-          <div class="address-item__title">
-            <h2>Main Street 12</h2>
-            <span>Default shipping</span>
-            <span>Default billing</span>
+      @for (address of profile().addresses; track address.id) {
+        <article class="address-item">
+          <div class="address-item__icon" aria-hidden="true">
+            <mat-icon>location_on</mat-icon>
           </div>
 
-          <p>New York, 10001, US</p>
-        </div>
+          <div class="address-item__content">
+            <div class="address-item__title">
+              <h2>{{ address.streetName }}</h2>
+              @if (address.isDefaultShipping) {
+                <span>Default shipping</span>
+              }
+              @if (address.isDefaultBilling) {
+                <span>Default billing</span>
+              }
+            </div>
 
-        <div class="address-actions">
-          <button mat-stroked-button type="button" (click)="editAddress()">Edit</button>
-          <button mat-button type="button">Delete</button>
-        </div>
-      </article>
+            <p>{{ address.city }}, {{ address.postalCode }}, {{ address.country }}</p>
+          </div>
+        </article>
+      }
     </div>
 
-    <form class="address-form">
+    <form class="address-form" [formGroup]="addressForm">
       <mat-form-field appearance="outline">
         <mat-label>Street Address</mat-label>
-        <input [disabled]="!isEditMode()" matInput type="text" />
+        <input matInput type="text" formControlName="streetName" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>City</mat-label>
-        <input [disabled]="!isEditMode()" matInput type="text" />
+        <input matInput type="text" formControlName="city" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Postal Code</mat-label>
-        <input [disabled]="!isEditMode()" matInput type="text" />
+        <input matInput type="text" formControlName="postalCode" />
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Country</mat-label>
-        <input [disabled]="!isEditMode()" matInput type="text" />
+        <input matInput type="text" formControlName="country" />
       </mat-form-field>
+
+      <mat-checkbox formControlName="isDefaultShipping">Default shipping</mat-checkbox>
+      <mat-checkbox formControlName="isDefaultBilling">Default billing</mat-checkbox>
 
       @if (isEditMode()) {
         <div class="edit-actions">
