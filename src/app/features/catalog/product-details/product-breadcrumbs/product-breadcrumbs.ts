@@ -1,9 +1,10 @@
 import { Component, computed, input } from '@angular/core';
+import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-product-breadcrumbs',
-  imports: [RouterLink],
+  imports: [RouterLink, MatIconModule],
   templateUrl: './product-breadcrumbs.html',
   styleUrl: './product-breadcrumbs.scss',
 })
