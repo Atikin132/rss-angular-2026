@@ -1,0 +1,18 @@
+.breadcrumbs-container {
+  display: flex;
+}
+
+.breadcrumbs {
+  width: 100%;
+  max-width: 1000px;
+}
+
+.link {
+  color: var(--mat-sys-on-primary-container);
+  text-decoration: none;
+  transition: 0.2s;
+}
+
+.link:hover {
+  color: var(--mat-sys-tertiary);
+}

@@ -1,9 +1,15 @@
 :host {
   display: flex;
+  flex-direction: column;
   padding: 32px;
   width: 100%;
   box-sizing: border-box;
   justify-content: space-between;
+  gap: 50px;
+}
+
+.page-content {
+  display: flex;
   gap: 50px;
 }
 
@@ -97,7 +103,7 @@
   }
 }
 @media (max-width: 685px) {
-  :host {
+  .page-content {
     flex-direction: column;
   }
 }
