@@ -10,14 +10,12 @@ import {
 
 interface ProductsState {
   products: Product[];
-  selectedProduct: Product | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ProductsState = {
   products: [],
-  selectedProduct: null,
   loading: false,
   error: null,
 };
@@ -68,14 +66,10 @@ export const ProductsStore = signalStore(
         });
       }
     },
-    async loadProductBySlug(slug: string) {
+    async loadProductBySlug(slug: string): Promise<Product | null> {
       const existingProduct = store.products().find((product) => product.slug === slug);
       if (existingProduct) {
-        patchState(store, {
-          selectedProduct: existingProduct,
-        });
-
-        return;
+        return existingProduct;
       }
       try {
         patchState(store, {
@@ -90,19 +84,16 @@ export const ProductsStore = signalStore(
 
         if (!product) {
           patchState(store, {
-            selectedProduct: null,
             error: 'Product not found',
           });
-          return;
+          return null;
         }
-
-        patchState(store, {
-          selectedProduct: product,
-        });
+        return product;
       } catch {
         patchState(store, {
           error: 'Failed to load product',
         });
+        return null;
       } finally {
         patchState(store, {
           loading: false,

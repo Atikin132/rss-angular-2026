@@ -8,9 +8,96 @@
 }
 
 .gallery {
+  flex: 3;
+}
+
+.info-btns {
   flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.product-name {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.3;
+}
+
+.price-block {
+  display: flex;
+  gap: 8px;
+
+  .price {
+    color: var(--mat-sys-primary);
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .old-price {
+    font-size: 19px;
+    color: #999;
+    text-decoration: line-through;
+  }
+}
+
+.btns {
+  display: flex;
+  gap: 10px;
+}
+
+.add-to-cart-btn {
+  flex: 2;
+  transition:
+    background-color 0.3s,
+    color 0.3s,
+    transform 0.3s;
+
+  &.added {
+    color: #616265;
+    background-color: #e0dfe3;
+
+    &:hover {
+      color: var(--mat-sys-on-error);
+      background-color: var(--mat-sys-error);
+    }
+  }
+}
+
+.wishlist-btn,
+.compare-btn {
   flex: 1;
+  color: gray;
+  transition:
+    color 0.2s,
+    transform 0.2s;
+}
+
+.wishlist-btn {
+  &:hover {
+    color: red;
+  }
+  &.active {
+    color: red;
+  }
+}
+
+.compare-btn {
+  &:hover {
+    color: #f8cf3b;
+  }
+  &.active {
+    color: #f8cf3b;
+  }
+}
+@media (max-width: 685px) {
+  :host {
+    flex-direction: column;
+  }
 }
