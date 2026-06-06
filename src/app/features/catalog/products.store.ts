@@ -10,12 +10,14 @@ import {
 
 interface ProductsState {
   products: Product[];
+  selectedProduct: Product | null;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ProductsState = {
   products: [],
+  selectedProduct: null,
   loading: false,
   error: null,
 };
@@ -59,6 +61,47 @@ export const ProductsStore = signalStore(
       } catch {
         patchState(store, {
           error: 'Failed to load products',
+        });
+      } finally {
+        patchState(store, {
+          loading: false,
+        });
+      }
+    },
+    async loadProductBySlug(slug: string) {
+      const existingProduct = store.products().find((product) => product.slug === slug);
+      if (existingProduct) {
+        patchState(store, {
+          selectedProduct: existingProduct,
+        });
+
+        return;
+      }
+      try {
+        patchState(store, {
+          loading: true,
+          error: null,
+        });
+
+        const data = await apiService.request<PagedResponse<CommercetoolsProductProjection>>(
+          `/product-projections?where=slug(en-US="${slug}")&limit=1&expand=categories[*]`,
+        );
+        const product = mapProduct(data.results[0]);
+
+        if (!product) {
+          patchState(store, {
+            selectedProduct: null,
+            error: 'Product not found',
+          });
+          return;
+        }
+
+        patchState(store, {
+          selectedProduct: product,
+        });
+      } catch {
+        patchState(store, {
+          error: 'Failed to load product',
         });
       } finally {
         patchState(store, {

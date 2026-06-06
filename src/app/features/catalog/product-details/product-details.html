@@ -1,1 +1,7 @@
-<p>product-details.page works!</p>
+@if (product(); as p) {
+  <app-product-gallery class="gallery" [images]="p.images" />
+  <div class="info">
+    <h1>{{ p.name }}</h1>
+    <p>{{ p.description }}</p>
+  </div>
+}
