@@ -9,7 +9,6 @@ import { AuthLayoutComponent } from './core/layouts/auth-layout/auth-layout.comp
 import { LoginPage } from './features/auth/login/page/login.page';
 import { RegisterPage } from './features/auth/register/page/register.page';
 import { UnknownPage } from './features/wildcard-route/page/unknown.page';
-import { CartPage } from './features/cart/cart.page';
 
 export const routes: Routes = [
   {
@@ -30,7 +29,7 @@ export const routes: Routes = [
       },
       {
         path: 'cart',
-        component: CartPage,
+        loadComponent: () => import('./features/cart/cart.page').then((m) => m.CartPage),
       },
       {
         path: 'profile',

@@ -1,5 +1,5 @@
-import { ChangeDetectionStrategy, Component, computed, input } from '@angular/core';
-import { CartItem } from '../interfaces/cart-item.interface';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { CartService } from '../services/cart.service';
 
 @Component({
   selector: 'app-cart-summary',
@@ -9,11 +9,6 @@ import { CartItem } from '../interfaces/cart-item.interface';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartSummaryComponent {
-  items = input.required<CartItem[]>();
-
-  totalPrice = computed(() =>
-    this.items().reduce((total, item) => total + item.price * item.quantity, 0),
-  );
-
-  totalItems = computed(() => this.items().reduce((total, item) => total + item.quantity, 0));
+  readonly cartService = inject(CartService);
+  readonly totalPrice = this.cartService.totalPrice;
 }
