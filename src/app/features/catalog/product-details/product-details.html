@@ -8,17 +8,7 @@
           <p class="brand-name">{{ productItem.brand }}</p>
           <h2 class="product-name">{{ productItem.name }}</h2>
         </div>
-        <div class="price-block">
-          <span class="price">
-            {{ actualPrice() | currency: productItem.currency }}
-          </span>
-
-          @if (hasDiscount()) {
-            <span class="old-price">
-              {{ productItem.price | currency: productItem.currency }}
-            </span>
-          }
-        </div>
+        <app-product-price [product]="productItem" />
         <p>{{ productItem.description }}</p>
       </div>
       <div class="btns">

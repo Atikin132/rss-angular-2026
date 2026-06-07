@@ -51,23 +51,6 @@
     text-overflow: ellipsis;
   }
 
-  .price-block {
-    display: flex;
-    gap: 8px;
-
-    .price {
-      color: var(--mat-sys-primary);
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .old-price {
-      font-size: 13px;
-      color: #999;
-      text-decoration: line-through;
-    }
-  }
-
   .compare-btn,
   .wishlist-btn {
     position: absolute;
