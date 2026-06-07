@@ -58,7 +58,7 @@ export class LoginPage {
       this.loginForm.markAllAsTouched();
       return;
     }
-    this.authService.login();
+    this.authService.login(this.rememberMe());
     // eslint-disable-next-line no-console
     console.log({
       ...this.loginForm.getRawValue(),

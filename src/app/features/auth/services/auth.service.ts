@@ -9,30 +9,26 @@ export class AuthService {
   readonly isAuthenticated = signal(false);
 
   initAuth(): void {
-    const storedValue = localStorage.getItem(AUTH_KEY);
+    const localValue = localStorage.getItem(AUTH_KEY);
+    const sessionValue = sessionStorage.getItem(AUTH_KEY);
 
-    if (storedValue === 'true') {
-      this.isAuthenticated.set(true);
-    } else {
-      this.isAuthenticated.set(false);
-    }
+    this.isAuthenticated.set(localValue === 'true' || sessionValue === 'true');
   }
 
-  login(): void {
+  login(rememberMe = false): void {
     this.isAuthenticated.set(true);
-    this.setLocalStorage(true);
+
+    if (rememberMe) {
+      localStorage.setItem(AUTH_KEY, 'true');
+    } else {
+      sessionStorage.setItem(AUTH_KEY, 'true');
+    }
   }
 
   logout(): void {
     this.isAuthenticated.set(false);
-    this.removeLocalStorage();
-  }
 
-  private setLocalStorage(value: boolean): void {
-    localStorage.setItem(AUTH_KEY, String(value));
-  }
-
-  private removeLocalStorage(): void {
     localStorage.removeItem(AUTH_KEY);
+    sessionStorage.removeItem(AUTH_KEY);
   }
 }
