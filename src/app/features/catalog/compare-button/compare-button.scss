@@ -1,0 +1,16 @@
+.compare-btn {
+  width: 100%;
+  color: gray;
+
+  transition:
+    color 0.2s,
+    transform 0.2s;
+
+  &:hover {
+    color: #f8cf3b;
+  }
+
+  &.active {
+    color: #f8cf3b;
+  }
+}

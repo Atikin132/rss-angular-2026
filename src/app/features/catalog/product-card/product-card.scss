@@ -68,33 +68,18 @@
     }
   }
 
+  .compare-btn,
   .wishlist-btn {
     position: absolute;
     top: 10px;
-    right: 10px;
-  }
-
-  .compare-btn {
-    position: absolute;
-    top: 10px;
-
-    color: gray;
-
-    transition:
-      color 0.2s,
-      transform 0.2s;
   }
 
   .compare-btn {
     left: 10px;
+  }
 
-    &:hover {
-      color: #f8cf3b;
-    }
-
-    &.active {
-      color: #f8cf3b;
-    }
+  .wishlist-btn {
+    right: 10px;
   }
 }
 

@@ -24,15 +24,7 @@
       <div class="btns">
         <app-cart-button class="add-to-cart-btn" [product]="productItem" />
         <app-wishlist-button class="wishlist-btn" [product]="productItem" />
-
-        <button
-          mat-icon-button
-          class="compare-btn"
-          [class.active]="isCompared()"
-          (click)="toggleCompare($event)"
-        >
-          <mat-icon>balance</mat-icon>
-        </button>
+        <app-compare-button class="compare-btn" [product]="productItem" />
       </div>
     </div>
   </div>
