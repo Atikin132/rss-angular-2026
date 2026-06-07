@@ -1,8 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './core/layouts/main-layout/main-layout.component/main-layout.component';
 import { MainPage } from './features/main/page/main.page';
-import { CatalogPage } from './features/catalog/catalog/page/catalog.page';
-import { ProductDetailsPage } from './features/catalog/product-details/page/product-details.page';
 import { ProfilePage } from './features/profile/page/profile.page';
 import { AboutPage } from './features/about/page/about.page';
 import { AuthLayoutComponent } from './core/layouts/auth-layout/auth-layout.component/auth-layout.component';
@@ -22,11 +20,8 @@ export const routes: Routes = [
       },
       {
         path: 'catalog',
-        component: CatalogPage,
-      },
-      {
-        path: 'catalog/product/:id',
-        component: ProductDetailsPage,
+        loadChildren: () =>
+          import('./features/catalog/catalog.routes').then((m) => m.catalogRoutes),
       },
       {
         path: 'cart',
