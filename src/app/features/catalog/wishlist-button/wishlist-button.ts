@@ -2,7 +2,7 @@ import { Component, computed, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Product } from '../models/product.model';
-import { WishlistStore } from '../stores/wishlist.store';
+import { WishlistStore } from '../stores/create-selection.store';
 
 @Component({
   selector: 'app-wishlist-button',

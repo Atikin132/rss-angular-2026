@@ -1,8 +1,8 @@
 import { Component, computed, inject, input, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { CartStore } from '../stores/cart.store';
 import { Product } from '../models/product.model';
+import { CartStore } from '../stores/create-selection.store';
 
 @Component({
   selector: 'app-cart-button',

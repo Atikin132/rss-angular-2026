@@ -1,8 +1,8 @@
 import { Component, computed, inject, input } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-import { CompareStore } from '../stores/compare.store';
 import { Product } from '../models/product.model';
+import { CompareStore } from '../stores/create-selection.store';
 
 @Component({
   selector: 'app-compare-button',
