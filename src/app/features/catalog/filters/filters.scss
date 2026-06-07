@@ -1,0 +1,90 @@
+.filters-container {
+  padding: 20px;
+}
+
+.filters {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  border-radius: 10px;
+  background-color: var(--mat-sys-inverse-on-surface);
+  padding: 20px;
+}
+
+.title-clear {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.block-title {
+  color: var(--mat-sys-primary);
+  font-weight: 500;
+  margin: 0;
+}
+
+.clear-btn {
+  color: #717786;
+}
+
+.filter-title {
+  text-transform: uppercase;
+  font-weight: 500;
+  margin-top: 0;
+  margin-bottom: 5px;
+}
+
+.filter-checkbox {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.checkbox-text {
+  text-transform: capitalize;
+}
+
+.brand-select {
+  ::ng-deep .mat-mdc-text-field-wrapper {
+    background-color: white;
+  }
+  --mat-form-field-container-height: 40px;
+  --mat-form-field-container-vertical-padding: 8px;
+}
+
+.price-slider {
+  width: 95%;
+
+  ::ng-deep .mdc-slider__thumb-knob {
+    width: 12px;
+    height: 12px;
+    border-width: 2px;
+  }
+}
+
+.price-inputs {
+  width: 95%;
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0px 8px;
+
+  input {
+    width: 30%;
+    padding: 10px 10px 10px 10px;
+    border-radius: 10px;
+    border: 0;
+    box-sizing: border-box;
+
+    &:focus {
+      outline: 1.5px solid var(--mat-sys-primary);
+    }
+
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+  }
+}
