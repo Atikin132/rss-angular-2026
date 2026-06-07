@@ -1,0 +1,17 @@
+<div class="gallery">
+  <div class="main-image">
+    <img [src]="selectedImage()" alt="" />
+  </div>
+
+  <div class="thumbnails">
+    @for (image of images(); track image) {
+      <button
+        class="thumbnail"
+        [class.active]="selectedImage() === image"
+        (click)="selectImage(image)"
+      >
+        <img [src]="image" alt="" />
+      </button>
+    }
+  </div>
+</div>

@@ -51,74 +51,18 @@
     text-overflow: ellipsis;
   }
 
-  .price-block {
-    display: flex;
-    gap: 8px;
-
-    .price {
-      color: var(--mat-sys-primary);
-      font-size: 18px;
-      font-weight: 700;
-    }
-
-    .old-price {
-      font-size: 13px;
-      color: #999;
-      text-decoration: line-through;
-    }
-  }
-
-  .add-to-cart-btn {
-    margin-top: auto;
-    transition:
-      background-color 0.3s,
-      color 0.3s,
-      transform 0.3s;
-
-    &.added {
-      color: #616265;
-      background-color: #e0dfe3;
-
-      &:hover {
-        color: var(--mat-sys-on-error);
-        background-color: var(--mat-sys-error);
-      }
-    }
-  }
-
-  .wishlist-btn,
-  .compare-btn {
+  .compare-btn,
+  .wishlist-btn {
     position: absolute;
     top: 10px;
-
-    color: gray;
-
-    transition:
-      color 0.2s,
-      transform 0.2s;
-  }
-
-  .wishlist-btn {
-    right: 10px;
-    &:hover {
-      color: red;
-    }
-
-    &.active {
-      color: red;
-    }
   }
 
   .compare-btn {
     left: 10px;
+  }
 
-    &:hover {
-      color: #f8cf3b;
-    }
-
-    &.active {
-      color: #f8cf3b;
-    }
+  .wishlist-btn {
+    right: 10px;
   }
 }
 

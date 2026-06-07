@@ -1,12 +1,12 @@
 import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { ApiService } from '../../core/services/commercetools/commercetools-api.service';
-import { mapProduct } from '../../core/services/commercetools/mapper';
-import { Product } from './models/product.model';
+import { ApiService } from '../../../core/services/commercetools/commercetools-api.service';
+import { mapProduct } from '../../../core/services/commercetools/mapper';
+import { Product } from '../models/product.model';
 import {
   CommercetoolsProductProjection,
   PagedResponse,
-} from '../../core/services/commercetools/commercetools.types';
+} from '../../../core/services/commercetools/commercetools.types';
 
 interface ProductsState {
   products: Product[];
@@ -60,6 +60,40 @@ export const ProductsStore = signalStore(
         patchState(store, {
           error: 'Failed to load products',
         });
+      } finally {
+        patchState(store, {
+          loading: false,
+        });
+      }
+    },
+    async loadProductBySlug(slug: string): Promise<Product | null> {
+      const existingProduct = store.products().find((product) => product.slug === slug);
+      if (existingProduct) {
+        return existingProduct;
+      }
+      try {
+        patchState(store, {
+          loading: true,
+          error: null,
+        });
+
+        const data = await apiService.request<PagedResponse<CommercetoolsProductProjection>>(
+          `/product-projections?where=slug(en-US="${slug}")&limit=1&expand=categories[*]`,
+        );
+        const product = mapProduct(data.results[0]);
+
+        if (!product) {
+          patchState(store, {
+            error: 'Product not found',
+          });
+          return null;
+        }
+        return product;
+      } catch {
+        patchState(store, {
+          error: 'Failed to load product',
+        });
+        return null;
       } finally {
         patchState(store, {
           loading: false,
