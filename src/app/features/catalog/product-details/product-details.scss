@@ -65,20 +65,6 @@
 
 .add-to-cart-btn {
   flex: 2;
-  transition:
-    background-color 0.3s,
-    color 0.3s,
-    transform 0.3s;
-
-  &.added {
-    color: #616265;
-    background-color: #e0dfe3;
-
-    &:hover {
-      color: var(--mat-sys-on-error);
-      background-color: var(--mat-sys-error);
-    }
-  }
 }
 
 .wishlist-btn,

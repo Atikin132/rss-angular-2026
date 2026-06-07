@@ -1,12 +1,12 @@
 import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
-import { ApiService } from '../../core/services/commercetools/commercetools-api.service';
-import { mapProduct } from '../../core/services/commercetools/mapper';
-import { Product } from './models/product.model';
+import { ApiService } from '../../../core/services/commercetools/commercetools-api.service';
+import { mapProduct } from '../../../core/services/commercetools/mapper';
+import { Product } from '../models/product.model';
 import {
   CommercetoolsProductProjection,
   PagedResponse,
-} from '../../core/services/commercetools/commercetools.types';
+} from '../../../core/services/commercetools/commercetools.types';
 
 interface ProductsState {
   products: Product[];

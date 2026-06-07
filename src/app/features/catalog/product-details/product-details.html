@@ -1,40 +1,28 @@
-@if (product(); as p) {
-  <app-product-breadcrumbs [productName]="p.name" [slug]="p.slug" />
+@if (product(); as productItem) {
+  <app-product-breadcrumbs [productName]="productItem.name" [slug]="productItem.slug" />
   <div class="page-content">
-    <app-product-gallery class="gallery" [images]="p.images" />
+    <app-product-gallery class="gallery" [images]="productItem.images" />
     <div class="info-btns">
       <div class="info">
         <div>
-          <p class="brand-name">{{ p.brand }}</p>
-          <h2 class="product-name">{{ p.name }}</h2>
+          <p class="brand-name">{{ productItem.brand }}</p>
+          <h2 class="product-name">{{ productItem.name }}</h2>
         </div>
         <div class="price-block">
           <span class="price">
-            {{ actualPrice() | currency: p.currency }}
+            {{ actualPrice() | currency: productItem.currency }}
           </span>
 
           @if (hasDiscount()) {
             <span class="old-price">
-              {{ p.price | currency: p.currency }}
+              {{ productItem.price | currency: productItem.currency }}
             </span>
           }
         </div>
-        <p>{{ p.description }}</p>
+        <p>{{ productItem.description }}</p>
       </div>
       <div class="btns">
-        <button
-          mat-flat-button
-          class="add-to-cart-btn"
-          [class.added]="cartButtonState().added"
-          [class.remove]="cartButtonState().remove"
-          (click)="toggleCart($event)"
-          (mouseenter)="hovered.set(true)"
-          (mouseleave)="hovered.set(false)"
-        >
-          <mat-icon>{{ cartButtonState().icon }}</mat-icon>
-
-          {{ cartButtonState().text }}
-        </button>
+        <app-cart-button class="add-to-cart-btn" [product]="productItem" />
         <button
           mat-icon-button
           class="wishlist-btn"
