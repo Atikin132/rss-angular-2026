@@ -8,11 +8,13 @@ import { AboutPage } from './features/about/page/about.page';
 import { CartPage } from './features/cart/cart.page';
 import { authRoutes } from './features/auth/auth.routes';
 import { wildcardRoutes } from './features/wildcard/wildcard.routes';
+import { authGuard } from './features/auth/guards/auth.guard';
 
 export const routes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
+    canActivate: [authGuard],
     children: [
       {
         path: '',
