@@ -1,10 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './core/layouts/main-layout/main-layout.component/main-layout.component';
 import { MainPage } from './features/main/page/main.page';
-import { CatalogPage } from './features/catalog/catalog/page/catalog.page';
-import { ProductDetailsPage } from './features/catalog/product-details/page/product-details.page';
-import { ProfilePage } from './features/profile/page/profile.page';
-import { AboutPage } from './features/about/page/about.page';
 import { CartPage } from './features/cart/cart.page';
 import { authRoutes } from './features/auth/auth.routes';
 import { wildcardRoutes } from './features/wildcard/wildcard.routes';
@@ -14,7 +10,6 @@ export const routes: Routes = [
   {
     path: '',
     component: MainLayoutComponent,
-    canActivate: [authGuard],
     children: [
       {
         path: '',
@@ -22,11 +17,8 @@ export const routes: Routes = [
       },
       {
         path: 'catalog',
-        component: CatalogPage,
-      },
-      {
-        path: 'catalog/product/:id',
-        component: ProductDetailsPage,
+        loadChildren: () =>
+          import('./features/catalog/catalog.routes').then((m) => m.catalogRoutes),
       },
       {
         path: 'cart',
@@ -34,11 +26,13 @@ export const routes: Routes = [
       },
       {
         path: 'profile',
-        component: ProfilePage,
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./features/profile/profile.routes').then((m) => m.ProfileRoutes),
       },
       {
         path: 'about',
-        component: AboutPage,
+        loadComponent: () => import('./features/about/page/about.page').then((m) => m.AboutPage),
       },
     ],
   },
