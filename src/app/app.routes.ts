@@ -1,12 +1,12 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './core/layouts/main-layout/main-layout.component/main-layout.component';
 import { MainPage } from './features/main/page/main.page';
-import { ProfilePage } from './features/profile/page/profile.page';
 import { AuthLayoutComponent } from './core/layouts/auth-layout/auth-layout.component/auth-layout.component';
 import { LoginPage } from './features/auth/login/page/login.page';
 import { RegisterPage } from './features/auth/register/page/register.page';
 import { UnknownPage } from './features/wildcard-route/page/unknown.page';
 import { CartPage } from './features/cart/cart.page';
+import { AuthGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -28,7 +28,9 @@ export const routes: Routes = [
       },
       {
         path: 'profile',
-        component: ProfilePage,
+        canActivate: [AuthGuard],
+        loadChildren: () =>
+          import('./features/profile/profile.routes').then((m) => m.ProfileRoutes),
       },
       {
         path: 'about',
