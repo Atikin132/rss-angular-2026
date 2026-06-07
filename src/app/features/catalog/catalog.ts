@@ -5,11 +5,11 @@ import { CatalogFilters, Filters } from './filters/filters';
 import { ProductsStore } from './stores/products.store';
 import { filterProducts } from './utils/filter-products';
 import { sortMap } from './utils/sort-map';
-import { ProductCard } from './product-card/product-card';
+import { ProductGrid } from './product-grid/product-grid';
 
 @Component({
   selector: 'app-catalog',
-  imports: [ProductCard, Search, Sort, Filters],
+  imports: [ProductGrid, Search, Sort, Filters],
   templateUrl: './catalog.html',
   styleUrl: './catalog.scss',
 })
