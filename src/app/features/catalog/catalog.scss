@@ -21,10 +21,6 @@ app-filters {
   flex: 1;
 }
 
-.nothing-found-text {
-  justify-self: center;
-}
-
 @media (max-width: 712px) {
   app-filters {
     max-width: 100%;
