@@ -21,16 +21,8 @@
     </div>
     <app-cart-button [product]="productItem" />
   </div>
-  <button
-    mat-icon-button
-    class="wishlist-btn"
-    [class.active]="isFavorite()"
-    (click)="toggleFavorite($event)"
-  >
-    <mat-icon>
-      {{ isFavorite() ? 'favorite' : 'favorite_border' }}
-    </mat-icon>
-  </button>
+
+  <app-wishlist-button class="wishlist-btn" [product]="productItem" />
 
   <button
     mat-icon-button

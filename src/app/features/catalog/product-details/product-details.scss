@@ -67,22 +67,16 @@
   flex: 2;
 }
 
-.wishlist-btn,
+.wishlist-btn {
+  flex: 1;
+}
+
 .compare-btn {
   flex: 1;
   color: gray;
   transition:
     color 0.2s,
     transform 0.2s;
-}
-
-.wishlist-btn {
-  &:hover {
-    color: red;
-  }
-  &.active {
-    color: red;
-  }
 }
 
 .compare-btn {

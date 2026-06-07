@@ -7,6 +7,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { Product } from '../models/product.model';
 import { ProductBreadcrumbs } from './product-breadcrumbs/product-breadcrumbs';
 import { CartButton } from '../cart-button/cart-button';
+import { WishlistButton } from '../wishlist-button/wishlist-button';
 
 @Component({
   selector: 'app-product-details',
@@ -17,6 +18,7 @@ import { CartButton } from '../cart-button/cart-button';
     CurrencyPipe,
     ProductBreadcrumbs,
     CartButton,
+    WishlistButton,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
@@ -29,7 +31,6 @@ export class ProductDetailsPage {
   readonly product = signal<Product | null>(null);
   isLoading = this.store.loading;
 
-  isFavorite = signal(false);
   isCompared = signal(false);
 
   readonly actualPrice = computed(() => this.product()?.discountedPrice ?? this.product()?.price);
@@ -44,11 +45,6 @@ export class ProductDetailsPage {
         this.product.set(fetchedProduct);
       }
     });
-  }
-
-  toggleFavorite(event: MouseEvent): void {
-    event.stopPropagation();
-    this.isFavorite.update((value) => !value);
   }
 
   toggleCompare(event: MouseEvent): void {
