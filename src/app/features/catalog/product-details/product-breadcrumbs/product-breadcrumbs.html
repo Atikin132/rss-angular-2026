@@ -4,7 +4,11 @@
       @for (crumb of breadcrumbs(); track crumb.url; let last = $last) {
         @if (!last) {
           <a class="link" [routerLink]="crumb.url">
-            <mat-icon class="catalog-icon">menu_book</mat-icon>
+            @if (fromPage === 'wishlist') {
+              <mat-icon class="catalog-icon">favorite</mat-icon>
+            } @else {
+              <mat-icon class="catalog-icon">menu_book</mat-icon>
+            }
             {{ crumb.label }}</a
           >
           <span>&nbsp;&nbsp;>&nbsp;&nbsp;</span>

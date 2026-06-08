@@ -20,6 +20,11 @@ export const routes: Routes = [
           import('./features/catalog/catalog.routes').then((m) => m.catalogRoutes),
       },
       {
+        path: 'wishlist',
+        loadChildren: () =>
+          import('./features/wishlist/wishlist.routes').then((m) => m.wishlistRoutes),
+      },
+      {
         path: 'cart',
         loadComponent: () => import('./features/cart/cart.page').then((m) => m.CartPage),
       },

@@ -52,6 +52,12 @@ export class Header {
       route: '/catalog',
     },
     {
+      type: 'link',
+      label: 'Wishlist',
+      icon: 'favorite',
+      route: '/wishlist',
+    },
+    {
       type: 'cart',
       route: '/cart',
     },
