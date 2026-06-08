@@ -1,9 +1,10 @@
-import { Component, HostListener, output, signal } from '@angular/core';
+import { Component, HostListener, inject, output, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CartBadgeComponent } from '../../../../features/cart/cart-badge.component/cart-badge.component';
+import { UserService } from '../../../../features/auth/services/user.service';
 
 @Component({
   selector: 'app-header',
@@ -19,9 +20,15 @@ import { CartBadgeComponent } from '../../../../features/cart/cart-badge.compone
   styleUrl: './header.scss',
 })
 export class Header {
+  private readonly userService = inject(UserService);
+
   logout = output<void>();
 
   isMenuOpen = signal<boolean>(false);
+
+  get username(): string {
+    return this.userService.fullName();
+  }
 
   toggleMenu(): void {
     this.isMenuOpen.update((v) => !v);
@@ -56,7 +63,7 @@ export class Header {
     },
     {
       type: 'link',
-      label: 'Profile',
+      label: this.username,
       icon: 'person',
       route: '/profile',
     },

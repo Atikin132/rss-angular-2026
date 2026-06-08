@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { CartListComponent } from './cart-list.component/cart-list.component';
 import { CartSummaryComponent } from './cart-summary.component/cart-summary.component';
 import { EmptyCartComponent } from './empty-cart.component/empty-cart.component';
-import { MOCK_CART_ITEMS } from './mock/mock-cart-items';
+import { CartService } from './services/cart.service';
 
 @Component({
   selector: 'app-cart.page',
@@ -12,20 +12,22 @@ import { MOCK_CART_ITEMS } from './mock/mock-cart-items';
   styleUrl: './cart.page.scss',
 })
 export class CartPage {
-  protected readonly cartItems = MOCK_CART_ITEMS;
+  private readonly cartService = inject(CartService);
+  readonly cartItems = this.cartService.items;
 
   onIncrease(id: string): void {
-    // eslint-disable-next-line no-console
-    console.log('increase', id);
+    this.cartService.increaseQuantity(id);
   }
 
   onDecrease(id: string): void {
-    // eslint-disable-next-line no-console
-    console.log('decrease', id);
+    this.cartService.decreaseQuantity(id);
   }
 
   onRemove(id: string): void {
-    // eslint-disable-next-line no-console
-    console.log('remove', id);
+    this.cartService.removeItem(id);
+  }
+
+  onClearCart(): void {
+    this.cartService.clearCart();
   }
 }

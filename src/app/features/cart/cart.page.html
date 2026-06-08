@@ -1,15 +1,27 @@
 <section class="cart-page">
-  @if (cartItems.length) {
+  @if (cartItems().length) {
+    <div class="cart-page__header">
+      <div>
+        <h1>Your Shopping Cart</h1>
+        <p>Review your items before checking out</p>
+      </div>
+
+      <button class="cart-page__clear" type="button" (click)="onClearCart()">
+        <span aria-hidden="true">x</span>
+        Clear Cart
+      </button>
+    </div>
+
     <div class="cart-page__content">
       <app-cart-list
         class="cart-page__list"
-        [items]="cartItems"
+        [items]="cartItems()"
         (increase)="onIncrease($event)"
         (decrease)="onDecrease($event)"
         (remove)="onRemove($event)"
       />
 
-      <app-cart-summary class="cart-page__summary" [items]="cartItems" />
+      <app-cart-summary class="cart-page__summary" />
     </div>
   } @else {
     <app-empty-cart />

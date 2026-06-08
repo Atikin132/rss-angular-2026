@@ -1,17 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UnknownPage } from './unknown.page';
+import { WildcardPage } from './wildcard.page';
 
-describe('UnknownPage', () => {
-  let component: UnknownPage;
-  let fixture: ComponentFixture<UnknownPage>;
+describe('WildcardPage', () => {
+  let component: WildcardPage;
+  let fixture: ComponentFixture<WildcardPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UnknownPage],
+      imports: [WildcardPage],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(UnknownPage);
+    fixture = TestBed.createComponent(WildcardPage);
     component = fixture.componentInstance;
     await fixture.whenStable();
   });

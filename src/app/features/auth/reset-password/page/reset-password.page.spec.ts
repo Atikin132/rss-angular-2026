@@ -1,18 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { CartPage } from './cart.page';
+import { ResetPasswordPage } from './reset-password.page';
 
-describe('CartPage', () => {
-  let component: CartPage;
-  let fixture: ComponentFixture<CartPage>;
+describe('ResetPasswordPage', () => {
+  let component: ResetPasswordPage;
+  let fixture: ComponentFixture<ResetPasswordPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CartPage],
+      imports: [ResetPasswordPage],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(CartPage);
+    fixture = TestBed.createComponent(ResetPasswordPage);
     component = fixture.componentInstance;
+
     await fixture.whenStable();
   });
 

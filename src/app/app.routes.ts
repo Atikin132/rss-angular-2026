@@ -1,12 +1,9 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './core/layouts/main-layout/main-layout.component/main-layout.component';
 import { MainPage } from './features/main/page/main.page';
-import { AuthLayoutComponent } from './core/layouts/auth-layout/auth-layout.component/auth-layout.component';
-import { LoginPage } from './features/auth/login/page/login.page';
-import { RegisterPage } from './features/auth/register/page/register.page';
-import { UnknownPage } from './features/wildcard-route/page/unknown.page';
-import { CartPage } from './features/cart/cart.page';
-import { AuthGuard } from './core/guards/auth.guard';
+import { authRoutes } from './features/auth/auth.routes';
+import { wildcardRoutes } from './features/wildcard/wildcard.routes';
+import { authGuard } from './features/auth/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -29,11 +26,11 @@ export const routes: Routes = [
       },
       {
         path: 'cart',
-        component: CartPage,
+        loadComponent: () => import('./features/cart/cart.page').then((m) => m.CartPage),
       },
       {
         path: 'profile',
-        canActivate: [AuthGuard],
+        canActivate: [authGuard],
         loadChildren: () =>
           import('./features/profile/profile.routes').then((m) => m.ProfileRoutes),
       },
@@ -43,22 +40,8 @@ export const routes: Routes = [
       },
     ],
   },
-  {
-    path: '',
-    component: AuthLayoutComponent,
-    children: [
-      {
-        path: 'login',
-        component: LoginPage,
-      },
-      {
-        path: 'register',
-        component: RegisterPage,
-      },
-    ],
-  },
-  {
-    path: '**',
-    component: UnknownPage,
-  },
+
+  ...authRoutes,
+
+  ...wildcardRoutes,
 ];
