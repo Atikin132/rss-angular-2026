@@ -1,8 +1,9 @@
-import { ChangeDetectionStrategy, Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { MatBadgeModule } from '@angular/material/badge';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { CartService } from '../services/cart.service';
 
 @Component({
   selector: 'app-cart-badge',
@@ -13,5 +14,6 @@ import { MatButtonModule } from '@angular/material/button';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartBadgeComponent {
-  count = input(0);
+  private readonly cartService = inject(CartService);
+  readonly count = this.cartService.totalItems;
 }

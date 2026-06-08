@@ -1,7 +1,6 @@
 import { Routes } from '@angular/router';
 import { MainLayoutComponent } from './core/layouts/main-layout/main-layout.component/main-layout.component';
 import { MainPage } from './features/main/page/main.page';
-import { CartPage } from './features/cart/cart.page';
 import { authRoutes } from './features/auth/auth.routes';
 import { wildcardRoutes } from './features/wildcard/wildcard.routes';
 import { authGuard } from './features/auth/guards/auth.guard';
@@ -22,7 +21,7 @@ export const routes: Routes = [
       },
       {
         path: 'cart',
-        component: CartPage,
+        loadComponent: () => import('./features/cart/cart.page').then((m) => m.CartPage),
       },
       {
         path: 'profile',
