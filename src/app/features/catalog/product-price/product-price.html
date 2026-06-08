@@ -1,0 +1,13 @@
+@let productItem = product();
+
+<div class="price-block">
+  <span class="price">
+    {{ actualPrice() | currency: productItem.currency }}
+  </span>
+
+  @if (hasDiscount()) {
+    <span class="old-price">
+      {{ productItem.price | currency: productItem.currency }}
+    </span>
+  }
+</div>

@@ -1,0 +1,26 @@
+@let products = filteredAndSortedProducts();
+
+<div class="page-content">
+  <app-filters
+    [value]="filters()"
+    [categories]="categories()"
+    [brands]="brands()"
+    (valueChange)="filters.set($event)"
+  />
+  <div class="catalog-page">
+    <div class="sort-search">
+      <app-sort [value]="sort()" (valueChange)="onSortChange($event)" />
+      <app-search [value]="search()" (valueChange)="onSearchChange($event)" />
+    </div>
+
+    @if (products.length > 0) {
+      <div class="grid">
+        @for (product of products; track product.id) {
+          <app-product-card [product]="product" />
+        }
+      </div>
+    } @else {
+      <p class="nothing-found-text">Nothing found</p>
+    }
+  </div>
+</div>

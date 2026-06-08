@@ -2,6 +2,7 @@ import { Component, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { Header } from '../header/header';
 import { Footer } from '../footer/footer';
+import { AuthService } from '../../../../features/auth/services/auth.service';
 
 @Component({
   selector: 'app-main-layout',
@@ -11,8 +12,10 @@ import { Footer } from '../footer/footer';
 })
 export class MainLayoutComponent {
   private router = inject(Router);
+  private readonly authService = inject(AuthService);
 
   onLogout(): void {
+    this.authService.logout();
     this.router.navigate(['/login']);
   }
 }

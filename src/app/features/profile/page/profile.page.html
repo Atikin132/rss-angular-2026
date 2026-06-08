@@ -1,1 +1,57 @@
-<p>profile.page works!</p>
+<section class="profile-page">
+  <div class="private-notice">
+    <mat-icon aria-hidden="true">lock</mat-icon>
+    <span>This page is private. You are viewing your secure profile as an authenticated user.</span>
+  </div>
+
+  <div class="profile-layout">
+    <aside class="profile-sidebar" aria-label="Profile navigation">
+      <nav class="profile-nav">
+        <a
+          class="profile-nav__link"
+          routerLink="/profile"
+          routerLinkActive="profile-nav__link--active"
+          [routerLinkActiveOptions]="{ exact: true }"
+        >
+          <mat-icon aria-hidden="true">person</mat-icon>
+          <span>Personal Info</span>
+        </a>
+
+        <a
+          class="profile-nav__link"
+          routerLink="/profile/security"
+          routerLinkActive="profile-nav__link--active"
+        >
+          <mat-icon aria-hidden="true">shield</mat-icon>
+          <span>Security</span>
+        </a>
+
+        <a
+          class="profile-nav__link"
+          routerLink="/profile/addresses"
+          routerLinkActive="profile-nav__link--active"
+        >
+          <mat-icon aria-hidden="true">location_on</mat-icon>
+          <span>Addresses</span>
+        </a>
+      </nav>
+
+      <article class="member-card">
+        <div class="member-card__cover" aria-hidden="true"></div>
+
+        <div class="member-card__avatar" aria-hidden="true">
+          <mat-icon>face</mat-icon>
+        </div>
+
+        <div class="member-card__body">
+          <h2>{{ profile().firstName }} {{ profile().lastName }}</h2>
+          <p>Member since Jan 2024</p>
+        </div>
+      </article>
+    </aside>
+
+    <div class="profile-content">
+      <router-outlet />
+    </div>
+  </div>
+</section>

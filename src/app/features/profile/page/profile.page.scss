@@ -1,0 +1,148 @@
+.profile-page {
+  min-height: 520px;
+  padding: 32px;
+  background-color: #fbf9ff;
+}
+
+.private-notice {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  min-height: 60px;
+  padding: 16px 20px;
+  color: #4a4a55;
+  background-color: #e2e0e6;
+  border-radius: 8px;
+  font-size: 14px;
+}
+
+.private-notice mat-icon {
+  color: #5f6068;
+  font-size: 20px;
+}
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 32px;
+  margin-top: 32px;
+}
+
+.profile-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 36px;
+}
+
+.profile-content {
+  min-width: 0;
+}
+
+.profile-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-nav__link {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  height: 56px;
+  padding: 0 24px;
+  color: #33343b;
+  text-decoration: none;
+  border-radius: 28px;
+  font-weight: 700;
+}
+
+.profile-nav__link mat-icon {
+  font-size: 20px;
+}
+
+.profile-nav__link--active {
+  color: #ffffff;
+  background-color: #0279df;
+}
+
+.member-card {
+  overflow: hidden;
+  background-color: #e6e2e8;
+  border-radius: 8px;
+}
+
+.member-card__cover {
+  height: 136px;
+  background-color: #111318;
+  background-image:
+    radial-gradient(circle at center, #25282e 0, #08090d 50%, transparent 51%),
+    linear-gradient(135deg, #2b3036, #050608);
+}
+
+.member-card__avatar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 76px;
+  height: 76px;
+  margin: -38px auto 0;
+  color: #ffffff;
+  background-color: #087de4;
+  border: 4px solid #ffffff;
+  border-radius: 50%;
+  box-shadow: 0 6px 18px rgba(2, 121, 223, 0.32);
+}
+
+.member-card__avatar mat-icon {
+  font-size: 32px;
+}
+
+.member-card__body {
+  padding: 20px 16px 24px;
+  text-align: center;
+}
+
+.member-card__body h2 {
+  margin: 0;
+  color: #181923;
+  font-size: 16px;
+}
+
+.member-card__body p {
+  margin: 4px 0 0;
+  color: #555866;
+  font-size: 14px;
+}
+
+@media (max-width: 900px) {
+  .profile-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-sidebar {
+    gap: 24px;
+  }
+
+  .profile-nav {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  .profile-nav__link {
+    flex: 1 1 190px;
+  }
+
+  .member-card {
+    max-width: 384px;
+  }
+}
+
+@media (max-width: 640px) {
+  .profile-page {
+    padding: 16px;
+  }
+
+  .private-notice {
+    align-items: flex-start;
+  }
+}
