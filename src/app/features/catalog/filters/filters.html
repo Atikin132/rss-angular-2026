@@ -1,0 +1,78 @@
+<div class="filters-container">
+  <div class="filters">
+    <div class="title-clear">
+      <h3 class="block-title">Filters</h3>
+      <button mat-button class="clear-btn" (click)="clearAll()">Clear all</button>
+    </div>
+
+    <div class="filter-block">
+      <h4 class="filter-title">Category</h4>
+      <div class="filter-checkbox">
+        @for (category of categories(); track category) {
+          <mat-checkbox
+            class="checkbox-text"
+            [checked]="value().categories.includes(category)"
+            (change)="toggleCategory(category)"
+          >
+            {{ category }}
+          </mat-checkbox>
+        }
+      </div>
+    </div>
+
+    <div class="filter-block">
+      <h4 class="filter-title">Brand</h4>
+
+      <mat-form-field appearance="outline" class="brand-select">
+        <mat-select
+          placeholder="All Brands"
+          multiple
+          [value]="value().brands"
+          (selectionChange)="onBrandsChange($event)"
+        >
+          @for (brand of brands(); track brand) {
+            <mat-option [value]="brand">
+              {{ brand }}
+            </mat-option>
+          }
+        </mat-select>
+      </mat-form-field>
+    </div>
+
+    <div class="filter-block">
+      <h4 class="filter-title">Price range</h4>
+
+      <mat-slider class="price-slider" [min]="0" [max]="5000" [step]="50">
+        <input
+          matSliderStartThumb
+          [value]="value().minPrice ?? 0"
+          (valueChange)="onMinSliderChange($event)"
+        />
+
+        <input
+          matSliderEndThumb
+          [value]="value().maxPrice ?? 5000"
+          (valueChange)="onMaxSliderChange($event)"
+        />
+      </mat-slider>
+
+      <div class="price-inputs">
+        <input
+          type="number"
+          placeholder="Min"
+          min="0"
+          [value]="value().minPrice ?? ''"
+          (input)="updateMinPrice($any($event.target).value)"
+        />
+
+        <input
+          type="number"
+          placeholder="Max"
+          min="0"
+          [value]="value().maxPrice ?? ''"
+          (input)="updateMaxPrice($any($event.target).value)"
+        />
+      </div>
+    </div>
+  </div>
+</div>

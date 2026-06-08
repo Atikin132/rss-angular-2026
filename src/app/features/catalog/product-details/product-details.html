@@ -1,0 +1,23 @@
+@if (product(); as productItem) {
+  <app-product-breadcrumbs [productName]="productItem.name" [slug]="productItem.slug" />
+  <div class="page-content">
+    <app-product-gallery class="gallery" [images]="productItem.images" />
+    <div class="info-btns">
+      <div class="info">
+        <div>
+          <p class="brand-name">{{ productItem.brand }}</p>
+          <h2 class="product-name">{{ productItem.name }}</h2>
+        </div>
+        <app-product-price [product]="productItem" />
+        <p>{{ productItem.description }}</p>
+      </div>
+      <div class="btns">
+        <app-cart-button class="add-to-cart-btn" [product]="productItem" />
+        <app-wishlist-button class="wishlist-btn" [product]="productItem" />
+        <app-compare-button class="compare-btn" [product]="productItem" />
+      </div>
+    </div>
+  </div>
+} @else {
+  <p class="nothing-found-text">Nothing found</p>
+}

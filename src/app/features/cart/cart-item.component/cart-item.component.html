@@ -1,0 +1,32 @@
+<mat-card class="cart-item">
+  <div class="cart-item__details">
+    <div class="cart-item__media">
+      <img class="cart-item__image" [src]="item().imageUrl" [alt]="item().name" />
+    </div>
+
+    <div class="cart-item__info">
+      <h3>{{ item().name }}</h3>
+      <p class="cart-item__meta">Color: Blue</p>
+
+      <p class="cart-item__price">${{ item().price }}</p>
+    </div>
+  </div>
+
+  <div class="cart-item__actions">
+    <div class="cart-item__quantity">
+      <button mat-icon-button type="button" (click)="onDecrease()">
+        <mat-icon>remove</mat-icon>
+      </button>
+
+      <span>{{ item().quantity }}</span>
+
+      <button mat-icon-button type="button" (click)="onIncrease()">
+        <mat-icon>add</mat-icon>
+      </button>
+    </div>
+
+    <button class="cart-item__remove" type="button" aria-label="Remove item" (click)="onRemove()">
+      <mat-icon>close</mat-icon>
+    </button>
+  </div>
+</mat-card>

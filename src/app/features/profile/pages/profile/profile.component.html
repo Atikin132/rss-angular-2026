@@ -1,0 +1,51 @@
+<article class="personal-card">
+  <header class="personal-card__header">
+    <div>
+      <h1>Personal Information</h1>
+      <p>Manage your account details and how we contact you.</p>
+    </div>
+
+    @if (!isEditMode()) {
+      <button mat-stroked-button type="button" (click)="editProfile()">
+        <mat-icon aria-hidden="true">edit</mat-icon>
+        <span>Edit</span>
+      </button>
+    } @else {
+      <div class="edit-actions">
+        <button mat-flat-button type="button" (click)="saveProfile()">
+          <mat-icon aria-hidden="true">save</mat-icon>
+          <span>Save</span>
+        </button>
+
+        <button mat-stroked-button type="button" (click)="cancelEdit()">
+          <mat-icon aria-hidden="true">close</mat-icon>
+          <span>Cancel</span>
+        </button>
+      </div>
+    }
+  </header>
+
+  <form class="personal-form" [formGroup]="profileForm">
+    <mat-form-field appearance="outline">
+      <mat-label>First Name</mat-label>
+      <input matInput type="text" formControlName="firstName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Last Name</mat-label>
+      <input matInput type="text" formControlName="lastName" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Email Address</mat-label>
+      <input matInput type="email" formControlName="email" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Date of Birth</mat-label>
+      <input matInput [matDatepicker]="birthDatePicker" formControlName="dateOfBirth" />
+      <mat-datepicker-toggle matIconSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
+      <mat-datepicker #birthDatePicker></mat-datepicker>
+    </mat-form-field>
+  </form>
+</article>

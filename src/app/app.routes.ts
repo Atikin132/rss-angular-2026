@@ -1,15 +1,9 @@
 import { Routes } from '@angular/router';
-import { MainLayoutComponent } from './layouts/main-layout/main-layout.component/main-layout.component';
-import { AuthLayoutComponent } from './layouts/auth-layout/auth-layout.component/auth-layout.component';
-import { LoginPage } from './pages/login.page/login.page';
-import { RegisterPage } from './pages/register.page/register.page';
-import { UnknownPage } from './pages/unknown.page/unknown.page';
-import { MainPage } from './pages/main.page/main.page';
-import { CatalogPage } from './pages/catalog.page/catalog.page';
-import { ProductDetailsPage } from './pages/product-details.page/product-details.page';
-import { CartPage } from './pages/cart.page/cart.page';
-import { ProfilePage } from './pages/profile.page/profile.page';
-import { AboutPage } from './pages/about.page/about.page';
+import { MainLayoutComponent } from './core/layouts/main-layout/main-layout.component/main-layout.component';
+import { MainPage } from './features/main/page/main.page';
+import { authRoutes } from './features/auth/auth.routes';
+import { wildcardRoutes } from './features/wildcard/wildcard.routes';
+import { authGuard } from './features/auth/guards/auth.guard';
 
 export const routes: Routes = [
   {
@@ -22,42 +16,32 @@ export const routes: Routes = [
       },
       {
         path: 'catalog',
-        component: CatalogPage,
+        loadChildren: () =>
+          import('./features/catalog/catalog.routes').then((m) => m.catalogRoutes),
       },
       {
-        path: 'catalog/product/:id',
-        component: ProductDetailsPage,
+        path: 'wishlist',
+        loadChildren: () =>
+          import('./features/wishlist/wishlist.routes').then((m) => m.wishlistRoutes),
       },
       {
         path: 'cart',
-        component: CartPage,
+        loadComponent: () => import('./features/cart/cart.page').then((m) => m.CartPage),
       },
       {
         path: 'profile',
-        component: ProfilePage,
+        canActivate: [authGuard],
+        loadChildren: () =>
+          import('./features/profile/profile.routes').then((m) => m.ProfileRoutes),
       },
       {
         path: 'about',
-        component: AboutPage,
+        loadComponent: () => import('./features/about/page/about.page').then((m) => m.AboutPage),
       },
     ],
   },
-  {
-    path: '',
-    component: AuthLayoutComponent,
-    children: [
-      {
-        path: 'login',
-        component: LoginPage,
-      },
-      {
-        path: 'register',
-        component: RegisterPage,
-      },
-    ],
-  },
-  {
-    path: '**',
-    component: UnknownPage,
-  },
+
+  ...authRoutes,
+
+  ...wildcardRoutes,
 ];

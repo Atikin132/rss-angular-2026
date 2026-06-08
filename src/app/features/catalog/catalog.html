@@ -1,0 +1,16 @@
+<div class="page-content">
+  <app-filters
+    [value]="filters()"
+    [categories]="categories()"
+    [brands]="brands()"
+    (valueChange)="filters.set($event)"
+  />
+  <div class="catalog-page">
+    <div class="sort-search">
+      <app-sort [value]="sort()" (valueChange)="onSortChange($event)" />
+      <app-search [value]="search()" (valueChange)="onSearchChange($event)" />
+    </div>
+
+    <app-product-grid [products]="filteredAndSortedProducts()" />
+  </div>
+</div>

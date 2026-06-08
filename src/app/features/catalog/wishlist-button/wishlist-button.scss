@@ -1,0 +1,16 @@
+.wishlist-btn {
+  width: 100%;
+  color: gray;
+
+  transition:
+    color 0.2s,
+    transform 0.2s;
+
+  &:hover {
+    color: red;
+  }
+
+  &.active {
+    color: red;
+  }
+}

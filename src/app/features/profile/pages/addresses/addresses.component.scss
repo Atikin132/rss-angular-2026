@@ -1,0 +1,132 @@
+.addresses-page {
+  min-height: 100%;
+}
+
+.addresses-card {
+  padding: 36px;
+  background-color: #ffffff;
+  border: 1px solid #d3d0d9;
+  border-radius: 22px;
+}
+
+.addresses-card__header {
+  display: flex;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.addresses-card__header h1 {
+  margin: 0;
+  color: #0876d8;
+  font-size: 32px;
+  font-weight: 400;
+}
+
+.addresses-card__header p {
+  margin: 8px 0 0;
+  color: #4e5360;
+  font-size: 16px;
+}
+
+.address-list {
+  margin-top: 36px;
+}
+
+.address-item {
+  display: grid;
+  grid-template-columns: 56px 1fr;
+  gap: 20px;
+  align-items: center;
+  padding: 20px;
+  background-color: #fbfaff;
+  border: 1px solid #d8d5dd;
+  border-radius: 14px;
+}
+
+.address-item__icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  color: #ffffff;
+  background-color: #087de4;
+  border-radius: 50%;
+}
+
+.address-item__title {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.address-item__title h2 {
+  margin: 0;
+  color: #181923;
+  font-size: 18px;
+}
+
+.address-item__title span {
+  padding: 4px 10px;
+  color: #0876d8;
+  background-color: #e6f2ff;
+  border-radius: 14px;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.address-item__content p {
+  margin: 8px 0 0;
+  color: #555866;
+  font-size: 14px;
+}
+
+.address-form {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px 32px;
+  margin-top: 36px;
+}
+
+.address-form mat-form-field {
+  width: 100%;
+}
+
+.edit-actions {
+  display: flex;
+  gap: 8px;
+}
+
+@media (max-width: 760px) {
+  .addresses-card {
+    padding: 20px;
+    border-radius: 14px;
+  }
+
+  .addresses-card__header {
+    flex-direction: column;
+  }
+
+  .addresses-card__header h1 {
+    font-size: 26px;
+  }
+
+  .address-item {
+    grid-template-columns: 1fr;
+  }
+
+  .address-form {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+
+  .addresses-card__header button,
+  .edit-actions button {
+    width: 100%;
+  }
+
+  .edit-actions {
+    flex-direction: column;
+  }
+}

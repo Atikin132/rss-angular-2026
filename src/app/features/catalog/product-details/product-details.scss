@@ -1,0 +1,67 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  padding: 32px;
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: space-between;
+  gap: 50px;
+}
+
+.page-content {
+  display: flex;
+  gap: 50px;
+}
+
+.gallery {
+  flex: 3;
+}
+
+.info-btns {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.brand-name {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.product-name {
+  margin: 0;
+  font-size: 1.5rem;
+  line-height: 1.3;
+}
+
+app-product-price {
+  --product-price-size: 24px;
+  --product-old-price-size: 19px;
+}
+
+.btns {
+  display: flex;
+  gap: 10px;
+}
+
+.add-to-cart-btn {
+  flex: 2;
+}
+
+.wishlist-btn,
+.compare-btn {
+  flex: 1;
+}
+
+@media (max-width: 685px) {
+  .page-content {
+    flex-direction: column;
+  }
+}
