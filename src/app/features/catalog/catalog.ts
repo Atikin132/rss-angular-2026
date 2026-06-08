@@ -2,7 +2,7 @@ import { Component, computed, inject, OnInit, signal } from '@angular/core';
 import { Search } from './search/search';
 import { Sort, SortType } from './sort/sort';
 import { CatalogFilters, Filters } from './filters/filters';
-import { ProductsStore } from './products.store';
+import { ProductsStore } from './stores/products.store';
 import { filterProducts } from './utils/filter-products';
 import { sortMap } from './utils/sort-map';
 import { ProductCard } from './product-card/product-card';

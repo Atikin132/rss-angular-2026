@@ -1,0 +1,20 @@
+.price-block {
+  display: flex;
+  gap: 8px;
+
+  .price {
+    color: var(--mat-sys-primary);
+    font-size: 18px;
+    font-size: var(--product-price-size, 18px);
+
+    font-weight: 700;
+  }
+
+  .old-price {
+    font-size: 13px;
+    font-size: var(--product-old-price-size, 13px);
+
+    color: #999;
+    text-decoration: line-through;
+  }
+}

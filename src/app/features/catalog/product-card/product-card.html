@@ -6,51 +6,11 @@
   <div class="card-info">
     <div class="info">
       <h3 class="product-name">{{ productItem.name }}</h3>
-
-      <div class="price-block">
-        <span class="price">
-          {{ actualPrice() | currency: productItem.currency }}
-        </span>
-
-        @if (hasDiscount()) {
-          <span class="old-price">
-            {{ productItem.price | currency: productItem.currency }}
-          </span>
-        }
-      </div>
+      <app-product-price [product]="productItem" />
     </div>
-
-    <button
-      mat-flat-button
-      class="add-to-cart-btn"
-      [class.added]="cartButtonState().added"
-      [class.remove]="cartButtonState().remove"
-      (click)="toggleCart($event)"
-      (mouseenter)="hovered.set(true)"
-      (mouseleave)="hovered.set(false)"
-    >
-      <mat-icon>{{ cartButtonState().icon }}</mat-icon>
-
-      {{ cartButtonState().text }}
-    </button>
+    <app-cart-button [product]="productItem" />
   </div>
-  <button
-    mat-icon-button
-    class="wishlist-btn"
-    [class.active]="isFavorite()"
-    (click)="toggleFavorite($event)"
-  >
-    <mat-icon>
-      {{ isFavorite() ? 'favorite' : 'favorite_border' }}
-    </mat-icon>
-  </button>
 
-  <button
-    mat-icon-button
-    class="compare-btn"
-    [class.active]="isCompared()"
-    (click)="toggleCompare($event)"
-  >
-    <mat-icon>balance</mat-icon>
-  </button>
+  <app-compare-button class="compare-btn" [product]="productItem" />
+  <app-wishlist-button class="wishlist-btn" [product]="productItem" />
 </div>

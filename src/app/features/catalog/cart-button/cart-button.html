@@ -1,0 +1,13 @@
+<button
+  mat-flat-button
+  class="add-to-cart-btn"
+  [class.added]="cartButtonState().added"
+  [class.remove]="cartButtonState().remove"
+  (click)="toggleCart($event)"
+  (mouseenter)="hovered.set(true)"
+  (mouseleave)="hovered.set(false)"
+>
+  <mat-icon>{{ cartButtonState().icon }}</mat-icon>
+
+  {{ cartButtonState().text }}
+</button>

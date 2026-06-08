@@ -1,0 +1,10 @@
+<button
+  mat-icon-button
+  class="wishlist-btn"
+  [class.active]="inWishlist()"
+  (click)="toggleFavorite($event)"
+>
+  <mat-icon>
+    {{ inWishlist() ? 'favorite' : 'favorite_border' }}
+  </mat-icon>
+</button>
