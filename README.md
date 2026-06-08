@@ -1,5 +1,7 @@
 
 # NovaKrama
+## Deploy
+[Deploy link](https://rss-angular-2026.vercel.app/)
 
 ## About
 This app is a **Rolling Scopes School Angular 2026 Q2 course** [team task](https://github.com/rolling-scopes-school/tasks/tree/master/angular/tasks/angular-team-task).
@@ -19,6 +21,7 @@ The platform allows users to browse products, search and filter catalog items, m
 
 ## Meeting Notes
 - [Meeting — 2026-05-16](https://github.com/Atikin132/rss-angular-2026/blob/main/meetings-notes/meeting-2026-05-16.md)
+- [Meeting — 2026-05-19](https://github.com/Atikin132/rss-angular-2026/blob/main/meetings-notes/meeting-2026-05-19.md)
 
 ## Tech stack
 
