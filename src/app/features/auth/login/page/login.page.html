@@ -1,1 +1,44 @@
-<p>login.page works!</p>
+<section class="login">
+  <mat-card class="login__card">
+    <div class="login__logo">
+      <mat-icon class="login__logoIcon">shopping_cart</mat-icon>
+    </div>
+    <h1 class="login__title">Login</h1>
+    <p class="login__subtitle">Sign in to continue to your account</p>
+    <form class="login__form" [formGroup]="loginForm" (ngSubmit)="submit()">
+      <mat-form-field appearance="outline">
+        <mat-label>Email</mat-label>
+        <input matInput type="email" formControlName="email" />
+        @if (loginForm.controls.email.invalid && loginForm.controls.email.touched) {
+          <mat-error>Please enter a valid email</mat-error>
+        }
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Password</mat-label>
+        <input
+          matInput
+          [type]="isPasswordVisible() ? 'text' : 'password'"
+          formControlName="password"
+        />
+        <button mat-icon-button matSuffix type="button" (click)="togglePasswordVisibility()">
+          <mat-icon>
+            {{ isPasswordVisible() ? 'visibility_off' : 'visibility' }}
+          </mat-icon>
+        </button>
+        @if (loginForm.controls.password.invalid && loginForm.controls.password.touched) {
+          <mat-error>Password must be at least 6 characters</mat-error>
+        }
+      </mat-form-field>
+      <div class="login__actions">
+        <mat-checkbox [checked]="rememberMe()" (change)="toggleRememberMe()">
+          Remember me
+        </mat-checkbox>
+        <a routerLink="/reset-password"> Forgot password? </a>
+      </div>
+      <button mat-raised-button color="primary" type="submit" [disabled]="loginForm.invalid">
+        Login
+      </button>
+    </form>
+    <a routerLink="/register"> Don't have an account? Register </a>
+  </mat-card>
+</section>

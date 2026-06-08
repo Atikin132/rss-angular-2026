@@ -1,0 +1,67 @@
+.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 24px;
+  background: #f5f7fb;
+  &__card {
+    width: 100%;
+    max-width: 420px;
+    padding: 28px 24px;
+    text-align: center;
+  }
+  &__logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 12px;
+  }
+  &__logoIcon {
+    width: 48px;
+    height: 48px;
+    font-size: 48px;
+    color: #3f51b5;
+  }
+  &__title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 600;
+  }
+  &__subtitle {
+    margin-top: 6px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #666;
+  }
+  &__form {
+    display: flex;
+    flex-direction: column;
+  }
+  mat-form-field {
+    margin-bottom: 4px;
+  }
+  &__actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+  }
+  &__forgot {
+    padding: 0;
+    border: none;
+    background: none;
+    cursor: pointer;
+    font-size: 13px;
+    color: #3f51b5;
+  }
+  button[mat-raised-button] {
+    color: white;
+    background-color: #3f51b5;
+
+    &:disabled {
+      background-color: #b0b7d6;
+      color: #f5f5f5;
+      cursor: not-allowed;
+    }
+  }
+}

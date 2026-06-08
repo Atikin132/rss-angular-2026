@@ -1,18 +1,19 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { UnknownPage } from './unknown.page';
+import { ResetPasswordPage } from './reset-password.page';
 
-describe('UnknownPage', () => {
-  let component: UnknownPage;
-  let fixture: ComponentFixture<UnknownPage>;
+describe('ResetPasswordPage', () => {
+  let component: ResetPasswordPage;
+  let fixture: ComponentFixture<ResetPasswordPage>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [UnknownPage],
+      imports: [ResetPasswordPage],
     }).compileComponents();
 
-    fixture = TestBed.createComponent(UnknownPage);
+    fixture = TestBed.createComponent(ResetPasswordPage);
     component = fixture.componentInstance;
+
     await fixture.whenStable();
   });
 

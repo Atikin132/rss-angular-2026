@@ -1,0 +1,34 @@
+:host {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+}
+.error-card {
+  max-width: 500px;
+  padding: 32px;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+mat-icon {
+  width: 96px;
+  height: 96px;
+  font-size: 96px;
+}
+h1 {
+  margin: 0;
+  font-size: 96px;
+  line-height: 1;
+  font-weight: 700;
+}
+h2 {
+  margin: 0;
+}
+p {
+  margin: 0;
+  max-width: 350px;
+}
