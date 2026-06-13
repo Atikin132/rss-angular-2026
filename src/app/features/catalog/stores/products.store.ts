@@ -25,7 +25,8 @@ const initialState: ProductsState = {
   error: null,
 };
 
-const PRODUCTS_ENDPOINT = '/product-projections/search?limit=50';
+const PRODUCTS_ENDPOINT = '/product-projections/search';
+const PRODUCTS_LIMIT_PER_PAGE = '?limit=30';
 const CATEGORIES_ENDPOINT = '/categories';
 
 export const ProductsStore = signalStore(
@@ -50,8 +51,9 @@ export const ProductsStore = signalStore(
           error: null,
         });
 
-        const productsPromise =
-          apiService.request<PagedResponse<CommercetoolsProductProjection>>(PRODUCTS_ENDPOINT);
+        const productsPromise = apiService.request<PagedResponse<CommercetoolsProductProjection>>(
+          PRODUCTS_ENDPOINT + PRODUCTS_LIMIT_PER_PAGE,
+        );
 
         const categoriesPromise =
           store.categoriesMap().size > 0
@@ -108,7 +110,7 @@ export const ProductsStore = signalStore(
         }
 
         const data = await apiService.request<PagedResponse<CommercetoolsProductProjection>>(
-          `/product-projections/search?filter=slug.en-US:"${slug}"&limit=1`,
+          `${PRODUCTS_ENDPOINT}?filter=slug.en-US:"${slug}"&limit=1`,
         );
 
         if (!data.results.length) {
