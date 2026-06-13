@@ -1,26 +1,32 @@
 import { computed, inject } from '@angular/core';
 import { patchState, signalStore, withComputed, withMethods, withState } from '@ngrx/signals';
 import { ApiService } from '../../../core/services/commercetools/commercetools-api.service';
-import { mapProduct } from '../../../core/services/commercetools/mapper';
+import { mapCategories, mapProduct } from '../../../core/services/commercetools/mapper';
 import { Product } from '../models/product.model';
 import {
+  CommercetoolsCategory,
   CommercetoolsProductProjection,
   PagedResponse,
 } from '../../../core/services/commercetools/commercetools.types';
 
 interface ProductsState {
   products: Product[];
+  categories: string[];
+  categoriesMap: Map<string, string>;
   loading: boolean;
   error: string | null;
 }
 
 const initialState: ProductsState = {
   products: [],
+  categories: [],
+  categoriesMap: new Map(),
   loading: false,
   error: null,
 };
 
-const PRODUCTS_ENDPOINT = '/product-projections?limit=50&expand=categories[*]';
+const PRODUCTS_ENDPOINT = '/product-projections/search?limit=50';
+const CATEGORIES_ENDPOINT = '/categories';
 
 export const ProductsStore = signalStore(
   { providedIn: 'root' },
@@ -28,10 +34,6 @@ export const ProductsStore = signalStore(
   withState(initialState),
 
   withComputed((store) => ({
-    categories: computed(() => {
-      return [...new Set(store.products().map((p) => p.category))].sort();
-    }),
-
     brands: computed(() => {
       return [...new Set(store.products().map((p) => p.brand))].sort();
     }),
@@ -48,13 +50,26 @@ export const ProductsStore = signalStore(
           error: null,
         });
 
-        const data =
-          await apiService.request<PagedResponse<CommercetoolsProductProjection>>(
-            PRODUCTS_ENDPOINT,
-          );
+        const productsPromise =
+          apiService.request<PagedResponse<CommercetoolsProductProjection>>(PRODUCTS_ENDPOINT);
+
+        const categoriesPromise =
+          store.categoriesMap().size > 0
+            ? Promise.resolve(null)
+            : apiService.request<PagedResponse<CommercetoolsCategory>>(CATEGORIES_ENDPOINT);
+
+        const [productsData, categoriesData] = await Promise.all([
+          productsPromise,
+          categoriesPromise,
+        ]);
+
+        const categoriesMap =
+          categoriesData !== null ? mapCategories(categoriesData.results) : store.categoriesMap();
 
         patchState(store, {
-          products: data.results.map(mapProduct),
+          categoriesMap,
+          categories: [...categoriesMap.values()].sort(),
+          products: productsData.results.map((product) => mapProduct(product, categoriesMap)),
         });
       } catch {
         patchState(store, {
@@ -68,31 +83,48 @@ export const ProductsStore = signalStore(
     },
     async loadProductBySlug(slug: string): Promise<Product | null> {
       const existingProduct = store.products().find((product) => product.slug === slug);
+
       if (existingProduct) {
         return existingProduct;
       }
+
       try {
         patchState(store, {
           loading: true,
           error: null,
         });
 
-        const data = await apiService.request<PagedResponse<CommercetoolsProductProjection>>(
-          `/product-projections?where=slug(en-US="${slug}")&limit=1&expand=categories[*]`,
-        );
-        const product = mapProduct(data.results[0]);
+        let categoriesMap = store.categoriesMap();
 
-        if (!product) {
+        if (categoriesMap.size === 0) {
+          const categoriesData =
+            await apiService.request<PagedResponse<CommercetoolsCategory>>(CATEGORIES_ENDPOINT);
+
+          categoriesMap = mapCategories(categoriesData.results);
+
+          patchState(store, {
+            categoriesMap,
+          });
+        }
+
+        const data = await apiService.request<PagedResponse<CommercetoolsProductProjection>>(
+          `/product-projections/search?filter=slug.en-US:"${slug}"&limit=1`,
+        );
+
+        if (!data.results.length) {
           patchState(store, {
             error: 'Product not found',
           });
+
           return null;
         }
-        return product;
+
+        return mapProduct(data.results[0], categoriesMap);
       } catch {
         patchState(store, {
           error: 'Failed to load product',
         });
+
         return null;
       } finally {
         patchState(store, {
