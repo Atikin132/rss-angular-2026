@@ -1,34 +1,115 @@
-import { Injectable, signal } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
+import { ApiService } from '../../../core/services/commercetools/commercetools-api.service';
+import { RegisterRequests } from '../models/api/register-request.model';
+import { Customer } from '../../../core/models/customer.model';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { LoginResponse } from '../models/api/login-response.model';
+import { environment } from '../../../../environments/environment';
+import { firstValueFrom } from 'rxjs';
+import { CustomerService } from './customer.service';
+import { Router } from '@angular/router';
 
-const AUTH_KEY = 'isAuthenticated';
+const ACCESS_TOKEN_KEY = 'accessToken';
+const REFRESH_TOKEN_KEY = 'refreshToken';
+const EXPIRES_AT_KEY = 'expiresAt';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthService {
   readonly isAuthenticated = signal(false);
+  private readonly http = inject(HttpClient);
+  private readonly api = inject(ApiService);
+  private readonly customerService = inject(CustomerService);
+  private readonly router = inject(Router);
 
   initAuth(): void {
-    const localValue = localStorage.getItem(AUTH_KEY);
-    const sessionValue = sessionStorage.getItem(AUTH_KEY);
+    const accessToken =
+      localStorage.getItem('accessToken') ?? sessionStorage.getItem('accessToken');
 
-    this.isAuthenticated.set(localValue === 'true' || sessionValue === 'true');
+    const expiresAt = localStorage.getItem('expiresAt') ?? sessionStorage.getItem('expiresAt');
+
+    this.isAuthenticated.set(!!accessToken && !!expiresAt && Date.now() < Number(expiresAt));
   }
 
-  login(rememberMe = false): void {
-    this.isAuthenticated.set(true);
+  async register(data: RegisterRequests): Promise<void> {
+    try {
+      let res = await this.api.post<{ customer: Customer }>('/customers', data.account);
+      const updateInfoBody = {
+        version: res.customer.version,
+        actions: [
+          { action: 'setDateOfBirth', ...data.dateOfBirth },
+          { action: 'addAddress', address: { ...data.address, externalId: 'should not be empty' } },
+        ],
+      };
+      res = await this.api.post<{ customer: Customer }>(
+        `/customers/${res.customer.id}`,
+        updateInfoBody,
+      );
+      this.login(data.account.email, data.account.password, false);
+    } catch (error) {
+      if (error instanceof HttpErrorResponse) {
+        throw new Error(error.error?.message ?? 'Registration failed. Please try again.', {
+          cause: error,
+        });
+      }
 
-    if (rememberMe) {
-      localStorage.setItem(AUTH_KEY, 'true');
-    } else {
-      sessionStorage.setItem(AUTH_KEY, 'true');
+      throw error;
     }
   }
 
-  logout(): void {
-    this.isAuthenticated.set(false);
+  async login(email: string, password: string, rememberMe: boolean): Promise<LoginResponse> {
+    const storage = rememberMe ? localStorage : sessionStorage;
 
-    localStorage.removeItem(AUTH_KEY);
-    sessionStorage.removeItem(AUTH_KEY);
+    const credentials = btoa(
+      `${environment.commercetools.clientId}:${environment.commercetools.clientSecret}`,
+    );
+
+    const body = new HttpParams()
+      .set('grant_type', 'password')
+      .set('username', email)
+      .set('password', password);
+
+    const response = await firstValueFrom(
+      this.http.post<LoginResponse>(
+        `${environment.commercetools.authUrl}/oauth/${environment.commercetools.projectKey}/customers/token`,
+
+        body.toString(),
+
+        {
+          headers: {
+            Authorization: `Basic ${credentials}`,
+            'Content-Type': 'application/x-www-form-urlencoded',
+          },
+        },
+      ),
+    );
+
+    storage.setItem(ACCESS_TOKEN_KEY, response.access_token);
+    storage.setItem(REFRESH_TOKEN_KEY, response.refresh_token || '');
+    storage.setItem(EXPIRES_AT_KEY, String(Date.now() + response.expires_in * 1000));
+
+    this.isAuthenticated.set(true);
+
+    const customerId = response.scope
+      .split(' ')
+      .find((s) => s.startsWith('customer_id:'))
+      ?.replace('customer_id:', '');
+
+    if (customerId) {
+      const customer = await this.api.request<Customer>(`/customers/${customerId}`);
+      this.customerService.setUser(customer);
+    }
+    void this.router.navigate(['/']);
+    return response;
+  }
+
+  logout(): void {
+    if (!this.isAuthenticated()) return;
+
+    this.isAuthenticated.set(false);
+    localStorage.clear();
+    sessionStorage.clear();
+    this.router.navigate(['/login']);
   }
 }

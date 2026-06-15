@@ -5,6 +5,11 @@
     </div>
     <h1 class="register__title">Create Account</h1>
     <p class="register__subtitle">Create your account to start shopping</p>
+    @if (errorMessage()) {
+      <div class="register__serverError">
+        {{ errorMessage() }}
+      </div>
+    }
 
     <mat-stepper linear>
       <mat-step [stepControl]="accountForm">
@@ -27,6 +32,17 @@
                 <mat-error>Last name is required</mat-error>
               }
             </mat-form-field>
+            <mat-form-field (click)="picker.open()" appearance="outline">
+              <mat-label>Date of Birth</mat-label>
+              <input matInput [matDatepicker]="picker" formControlName="dateOfBirth" readonly />
+              <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+              @if (
+                accountForm.controls.dateOfBirth.invalid && accountForm.controls.dateOfBirth.touched
+              ) {
+                <mat-error>Date of birth is required</mat-error>
+              }
+            </mat-form-field>
             <mat-form-field appearance="outline">
               <mat-label>Email</mat-label>
               <input matInput type="email" formControlName="email" />
@@ -47,7 +63,7 @@
                 </mat-icon>
               </button>
               @if (accountForm.controls.password.invalid && accountForm.controls.password.touched) {
-                <mat-error>Password must be at least 6 characters</mat-error>
+                <mat-error> Password must be 8+ chars, letters and numbers </mat-error>
               }
             </mat-form-field>
             <mat-form-field appearance="outline">
@@ -67,16 +83,15 @@
                   {{ isConfirmPasswordVisible() ? 'visibility_off' : 'visibility' }}
                 </mat-icon>
               </button>
-              @if (passwordsDoNotMatch() && accountForm.controls.confirmPassword.touched) {
-                <mat-error> Passwords do not match </mat-error>
+              @if (
+                accountForm.hasError('passwordMismatch') &&
+                accountForm.controls.confirmPassword.touched
+              ) {
+                <mat-error>Passwords do not match</mat-error>
               }
             </mat-form-field>
             <div class="register__stepActions">
-              <button
-                mat-raised-button
-                matStepperNext
-                [disabled]="accountForm.invalid || passwordsDoNotMatch()"
-              >
+              <button mat-raised-button matStepperNext [disabled]="accountForm.invalid">
                 Next
               </button>
             </div>
@@ -89,10 +104,16 @@
           <ng-template matStepLabel> Address Information </ng-template>
           <div class="register__stepContent">
             <mat-form-field appearance="outline">
-              <mat-label>Street</mat-label>
-              <input matInput formControlName="street" />
-              @if (addressForm.controls.street.invalid && addressForm.controls.street.touched) {
-                <mat-error>Street is required</mat-error>
+              <mat-label>Country</mat-label>
+              <mat-select formControlName="country">
+                @for (c of countries; track c.code) {
+                  <mat-option [value]="c.code">
+                    {{ c.label }}
+                  </mat-option>
+                }
+              </mat-select>
+              @if (addressForm.controls.country.invalid && addressForm.controls.country.touched) {
+                <mat-error>Country is required</mat-error>
               }
             </mat-form-field>
             <mat-form-field appearance="outline">
@@ -103,19 +124,20 @@
               }
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>Postal Code</mat-label>
-              <input matInput formControlName="postalCode" />
-              @if (
-                addressForm.controls.postalCode.invalid && addressForm.controls.postalCode.touched
-              ) {
-                <mat-error>Postal code is required</mat-error>
+              <mat-label>Street</mat-label>
+              <input matInput formControlName="street" />
+              @if (addressForm.controls.street.invalid && addressForm.controls.street.touched) {
+                <mat-error>Street is required</mat-error>
               }
             </mat-form-field>
             <mat-form-field appearance="outline">
-              <mat-label>Country</mat-label>
-              <input matInput formControlName="country" />
-              @if (addressForm.controls.country.invalid && addressForm.controls.country.touched) {
-                <mat-error>Country is required</mat-error>
+              <mat-label>Postal Code</mat-label>
+              <input matInput formControlName="postalCode" />
+              @if (
+                addressForm.controls.postalCode.hasError('invalidPostalCode') &&
+                addressForm.controls.postalCode.touched
+              ) {
+                <mat-error>Invalid postal code for selected country</mat-error>
               }
             </mat-form-field>
             <div class="register__stepActions">

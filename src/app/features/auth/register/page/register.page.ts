@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
@@ -8,6 +8,13 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatStepperModule } from '@angular/material/stepper';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { AbstractControl, ValidatorFn } from '@angular/forms';
+import { MatSelectModule } from '@angular/material/select';
+import { RegisterFormValue } from '../../models/forms/register-form-value.model';
+import { AuthService } from '../../services/auth.service';
+import { mapRegisterFormToRequests } from '../../mappers/register.mapper';
 
 @Component({
   selector: 'app-register-page',
@@ -22,30 +29,104 @@ import { MatStepperModule } from '@angular/material/stepper';
     MatButtonModule,
     MatIconModule,
     MatStepperModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatSelectModule,
   ],
   templateUrl: './register.page.html',
   styleUrl: './register.page.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class RegisterPage {
+export class RegisterPage implements OnInit {
   private readonly fb = inject(FormBuilder);
   private readonly router = inject(Router);
+  private readonly authService = inject(AuthService);
+  protected readonly errorMessage = signal('');
 
   protected readonly isPasswordVisible = signal(false);
   protected readonly isConfirmPasswordVisible = signal(false);
 
-  protected readonly accountForm = this.fb.nonNullable.group({
-    firstName: ['', Validators.required],
-    lastName: ['', Validators.required],
-    email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
-    confirmPassword: ['', [Validators.required, Validators.minLength(6)]],
-  });
+  ngOnInit(): void {
+    this.addressForm.controls.country.valueChanges.subscribe(() => {
+      this.addressForm.controls.postalCode.updateValueAndValidity();
+    });
+  }
+
+  protected readonly countries = [
+    { code: 'US', label: 'United States' },
+    { code: 'DE', label: 'Germany' },
+    { code: 'FR', label: 'France' },
+    { code: 'PL', label: 'Poland' },
+    { code: 'GB', label: 'United Kingdom' },
+    { code: 'BY', label: 'Belarus' },
+    { code: 'RU', label: 'Russia' },
+  ];
+
+  private postalCodePatterns: Record<string, RegExp> = {
+    US: /^\d{5}(-\d{4})?$/,
+    DE: /^\d{5}$/,
+    FR: /^\d{5}$/,
+    PL: /^\d{2}-\d{3}$/,
+    GB: /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i,
+    BY: /^\d{6}$/,
+    RU: /^\d{6}$/,
+  };
+
+  private passwordMatchValidator: ValidatorFn = (control: AbstractControl) => {
+    const password = control.get('password');
+    const confirmPassword = control.get('confirmPassword');
+    if (!password || !confirmPassword) return null;
+    const isEqual = password.value === confirmPassword.value;
+    if (isEqual) {
+      confirmPassword.setErrors(null);
+      return null;
+    }
+    confirmPassword.setErrors({ passwordMismatch: true });
+    return { passwordMismatch: true };
+  };
+
+  private postalCodeValidator: ValidatorFn = (control: AbstractControl) => {
+    const country = control.parent?.get('country')?.value;
+    const value = control.value;
+    if (!country || !value) return null;
+    const pattern = this.postalCodePatterns[country];
+    if (!pattern) return null;
+    return pattern.test(value) ? null : { invalidPostalCode: true };
+  };
+
+  protected readonly accountForm = this.fb.nonNullable.group(
+    {
+      firstName: ['', Validators.required],
+      lastName: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d).+$/),
+        ],
+      ],
+      confirmPassword: [
+        '',
+        [
+          Validators.required,
+          Validators.minLength(8),
+          Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d).+$/),
+        ],
+      ],
+      dateOfBirth: [null as Date | null, Validators.required],
+    },
+    {
+      validators: [this.passwordMatchValidator],
+      updateOn: 'change',
+    },
+  );
 
   protected readonly addressForm = this.fb.nonNullable.group({
     street: ['', Validators.required],
     city: ['', Validators.required],
-    postalCode: ['', Validators.required],
+    postalCode: ['', [Validators.required, this.postalCodeValidator]],
     country: ['', Validators.required],
   });
 
@@ -57,26 +138,28 @@ export class RegisterPage {
     this.isConfirmPasswordVisible.update((v) => !v);
   }
 
-  protected passwordsDoNotMatch(): boolean {
-    const password = this.accountForm.controls.password.value;
-    const confirmPassword = this.accountForm.controls.confirmPassword.value;
-
-    return !!password && !!confirmPassword && password !== confirmPassword;
-  }
-
-  protected submit(): void {
-    if (this.accountForm.invalid || this.addressForm.invalid || this.passwordsDoNotMatch()) {
+  protected async submit(): Promise<void> {
+    if (this.accountForm.invalid || this.addressForm.invalid) {
       this.accountForm.markAllAsTouched();
       this.addressForm.markAllAsTouched();
       return;
     }
 
-    // eslint-disable-next-line no-console
-    console.log({
-      ...this.accountForm.getRawValue(),
-      ...this.addressForm.getRawValue(),
-    });
+    this.errorMessage.set('');
 
-    void this.router.navigate(['/login']);
+    try {
+      const formValue: RegisterFormValue = {
+        ...this.accountForm.getRawValue(),
+        ...this.addressForm.getRawValue(),
+      };
+
+      const requests = mapRegisterFormToRequests(formValue);
+
+      await this.authService.register(requests);
+    } catch (error) {
+      this.errorMessage.set(
+        error instanceof Error ? error.message : 'Registration failed. Please try again.',
+      );
+    }
   }
 }
