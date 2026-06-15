@@ -50,25 +50,21 @@ function mapBrandFacets(productsData: PagedResponse<CommercetoolsProductProjecti
 }
 
 async function loadCategoriesIfNeeded(
-  categoriesMap: Map<string, string>,
+  categories: CategoryOption[],
   apiService: ApiService,
 ): Promise<{
-  categoriesData: PagedResponse<CommercetoolsCategory> | null;
+  categories: CategoryOption[];
   categoriesMap: Map<string, string>;
-}> {
-  if (categoriesMap.size > 0) {
-    return {
-      categoriesData: null,
-      categoriesMap,
-    };
+} | null> {
+  if (categories.length > 0) {
+    return null;
   }
 
-  const categoriesData =
-    await apiService.request<PagedResponse<CommercetoolsCategory>>(CATEGORIES_ENDPOINT);
+  const data = await apiService.request<PagedResponse<CommercetoolsCategory>>(CATEGORIES_ENDPOINT);
 
   return {
-    categoriesData,
-    categoriesMap: mapCategories(categoriesData.results),
+    categories: mapCategoryOptions(data.results),
+    categoriesMap: mapCategories(data.results),
   };
 }
 
@@ -98,24 +94,19 @@ export const ProductsStore = signalStore(
           PRODUCTS_ENDPOINT + PRODUCTS_LIMIT_PER_PAGE + BRAND_FACET_ENDPOINT,
         );
 
-        const categoriesPromise = loadCategoriesIfNeeded(store.categoriesMap(), apiService);
+        const categoriesPromise = loadCategoriesIfNeeded(store.categories(), apiService);
 
         const [productsData, categoriesResult] = await Promise.all([
           productsPromise,
           categoriesPromise,
         ]);
 
-        const { categoriesData, categoriesMap } = categoriesResult;
+        const categoriesMap = categoriesResult?.categoriesMap ?? store.categoriesMap();
 
         patchState(store, {
           products: productsData.results.map((product) => mapProduct(product, categoriesMap)),
           brands: mapBrandFacets(productsData),
-          ...(categoriesData
-            ? {
-                categories: mapCategoryOptions(categoriesData.results),
-                categoriesMap,
-              }
-            : {}),
+          ...(categoriesResult ?? {}),
         });
       } catch {
         patchState(store, {
@@ -136,15 +127,12 @@ export const ProductsStore = signalStore(
 
         let categoriesMap = store.categoriesMap();
 
-        if (categoriesMap.size === 0) {
-          const categoriesData =
-            await apiService.request<PagedResponse<CommercetoolsCategory>>(CATEGORIES_ENDPOINT);
+        const categoriesResult = await loadCategoriesIfNeeded(store.categories(), apiService);
 
-          categoriesMap = mapCategories(categoriesData.results);
+        if (categoriesResult) {
+          categoriesMap = categoriesResult.categoriesMap;
 
-          patchState(store, {
-            categoriesMap,
-          });
+          patchState(store, categoriesResult);
         }
 
         const data = await apiService.request<PagedResponse<CommercetoolsProductProjection>>(
