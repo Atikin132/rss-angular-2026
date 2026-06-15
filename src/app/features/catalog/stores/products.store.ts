@@ -18,6 +18,7 @@ interface ProductsState {
   categories: CategoryOption[];
   categoriesMap: Map<string, string>;
   brands: BrandOption[];
+  filters: CatalogFilters;
   loading: boolean;
   error: string | null;
 }
@@ -27,6 +28,12 @@ const initialState: ProductsState = {
   categories: [],
   categoriesMap: new Map(),
   brands: [],
+  filters: {
+    categories: [],
+    brands: [],
+    minPrice: null,
+    maxPrice: null,
+  },
   loading: false,
   error: null,
 };
@@ -165,6 +172,7 @@ export const ProductsStore = signalStore(
         patchState(store, {
           loading: true,
           error: null,
+          filters,
         });
 
         const query = buildFilters(filters);
