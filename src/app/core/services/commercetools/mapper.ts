@@ -16,7 +16,7 @@ export const mapProduct = (
 ): Product => {
   const variant = product.masterVariant;
 
-  const attributes = product.attributes || [];
+  const attributes = variant.attributes || [];
 
   const getAttribute = (name: string): ProductAttribute['value'] | undefined =>
     attributes.find((attr) => attr.name === name)?.value;
