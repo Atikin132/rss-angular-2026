@@ -78,14 +78,11 @@ export class AuthService {
         version: customerAfterCreate.version,
         actions,
       };
-      // eslint-disable-next-line no-console
-      console.log('add customer', createResponse);
+
       const updateResponse = await this.api.post<Customer>(
         `/customers/${customerAfterCreate.id}`,
         updateInfoBody,
       );
-      // eslint-disable-next-line no-console
-      console.log('update info', updateResponse);
 
       const updatedCustomer = updateResponse;
 
@@ -110,13 +107,11 @@ export class AuthService {
         });
       }
 
-      const addressRes = await this.api.post(`/customers/${updatedCustomer.id}`, {
+      await this.api.post(`/customers/${updatedCustomer.id}`, {
         version: updatedCustomer.version,
 
         actions: addressActions,
       });
-      // eslint-disable-next-line no-console
-      console.log(addressRes);
       await this.login(data.account.email, data.account.password, false);
     } catch (error) {
       if (error instanceof HttpErrorResponse) {
