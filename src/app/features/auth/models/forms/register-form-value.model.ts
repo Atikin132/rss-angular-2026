@@ -1,3 +1,10 @@
+export interface AddressFormValue {
+  street: string;
+  city: string;
+  postalCode: string;
+  country: string;
+}
+
 export interface RegisterFormValue {
   firstName: string;
   lastName: string;
@@ -5,8 +12,9 @@ export interface RegisterFormValue {
   password: string;
   confirmPassword: string;
   dateOfBirth: Date | null;
-  street: string;
-  city: string;
-  postalCode: string;
-  country: string;
+
+  useSeparateAddresses: boolean;
+
+  shippingAddress: AddressFormValue;
+  billingAddress: AddressFormValue;
 }

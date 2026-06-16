@@ -23,6 +23,16 @@ export class AuthService {
   private readonly customerService = inject(CustomerService);
   private readonly router = inject(Router);
 
+  private findAddressId(customer: Customer, externalId: string): string {
+    const address = customer.addresses.find((a) => a.externalId === externalId);
+
+    if (!address?.id) {
+      throw new Error(`Address with externalId "${externalId}" not found`);
+    }
+
+    return address.id;
+  }
+
   initAuth(): void {
     const accessToken =
       localStorage.getItem('accessToken') ?? sessionStorage.getItem('accessToken');
@@ -34,19 +44,80 @@ export class AuthService {
 
   async register(data: RegisterRequests): Promise<void> {
     try {
-      let res = await this.api.post<{ customer: Customer }>('/customers', data.account);
+      const createResponse = await this.api.post<{ customer: Customer }>(
+        '/customers',
+        data.account,
+      );
+
+      const customerAfterCreate = createResponse.customer;
+
+      const actions = [
+        {
+          action: 'setDateOfBirth',
+          ...data.dateOfBirth,
+        },
+        {
+          action: 'addAddress',
+          address: {
+            ...data.shippingAddress,
+            externalId: data.useSeparateAddresses ? 'shipping' : 'shipping-billing',
+          },
+        },
+      ];
+
+      if (data.useSeparateAddresses && data.billingAddress) {
+        actions.push({
+          action: 'addAddress',
+          address: {
+            ...data.billingAddress,
+            externalId: 'billing',
+          },
+        });
+      }
       const updateInfoBody = {
-        version: res.customer.version,
-        actions: [
-          { action: 'setDateOfBirth', ...data.dateOfBirth },
-          { action: 'addAddress', address: { ...data.address, externalId: 'should not be empty' } },
-        ],
+        version: customerAfterCreate.version,
+        actions,
       };
-      res = await this.api.post<{ customer: Customer }>(
-        `/customers/${res.customer.id}`,
+      // eslint-disable-next-line no-console
+      console.log('add customer', createResponse);
+      const updateResponse = await this.api.post<Customer>(
+        `/customers/${customerAfterCreate.id}`,
         updateInfoBody,
       );
-      this.login(data.account.email, data.account.password, false);
+      // eslint-disable-next-line no-console
+      console.log('update info', updateResponse);
+
+      const updatedCustomer = updateResponse;
+
+      const addressActions = [];
+      addressActions.push({
+        action: 'addShippingAddressId',
+
+        addressId: this.findAddressId(updatedCustomer, 'shipping'),
+      });
+
+      if (data.useSeparateAddresses) {
+        addressActions.push({
+          action: 'addBillingAddressId',
+
+          addressId: this.findAddressId(updatedCustomer, 'billing'),
+        });
+      } else {
+        addressActions.push({
+          action: 'addBillingAddressId',
+
+          addressId: this.findAddressId(updatedCustomer, 'shipping'),
+        });
+      }
+
+      const addressRes = await this.api.post(`/customers/${updatedCustomer.id}`, {
+        version: updatedCustomer.version,
+
+        actions: addressActions,
+      });
+      // eslint-disable-next-line no-console
+      console.log(addressRes);
+      await this.login(data.account.email, data.account.password, false);
     } catch (error) {
       if (error instanceof HttpErrorResponse) {
         throw new Error(error.error?.message ?? 'Registration failed. Please try again.', {

@@ -19,5 +19,7 @@ export interface AddAddressRequest {
 export interface RegisterRequests {
   account: RegisterRequest;
   dateOfBirth: AddDateOfBirthRequest;
-  address: AddAddressRequest;
+  useSeparateAddresses: boolean;
+  shippingAddress: AddAddressRequest;
+  billingAddress?: AddAddressRequest;
 }

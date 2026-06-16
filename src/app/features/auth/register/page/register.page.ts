@@ -15,6 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { RegisterFormValue } from '../../models/forms/register-form-value.model';
 import { AuthService } from '../../services/auth.service';
 import { mapRegisterFormToRequests } from '../../mappers/register.mapper';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 const namePattern = /^[\p{L}\s'-]+$/u;
 
@@ -34,6 +35,7 @@ const namePattern = /^[\p{L}\s'-]+$/u;
     MatDatepickerModule,
     MatNativeDateModule,
     MatSelectModule,
+    MatCheckboxModule,
   ],
   templateUrl: './register.page.html',
   styleUrl: './register.page.scss',
@@ -49,8 +51,41 @@ export class RegisterPage implements OnInit {
   protected readonly isConfirmPasswordVisible = signal(false);
 
   ngOnInit(): void {
-    this.addressForm.controls.country.valueChanges.subscribe(() => {
-      this.addressForm.controls.postalCode.updateValueAndValidity();
+    const shipping = this.addressForm.controls.shippingAddress;
+    const billing = this.addressForm.controls.billingAddress;
+
+    shipping.controls.country.valueChanges.subscribe(() => {
+      shipping.controls.postalCode.updateValueAndValidity();
+    });
+    billing.controls.country.valueChanges.subscribe(() => {
+      billing.controls.postalCode.updateValueAndValidity();
+    });
+
+    this.addressForm.controls.useSeparateAddresses.valueChanges.subscribe((useSeparate) => {
+      const billing = this.addressForm.controls.billingAddress;
+
+      if (useSeparate) {
+        billing.controls.street.addValidators(Validators.required);
+        billing.controls.city.addValidators([Validators.required, Validators.pattern(namePattern)]);
+        billing.controls.country.addValidators(Validators.required);
+        billing.controls.postalCode.addValidators([Validators.required, this.postalCodeValidator]);
+      } else {
+        billing.controls.street.clearValidators();
+        billing.controls.city.clearValidators();
+        billing.controls.country.clearValidators();
+        billing.controls.postalCode.clearValidators();
+
+        billing.reset({
+          street: '',
+          city: '',
+          postalCode: '',
+          country: '',
+        });
+      }
+
+      Object.values(billing.controls).forEach((control) => {
+        control.updateValueAndValidity();
+      });
     });
   }
 
@@ -140,10 +175,19 @@ export class RegisterPage implements OnInit {
   );
 
   protected readonly addressForm = this.fb.nonNullable.group({
-    street: ['', Validators.required],
-    city: ['', [Validators.required, Validators.pattern(namePattern)]],
-    postalCode: ['', [Validators.required, this.postalCodeValidator]],
-    country: ['', Validators.required],
+    useSeparateAddresses: [false],
+    shippingAddress: this.fb.nonNullable.group({
+      street: ['', Validators.required],
+      city: ['', [Validators.required, Validators.pattern(namePattern)]],
+      postalCode: ['', [Validators.required, this.postalCodeValidator]],
+      country: ['', Validators.required],
+    }),
+    billingAddress: this.fb.nonNullable.group({
+      street: [''],
+      city: [''],
+      postalCode: [''],
+      country: [''],
+    }),
   });
 
   protected togglePasswordVisibility(): void {

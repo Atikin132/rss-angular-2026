@@ -126,47 +126,139 @@
         <form [formGroup]="addressForm">
           <ng-template matStepLabel> Address Information </ng-template>
           <div class="register__stepContent">
-            <mat-form-field appearance="outline">
-              <mat-label>Country</mat-label>
-              <mat-select formControlName="country">
-                @for (c of countries; track c.code) {
-                  <mat-option [value]="c.code">
-                    {{ c.label }}
-                  </mat-option>
+            <div formGroupName="shippingAddress">
+              <h3>
+                {{
+                  addressForm.controls.useSeparateAddresses.value ? 'Shipping Address' : 'Address'
+                }}
+              </h3>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Country</mat-label>
+                <mat-select formControlName="country">
+                  @for (c of countries; track c.code) {
+                    <mat-option [value]="c.code">
+                      {{ c.label }}
+                    </mat-option>
+                  }
+                </mat-select>
+
+                @if (
+                  addressForm.controls.shippingAddress.controls.country.invalid &&
+                  addressForm.controls.shippingAddress.controls.country.touched
+                ) {
+                  <mat-error>Country is required</mat-error>
                 }
-              </mat-select>
-              @if (addressForm.controls.country.invalid && addressForm.controls.country.touched) {
-                <mat-error>Country is required</mat-error>
-              }
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>City</mat-label>
-              <input matInput formControlName="city" />
-              @if (addressForm.controls.city.hasError('required')) {
-                <mat-error>City is required</mat-error>
-              } @else if (addressForm.controls.city.hasError('pattern')) {
-                <mat-error>City cannot contain numbers</mat-error>
-              }
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Street</mat-label>
-              <input matInput formControlName="street" />
-              @if (addressForm.controls.street.invalid && addressForm.controls.street.touched) {
-                <mat-error>Street is required</mat-error>
-              }
-            </mat-form-field>
-            <mat-form-field appearance="outline">
-              <mat-label>Postal Code</mat-label>
-              <input matInput formControlName="postalCode" />
-              @if (
-                addressForm.controls.postalCode.hasError('invalidPostalCode') &&
-                addressForm.controls.postalCode.touched
-              ) {
-                <mat-error>Invalid postal code for selected country</mat-error>
-              }
-            </mat-form-field>
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>City</mat-label>
+                <input matInput formControlName="city" />
+
+                @if (addressForm.controls.shippingAddress.controls.city.hasError('required')) {
+                  <mat-error>City is required</mat-error>
+                } @else if (
+                  addressForm.controls.shippingAddress.controls.city.hasError('pattern')
+                ) {
+                  <mat-error>City cannot contain numbers</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Street</mat-label>
+                <input matInput formControlName="street" />
+
+                @if (
+                  addressForm.controls.shippingAddress.controls.street.invalid &&
+                  addressForm.controls.shippingAddress.controls.street.touched
+                ) {
+                  <mat-error>Street is required</mat-error>
+                }
+              </mat-form-field>
+
+              <mat-form-field appearance="outline">
+                <mat-label>Postal Code</mat-label>
+                <input matInput formControlName="postalCode" />
+
+                @if (
+                  addressForm.controls.shippingAddress.controls.postalCode.hasError(
+                    'invalidPostalCode'
+                  ) && addressForm.controls.shippingAddress.controls.postalCode.touched
+                ) {
+                  <mat-error>Invalid postal code for selected country</mat-error>
+                }
+              </mat-form-field>
+            </div>
+
+            @if (addressForm.controls.useSeparateAddresses.value) {
+              <div formGroupName="billingAddress">
+                <h3>Billing Address</h3>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Country</mat-label>
+                  <mat-select formControlName="country">
+                    @for (c of countries; track c.code) {
+                      <mat-option [value]="c.code">
+                        {{ c.label }}
+                      </mat-option>
+                    }
+                  </mat-select>
+
+                  @if (
+                    addressForm.controls.billingAddress.controls.country.invalid &&
+                    addressForm.controls.billingAddress.controls.country.touched
+                  ) {
+                    <mat-error>Country is required</mat-error>
+                  }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>City</mat-label>
+                  <input matInput formControlName="city" />
+
+                  @if (addressForm.controls.billingAddress.controls.city.hasError('required')) {
+                    <mat-error>City is required</mat-error>
+                  } @else if (
+                    addressForm.controls.billingAddress.controls.city.hasError('pattern')
+                  ) {
+                    <mat-error>City cannot contain numbers</mat-error>
+                  }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Street</mat-label>
+                  <input matInput formControlName="street" />
+
+                  @if (
+                    addressForm.controls.billingAddress.controls.street.invalid &&
+                    addressForm.controls.billingAddress.controls.street.touched
+                  ) {
+                    <mat-error>Street is required</mat-error>
+                  }
+                </mat-form-field>
+
+                <mat-form-field appearance="outline">
+                  <mat-label>Postal Code</mat-label>
+                  <input matInput formControlName="postalCode" />
+
+                  @if (
+                    addressForm.controls.billingAddress.controls.postalCode.hasError(
+                      'invalidPostalCode'
+                    ) && addressForm.controls.billingAddress.controls.postalCode.touched
+                  ) {
+                    <mat-error>Invalid postal code for selected country</mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            }
+
+            <mat-checkbox formControlName="useSeparateAddresses">
+              Separate shipping and billing addresses
+            </mat-checkbox>
+
             <div class="register__stepActions">
               <button mat-button type="button" matStepperPrevious>Back</button>
+
               <button
                 mat-raised-button
                 type="button"

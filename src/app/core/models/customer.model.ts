@@ -44,6 +44,7 @@ export interface Address {
   city?: string;
   postalCode?: string;
   country?: string;
+  externalId?: string;
 }
 
 export interface CustomerGroupAssignment {

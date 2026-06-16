@@ -14,11 +14,22 @@ export function mapRegisterFormToRequests(form: RegisterFormValue): RegisterRequ
       dateOfBirth: form.dateOfBirth?.toISOString().slice(0, 10) ?? '',
     },
 
-    address: {
-      streetName: form.street,
-      city: form.city,
-      postalCode: form.postalCode,
-      country: form.country,
+    useSeparateAddresses: form.useSeparateAddresses,
+
+    shippingAddress: {
+      streetName: form.shippingAddress.street,
+      city: form.shippingAddress.city,
+      postalCode: form.shippingAddress.postalCode,
+      country: form.shippingAddress.country,
     },
+
+    billingAddress: form.useSeparateAddresses
+      ? {
+          streetName: form.billingAddress.street,
+          city: form.billingAddress.city,
+          postalCode: form.billingAddress.postalCode,
+          country: form.billingAddress.country,
+        }
+      : undefined,
   };
 }
