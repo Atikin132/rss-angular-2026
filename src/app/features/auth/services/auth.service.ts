@@ -59,49 +59,64 @@ export class AuthService {
   }
 
   async login(email: string, password: string, rememberMe: boolean): Promise<LoginResponse> {
-    const storage = rememberMe ? localStorage : sessionStorage;
+    try {
+      const storage = rememberMe ? localStorage : sessionStorage;
 
-    const credentials = btoa(
-      `${environment.commercetools.clientId}:${environment.commercetools.clientSecret}`,
-    );
+      const credentials = btoa(
+        `${environment.commercetools.clientId}:${environment.commercetools.clientSecret}`,
+      );
 
-    const body = new HttpParams()
-      .set('grant_type', 'password')
-      .set('username', email)
-      .set('password', password);
+      const body = new HttpParams()
+        .set('grant_type', 'password')
+        .set('username', email)
+        .set('password', password);
 
-    const response = await firstValueFrom(
-      this.http.post<LoginResponse>(
-        `${environment.commercetools.authUrl}/oauth/${environment.commercetools.projectKey}/customers/token`,
-
-        body.toString(),
-
-        {
-          headers: {
-            Authorization: `Basic ${credentials}`,
-            'Content-Type': 'application/x-www-form-urlencoded',
+      const response = await firstValueFrom(
+        this.http.post<LoginResponse>(
+          `${environment.commercetools.authUrl}/oauth/${environment.commercetools.projectKey}/customers/token`,
+          body.toString(),
+          {
+            headers: {
+              Authorization: `Basic ${credentials}`,
+              'Content-Type': 'application/x-www-form-urlencoded',
+            },
           },
-        },
-      ),
-    );
+        ),
+      );
 
-    storage.setItem(ACCESS_TOKEN_KEY, response.access_token);
-    storage.setItem(REFRESH_TOKEN_KEY, response.refresh_token || '');
-    storage.setItem(EXPIRES_AT_KEY, String(Date.now() + response.expires_in * 1000));
+      storage.setItem(ACCESS_TOKEN_KEY, response.access_token);
+      storage.setItem(REFRESH_TOKEN_KEY, response.refresh_token || '');
+      storage.setItem(EXPIRES_AT_KEY, String(Date.now() + response.expires_in * 1000));
 
-    this.isAuthenticated.set(true);
+      this.isAuthenticated.set(true);
 
-    const customerId = response.scope
-      .split(' ')
-      .find((s) => s.startsWith('customer_id:'))
-      ?.replace('customer_id:', '');
+      const customerId = response.scope
+        .split(' ')
+        .find((s) => s.startsWith('customer_id:'))
+        ?.replace('customer_id:', '');
 
-    if (customerId) {
-      const customer = await this.api.request<Customer>(`/customers/${customerId}`);
-      this.customerService.setUser(customer);
+      if (customerId) {
+        const customer = await this.api.request<Customer>(`/customers/${customerId}`);
+        this.customerService.setUser(customer);
+      }
+
+      await this.router.navigate(['/']);
+
+      return response;
+    } catch (error) {
+      if (error instanceof HttpErrorResponse) {
+        throw new Error(
+          error.error?.error_description ??
+            error.error?.message ??
+            'Login failed. Please check your credentials.',
+          {
+            cause: error,
+          },
+        );
+      }
+
+      throw error;
     }
-    void this.router.navigate(['/']);
-    return response;
   }
 
   logout(): void {

@@ -5,11 +5,20 @@
     </div>
     <h1 class="login__title">Login</h1>
     <p class="login__subtitle">Sign in to continue to your account</p>
+    @if (errorMessage()) {
+      <div class="login__serverError">
+        {{ errorMessage() }}
+      </div>
+    }
     <form class="login__form" [formGroup]="loginForm" (ngSubmit)="submit()">
       <mat-form-field appearance="outline">
         <mat-label>Email</mat-label>
         <input matInput type="email" formControlName="email" />
-        @if (loginForm.controls.email.invalid && loginForm.controls.email.touched) {
+        @if (loginForm.controls.email.hasError('required') && loginForm.controls.email.touched) {
+          <mat-error>Email is required</mat-error>
+        } @else if (
+          loginForm.controls.email.hasError('email') && loginForm.controls.email.touched
+        ) {
           <mat-error>Please enter a valid email</mat-error>
         }
       </mat-form-field>
@@ -25,8 +34,18 @@
             {{ isPasswordVisible() ? 'visibility_off' : 'visibility' }}
           </mat-icon>
         </button>
-        @if (loginForm.controls.password.invalid && loginForm.controls.password.touched) {
-          <mat-error>Password must be at least 6 characters</mat-error>
+        @if (
+          loginForm.controls.password.hasError('required') && loginForm.controls.password.touched
+        ) {
+          <mat-error>Password is required</mat-error>
+        } @else if (
+          loginForm.controls.password.hasError('minlength') && loginForm.controls.password.touched
+        ) {
+          <mat-error>Password must be at least 8 characters</mat-error>
+        } @else if (
+          loginForm.controls.password.hasError('pattern') && loginForm.controls.password.touched
+        ) {
+          <mat-error>Password must contain letters and numbers</mat-error>
         }
       </mat-form-field>
       <div class="login__actions">

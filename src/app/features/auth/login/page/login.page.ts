@@ -34,10 +34,19 @@ export class LoginPage {
 
   protected readonly isPasswordVisible = signal(false);
   protected readonly rememberMe = signal(false);
+  protected readonly errorMessage = signal('');
 
   protected readonly loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: [
+      '',
+
+      [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d).+$/),
+      ],
+    ],
   });
 
   protected togglePasswordVisibility(): void {
@@ -57,10 +66,19 @@ export class LoginPage {
       this.loginForm.markAllAsTouched();
       return;
     }
-    await this.authService.login(
-      this.loginForm.getRawValue().email,
-      this.loginForm.getRawValue().password,
-      this.rememberMe(),
-    );
+
+    this.errorMessage.set('');
+
+    try {
+      await this.authService.login(
+        this.loginForm.getRawValue().email,
+        this.loginForm.getRawValue().password,
+        this.rememberMe(),
+      );
+    } catch (error) {
+      this.errorMessage.set(
+        error instanceof Error ? error.message : 'Login failed. Please try again.',
+      );
+    }
   }
 }
