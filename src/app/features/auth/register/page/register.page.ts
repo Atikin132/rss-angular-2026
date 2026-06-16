@@ -16,6 +16,8 @@ import { RegisterFormValue } from '../../models/forms/register-form-value.model'
 import { AuthService } from '../../services/auth.service';
 import { mapRegisterFormToRequests } from '../../mappers/register.mapper';
 
+const namePattern = /^[\p{L}\s'-]+$/u;
+
 @Component({
   selector: 'app-register-page',
   standalone: true,
@@ -72,6 +74,20 @@ export class RegisterPage implements OnInit {
     RU: /^\d{6}$/,
   };
 
+  private adultValidator: ValidatorFn = (control: AbstractControl) => {
+    const value = control.value;
+    if (!value) return null;
+    const today = new Date();
+    const birthDate = new Date(value);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age >= 18 ? null : { tooYoung: true };
+  };
+
   private passwordMatchValidator: ValidatorFn = (control: AbstractControl) => {
     const password = control.get('password');
     const confirmPassword = control.get('confirmPassword');
@@ -96,8 +112,8 @@ export class RegisterPage implements OnInit {
 
   protected readonly accountForm = this.fb.nonNullable.group(
     {
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstName: ['', [Validators.required, Validators.pattern(namePattern)]],
+      lastName: ['', [Validators.required, Validators.pattern(namePattern)]],
       email: ['', [Validators.required, Validators.email]],
       password: [
         '',
@@ -115,7 +131,7 @@ export class RegisterPage implements OnInit {
           Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d).+$/),
         ],
       ],
-      dateOfBirth: [null as Date | null, Validators.required],
+      dateOfBirth: [null as Date | null, [Validators.required, this.adultValidator]],
     },
     {
       validators: [this.passwordMatchValidator],
@@ -125,7 +141,7 @@ export class RegisterPage implements OnInit {
 
   protected readonly addressForm = this.fb.nonNullable.group({
     street: ['', Validators.required],
-    city: ['', Validators.required],
+    city: ['', [Validators.required, Validators.pattern(namePattern)]],
     postalCode: ['', [Validators.required, this.postalCodeValidator]],
     country: ['', Validators.required],
   });
