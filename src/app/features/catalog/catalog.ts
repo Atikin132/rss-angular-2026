@@ -26,12 +26,7 @@ export class CatalogPage implements OnInit {
   search = signal('');
   sort = signal<SortType>('name-asc');
 
-  filters = signal<CatalogFilters>({
-    categories: [],
-    brands: [],
-    minPrice: null,
-    maxPrice: null,
-  });
+  filters = this.store.filters;
 
   ngOnInit() {
     this.store.loadProducts();
@@ -55,7 +50,6 @@ export class CatalogPage implements OnInit {
   }
 
   onFiltersChange(filters: CatalogFilters) {
-    this.filters.set(filters);
     this.store.loadProductsByFilters(filters);
   }
 }
