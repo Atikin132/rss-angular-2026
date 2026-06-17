@@ -61,3 +61,9 @@ export interface AuthResponse {
   token_type: string;
   scope: string;
 }
+
+export interface CommercetoolsCategory {
+  id: string;
+  name: Record<string, string>;
+  slug: Record<string, string>;
+}

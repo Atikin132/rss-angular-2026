@@ -5,7 +5,10 @@
 
   <div class="card-info">
     <div class="info">
-      <h3 class="product-name">{{ productItem.name }}</h3>
+      <div class="name-description">
+        <h3 class="product-name">{{ productItem.name }}</h3>
+        <p class="product-description">{{ productItem.description }}</p>
+      </div>
       <app-product-price [product]="productItem" />
     </div>
     <app-cart-button [product]="productItem" />

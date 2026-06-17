@@ -39,7 +39,14 @@
     gap: 25px;
   }
 
-  .product-name {
+  .name-description {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .product-name,
+  .product-description {
     margin: 0;
     display: -webkit-box;
     line-clamp: 2;
