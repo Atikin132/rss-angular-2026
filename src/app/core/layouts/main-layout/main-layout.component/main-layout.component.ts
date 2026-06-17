@@ -16,6 +16,5 @@ export class MainLayoutComponent {
 
   onLogout(): void {
     this.authService.logout();
-    this.router.navigate(['/login']);
   }
 }

@@ -37,12 +37,14 @@
             }
           </li>
         }
-        <li>
-          <button mat-button (click)="onLogout()">
-            <mat-icon>logout</mat-icon>
-            <span class="link-text">Logout</span>
-          </button>
-        </li>
+        @if (authService.isAuthenticated()) {
+          <li>
+            <button mat-button (click)="onLogout()">
+              <mat-icon>logout</mat-icon>
+              <span class="link-text">Logout</span>
+            </button>
+          </li>
+        }
       </ul>
     </nav>
   </mat-toolbar>
