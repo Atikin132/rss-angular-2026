@@ -35,6 +35,7 @@ export interface ProductVariant {
   sku: string;
   prices?: ProductPrice[];
   images?: ProductImage[];
+  attributes?: ProductAttribute[];
 }
 
 export interface CommercetoolsProductProjection {
@@ -53,6 +54,8 @@ export interface PagedResponse<T> {
   offset: number;
   count: number;
   total: number;
+
+  facets?: ProductFacets;
 }
 
 export interface AuthResponse {
@@ -67,3 +70,29 @@ export interface CommercetoolsCategory {
   name: Record<string, string>;
   slug: Record<string, string>;
 }
+
+export interface CategoryOption {
+  id: string;
+  name: string;
+}
+
+export interface BrandOption {
+  name: string;
+  count: number;
+}
+
+export interface FacetTerm {
+  term: string;
+  count: number;
+}
+
+export interface FacetResult {
+  type: 'terms';
+  dataType: string;
+  total: number;
+  missing: number;
+  other: number;
+  terms: FacetTerm[];
+}
+
+export type ProductFacets = Record<string, FacetResult>;
