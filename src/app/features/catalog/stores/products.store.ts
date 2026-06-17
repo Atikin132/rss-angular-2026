@@ -84,12 +84,6 @@ export const ProductsStore = signalStore(
       }
     },
     async loadProductBySlug(slug: string): Promise<Product | null> {
-      const existingProduct = store.products().find((product) => product.slug === slug);
-
-      if (existingProduct) {
-        return existingProduct;
-      }
-
       try {
         patchState(store, {
           loading: true,
