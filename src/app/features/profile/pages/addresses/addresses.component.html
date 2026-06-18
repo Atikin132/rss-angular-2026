@@ -15,7 +15,7 @@
     </header>
 
     <div class="address-list">
-      @for (address of profile().addresses; track address.id) {
+      @for (address of addresses(); track address.id) {
         <article class="address-item">
           <div class="address-item__icon" aria-hidden="true">
             <mat-icon>location_on</mat-icon>
@@ -24,10 +24,10 @@
           <div class="address-item__content">
             <div class="address-item__title">
               <h2>{{ address.streetName }}</h2>
-              @if (address.isDefaultShipping) {
+              @if (isDefaultShipping(address)) {
                 <span>Default shipping</span>
               }
-              @if (address.isDefaultBilling) {
+              @if (isDefaultBilling(address)) {
                 <span>Default billing</span>
               }
             </div>
@@ -35,6 +35,8 @@
             <p>{{ address.city }}, {{ address.postalCode }}, {{ address.country }}</p>
           </div>
         </article>
+      } @empty {
+        <p>No addresses saved yet.</p>
       }
     </div>
 

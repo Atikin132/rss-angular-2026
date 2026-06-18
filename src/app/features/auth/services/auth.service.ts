@@ -12,6 +12,7 @@ import { Router } from '@angular/router';
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
 const EXPIRES_AT_KEY = 'expiresAt';
+const SCOPE_KEY = 'scope';
 
 @Injectable({
   providedIn: 'root',
@@ -129,30 +130,63 @@ export class AuthService {
       const storage = rememberMe ? localStorage : sessionStorage;
 
       const credentials = btoa(
-        `${environment.commercetools.clientId}:${environment.commercetools.clientSecret}`,
+        `${environment.commercetools.spaClientId}:${environment.commercetools.spaClientSecret}`,
       );
 
-      const body = new HttpParams()
+      const baseBody = new HttpParams()
         .set('grant_type', 'password')
         .set('username', email)
         .set('password', password);
 
-      const response = await firstValueFrom(
-        this.http.post<LoginResponse>(
-          `${environment.commercetools.authUrl}/oauth/${environment.commercetools.projectKey}/customers/token`,
-          body.toString(),
-          {
-            headers: {
-              Authorization: `Basic ${credentials}`,
-              'Content-Type': 'application/x-www-form-urlencoded',
-            },
-          },
-        ),
+      const scopedBody = baseBody.set(
+        'scope',
+        `manage_my_profile:${environment.commercetools.projectKey}`,
       );
+
+      const tokenUrl = `${environment.commercetools.authUrl}/oauth/${environment.commercetools.projectKey}/customers/token`;
+      const tokenRequestOptions = {
+        headers: {
+          Authorization: `Basic ${credentials}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+      };
+
+      let response: LoginResponse;
+
+      try {
+        response = await firstValueFrom(
+          this.http.post<LoginResponse>(tokenUrl, scopedBody.toString(), tokenRequestOptions),
+        );
+      } catch (error) {
+        const scopeError =
+          error instanceof HttpErrorResponse &&
+          (error.error?.error === 'invalid_scope' ||
+            String(error.error?.error_description ?? error.error?.message ?? '')
+              .toLowerCase()
+              .includes('scope'));
+
+        if (!scopeError) {
+          throw error;
+        }
+
+        response = await firstValueFrom(
+          this.http.post<LoginResponse>(tokenUrl, baseBody.toString(), tokenRequestOptions),
+        );
+      }
+
+      localStorage.removeItem(ACCESS_TOKEN_KEY);
+      localStorage.removeItem(REFRESH_TOKEN_KEY);
+      localStorage.removeItem(EXPIRES_AT_KEY);
+      localStorage.removeItem(SCOPE_KEY);
+      sessionStorage.removeItem(ACCESS_TOKEN_KEY);
+      sessionStorage.removeItem(REFRESH_TOKEN_KEY);
+      sessionStorage.removeItem(EXPIRES_AT_KEY);
+      sessionStorage.removeItem(SCOPE_KEY);
 
       storage.setItem(ACCESS_TOKEN_KEY, response.access_token);
       storage.setItem(REFRESH_TOKEN_KEY, response.refresh_token || '');
       storage.setItem(EXPIRES_AT_KEY, String(Date.now() + response.expires_in * 1000));
+      storage.setItem(SCOPE_KEY, response.scope);
 
       this.isAuthenticated.set(true);
 

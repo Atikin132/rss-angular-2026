@@ -8,6 +8,10 @@ export const environment = {
 
     clientSecret: '2_cYPifx07oSb7JYLCv1o1ot1Z_gBr4H',
 
+    spaClientId: 'RtIERiMEpIwvWuVdH5i0arbw',
+
+    spaClientSecret: '9SNh8yaQJCfH5GFpDYHGVDj6NL166rnR',
+
     authUrl: 'https://auth.europe-west1.gcp.commercetools.com',
 
     apiUrl: 'https://api.europe-west1.gcp.commercetools.com',
