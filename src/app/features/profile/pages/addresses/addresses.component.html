@@ -6,10 +6,15 @@
         <p>Manage shipping and billing addresses for your account.</p>
       </div>
 
-      @if (!isEditMode()) {
-        <button mat-stroked-button type="button" (click)="editAddress()">
-          <mat-icon aria-hidden="true">edit</mat-icon>
-          <span>Edit Address</span>
+      @if (!isFormOpen()) {
+        <button
+          mat-stroked-button
+          type="button"
+          [disabled]="isAddressSaving()"
+          (click)="addAddress()"
+        >
+          <mat-icon aria-hidden="true">add</mat-icon>
+          <span>Add Address</span>
         </button>
       }
     </header>
@@ -34,6 +39,46 @@
 
             <p>{{ address.city }}, {{ address.postalCode }}, {{ address.country }}</p>
           </div>
+
+          <button
+            mat-icon-button
+            type="button"
+            aria-label="Edit address"
+            [disabled]="isAddressSaving()"
+            (click)="editAddress(address)"
+          >
+            <mat-icon aria-hidden="true">edit</mat-icon>
+          </button>
+
+          <button
+            mat-icon-button
+            type="button"
+            aria-label="Delete address"
+            [disabled]="isAddressSaving()"
+            (click)="removeAddress(address)"
+          >
+            <mat-icon aria-hidden="true">delete</mat-icon>
+          </button>
+
+          <div class="address-item__defaults">
+            <button
+              mat-stroked-button
+              type="button"
+              [disabled]="isAddressSaving() || isDefaultShipping(address)"
+              (click)="setDefaultShipping(address)"
+            >
+              <span>Set default shipping</span>
+            </button>
+
+            <button
+              mat-stroked-button
+              type="button"
+              [disabled]="isAddressSaving() || isDefaultBilling(address)"
+              (click)="setDefaultBilling(address)"
+            >
+              <span>Set default billing</span>
+            </button>
+          </div>
         </article>
       } @empty {
         <p>No addresses saved yet.</p>
@@ -44,34 +89,68 @@
       <mat-form-field appearance="outline">
         <mat-label>Street Address</mat-label>
         <input matInput type="text" formControlName="streetName" />
+        @if (addressForm.controls.streetName.hasError('required')) {
+          <mat-error>Street address is required</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>City</mat-label>
         <input matInput type="text" formControlName="city" />
+        @if (addressForm.controls.city.hasError('required')) {
+          <mat-error>City is required</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
         <mat-label>Postal Code</mat-label>
         <input matInput type="text" formControlName="postalCode" />
+        @if (addressForm.controls.postalCode.hasError('required')) {
+          <mat-error>Postal code is required</mat-error>
+        }
       </mat-form-field>
 
       <mat-form-field appearance="outline">
-        <mat-label>Country</mat-label>
+        <mat-label>Country Code</mat-label>
         <input matInput type="text" formControlName="country" />
+        @if (addressForm.controls.country.hasError('required')) {
+          <mat-error>Country code is required</mat-error>
+        } @else if (addressForm.controls.country.hasError('pattern')) {
+          <mat-error>Use 2-letter country code</mat-error>
+        }
       </mat-form-field>
 
       <mat-checkbox formControlName="isDefaultShipping">Default shipping</mat-checkbox>
       <mat-checkbox formControlName="isDefaultBilling">Default billing</mat-checkbox>
 
-      @if (isEditMode()) {
+      @if (errorMessage()) {
+        <p class="address-form__error">{{ errorMessage() }}</p>
+      }
+
+      @if (isFormOpen()) {
         <div class="edit-actions">
-          <button mat-flat-button type="button" (click)="saveAddress()">
+          <button
+            mat-flat-button
+            type="button"
+            [disabled]="isAddressSaving() || addressForm.invalid"
+            (click)="saveAddress()"
+          >
             <mat-icon aria-hidden="true">save</mat-icon>
-            <span>Save Address</span>
+            <span>{{
+              isAddressSaving()
+                ? 'Saving...'
+                : formMode() === 'edit'
+                  ? 'Update Address'
+                  : 'Save Address'
+            }}</span>
           </button>
 
-          <button mat-stroked-button type="button" (click)="cancelEdit()">
+          <button
+            mat-stroked-button
+            type="button"
+            [disabled]="isAddressSaving()"
+            (click)="cancelEdit()"
+          >
             <mat-icon aria-hidden="true">close</mat-icon>
             <span>Cancel</span>
           </button>

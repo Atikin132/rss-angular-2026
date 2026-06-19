@@ -59,6 +59,12 @@
   width: 220px;
 }
 
+.security-form__error {
+  margin: 0;
+  color: #ba1a1a;
+  font-size: 14px;
+}
+
 @media (max-width: 640px) {
   .security-card {
     padding: 20px;
