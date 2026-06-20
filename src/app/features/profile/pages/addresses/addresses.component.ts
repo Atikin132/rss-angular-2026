@@ -1,5 +1,12 @@
 import { Component, computed, effect, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -8,6 +15,9 @@ import { MatInputModule } from '@angular/material/input';
 import { Address } from '../../../../core/models/customer.model';
 import { ProfileAddressService } from '../../services/profile-address.service';
 import { ProfileService } from '../../services/profile.service';
+
+const namePattern = /^[\p{L}\s'-]+$/u;
+const allowedCountryCodes = ['US', 'DE', 'FR', 'PL', 'GB', 'BY', 'RU'];
 
 @Component({
   selector: 'app-addresses',
@@ -25,6 +35,33 @@ import { ProfileService } from '../../services/profile.service';
 export class AddressesComponent {
   private readonly profileService = inject(ProfileService);
   private readonly profileAddressService = inject(ProfileAddressService);
+  private readonly postalCodePatterns: Record<string, RegExp> = {
+    US: /^\d{5}(-\d{4})?$/,
+    DE: /^\d{5}$/,
+    FR: /^\d{5}$/,
+    PL: /^\d{2}-\d{3}$/,
+    GB: /^[A-Z]{1,2}\d[A-Z\d]? ?\d[A-Z]{2}$/i,
+    BY: /^\d{6}$/,
+    RU: /^\d{6}$/,
+  };
+  private readonly postalCodeValidator: ValidatorFn = (control: AbstractControl) => {
+    const country = control.parent?.get('country')?.value?.toUpperCase();
+    const value = control.value;
+
+    if (!country || !value) return null;
+
+    const pattern = this.postalCodePatterns[country];
+    if (!pattern) return null;
+
+    return pattern.test(value) ? null : { invalidPostalCode: true };
+  };
+  private readonly countryValidator: ValidatorFn = (control: AbstractControl) => {
+    const value = control.value?.toUpperCase();
+
+    if (!value) return null;
+
+    return allowedCountryCodes.includes(value) ? null : { invalidCountry: true };
+  };
 
   readonly user = this.profileService.user;
   readonly addresses = computed(() => this.user()?.addresses ?? []);
@@ -35,11 +72,18 @@ export class AddressesComponent {
   readonly isFormOpen = computed(() => this.formMode() !== null);
   readonly addressForm = new FormGroup({
     streetName: new FormControl({ value: '', disabled: true }, [Validators.required]),
-    city: new FormControl({ value: '', disabled: true }, [Validators.required]),
-    postalCode: new FormControl({ value: '', disabled: true }, [Validators.required]),
+    city: new FormControl({ value: '', disabled: true }, [
+      Validators.required,
+      Validators.pattern(namePattern),
+    ]),
+    postalCode: new FormControl({ value: '', disabled: true }, [
+      Validators.required,
+      this.postalCodeValidator,
+    ]),
     country: new FormControl({ value: '', disabled: true }, [
       Validators.required,
       Validators.pattern(/^[A-Za-z]{2}$/),
+      this.countryValidator,
     ]),
     isDefaultShipping: new FormControl({
       value: false,
@@ -53,6 +97,10 @@ export class AddressesComponent {
 
   constructor() {
     this.profileService.loadUser();
+
+    this.addressForm.controls.country.valueChanges.subscribe(() => {
+      this.addressForm.controls.postalCode.updateValueAndValidity();
+    });
 
     effect(() => {
       if (!this.profileAddressService.isAddressChanged()) return;

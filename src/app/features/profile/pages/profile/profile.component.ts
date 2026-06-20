@@ -1,5 +1,12 @@
 import { Component, effect, inject, signal } from '@angular/core';
-import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+  AbstractControl,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidatorFn,
+  Validators,
+} from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -8,6 +15,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { Customer } from '../../../../core/models/customer.model';
 import { ProfileService } from '../../services/profile.service';
+
+const namePattern = /^[\p{L}\s'-]+$/u;
 
 @Component({
   selector: 'app-profile',
@@ -30,12 +39,36 @@ export class ProfileComponent {
   readonly errorMessage = this.profileService.errorMessage;
   readonly isSaving = this.profileService.isProfileSaving;
   readonly isEditMode = signal(false);
+
+  private adultValidator: ValidatorFn = (control: AbstractControl) => {
+    const value = control.value;
+    if (!value) return null;
+
+    const today = new Date();
+    const birthDate = new Date(value);
+    let age = today.getFullYear() - birthDate.getFullYear();
+    const monthDiff = today.getMonth() - birthDate.getMonth();
+
+    if (monthDiff < 0 || (monthDiff === 0 && today.getDate() < birthDate.getDate())) {
+      age--;
+    }
+
+    return age >= 18 ? null : { tooYoung: true };
+  };
+
   readonly profileForm = new FormGroup({
-    firstName: new FormControl({ value: '', disabled: true }, [Validators.required]),
-    lastName: new FormControl({ value: '', disabled: true }, [Validators.required]),
+    firstName: new FormControl({ value: '', disabled: true }, [
+      Validators.required,
+      Validators.pattern(namePattern),
+    ]),
+    lastName: new FormControl({ value: '', disabled: true }, [
+      Validators.required,
+      Validators.pattern(namePattern),
+    ]),
     email: new FormControl({ value: '', disabled: true }, [Validators.email, Validators.required]),
     dateOfBirth: new FormControl<Date | null>({ value: null, disabled: true }, [
       Validators.required,
+      this.adultValidator,
     ]),
   });
 

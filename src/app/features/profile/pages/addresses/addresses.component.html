@@ -99,6 +99,8 @@
         <input matInput type="text" formControlName="city" />
         @if (addressForm.controls.city.hasError('required')) {
           <mat-error>City is required</mat-error>
+        } @else if (addressForm.controls.city.hasError('pattern')) {
+          <mat-error>City cannot contain numbers</mat-error>
         }
       </mat-form-field>
 
@@ -107,6 +109,8 @@
         <input matInput type="text" formControlName="postalCode" />
         @if (addressForm.controls.postalCode.hasError('required')) {
           <mat-error>Postal code is required</mat-error>
+        } @else if (addressForm.controls.postalCode.hasError('invalidPostalCode')) {
+          <mat-error>Postal code does not match selected country</mat-error>
         }
       </mat-form-field>
 
@@ -117,6 +121,8 @@
           <mat-error>Country code is required</mat-error>
         } @else if (addressForm.controls.country.hasError('pattern')) {
           <mat-error>Use 2-letter country code</mat-error>
+        } @else if (addressForm.controls.country.hasError('invalidCountry')) {
+          <mat-error>Use one of: US, DE, FR, PL, GB, BY, RU</mat-error>
         }
       </mat-form-field>
 
