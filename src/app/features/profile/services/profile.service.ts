@@ -5,6 +5,7 @@ import { Customer } from '../../../core/models/customer.model';
 import { catchError, defer, finalize, Observable, take, tap, throwError } from 'rxjs';
 import { CustomerService } from '../../auth/services/customer.service';
 import { ChangePasswordRequest, UpdateProfileRequest } from '../models/profile-request.models';
+import { getCustomerToken } from '../../../shared/utils/customer-token';
 
 @Injectable({
   providedIn: 'root',
@@ -22,21 +23,6 @@ export class ProfileService {
   readonly isPasswordSaving = signal(false);
   readonly isPasswordChanged = signal(false);
 
-  private getCustomerToken(): string {
-    const token = sessionStorage.getItem('accessToken') ?? localStorage.getItem('accessToken');
-    const scope = sessionStorage.getItem('scope') ?? localStorage.getItem('scope');
-
-    if (!token) {
-      throw new Error('Customer access token not found');
-    }
-
-    if (!scope?.includes('manage_my_profile') || !scope.includes('customer_id:')) {
-      throw new Error(`Customer token has insufficient scope: ${scope ?? 'empty'}`);
-    }
-
-    return token;
-  }
-
   private getErrorMessage(error: unknown, fallback: string): string {
     if (error instanceof HttpErrorResponse) {
       return error.error?.message ?? error.error?.error_description ?? fallback;
@@ -53,7 +39,7 @@ export class ProfileService {
         throw new Error('Customer profile is not loaded');
       }
 
-      const token = this.getCustomerToken();
+      const token = getCustomerToken('manage_my_profile');
 
       return this.http.post<Customer>(
         this.baseUrl,
@@ -82,7 +68,7 @@ export class ProfileService {
 
   getUserProfile(): Observable<Customer> {
     return defer(() => {
-      const token = this.getCustomerToken();
+      const token = getCustomerToken('manage_my_profile');
 
       return this.http.get<Customer>(this.baseUrl, {
         headers: {
@@ -178,7 +164,7 @@ export class ProfileService {
         throw new Error('Customer profile is not loaded');
       }
 
-      const token = this.getCustomerToken();
+      const token = getCustomerToken('manage_my_profile');
 
       return this.http.post<Customer>(
         `${this.baseUrl}/password`,

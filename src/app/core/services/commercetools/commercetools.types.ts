@@ -152,6 +152,13 @@ export type CommercetoolsCartUpdateAction =
       code: string;
     }
   | {
+      action: 'removeDiscountCode';
+      discountCode: {
+        typeId: 'discount-code';
+        id: string;
+      };
+    }
+  | {
       action: 'addLineItem';
       productId: string;
       variantId: number;

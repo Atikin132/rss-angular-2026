@@ -8,6 +8,7 @@ import {
   CommercetoolsCartUpdateAction,
 } from '../../../core/services/commercetools/commercetools.types';
 import { mapCart } from '../mappers/cart.mapper';
+import { getCustomerToken } from '../../../shared/utils/customer-token';
 
 @Injectable({
   providedIn: 'root',
@@ -25,31 +26,19 @@ export class CartService {
   readonly totalPrice = computed(() => {
     return this.cart()?.totalPrice ?? 0;
   });
+  readonly subtotalPrice = computed(() => {
+    return this.cart()?.subtotalPrice ?? 0;
+  });
   readonly totalItems = computed(() => {
     return this.cart()?.totalItems ?? 0;
   });
-
-  private getCustomerToken(): string {
-    const token = sessionStorage.getItem('accessToken') ?? localStorage.getItem('accessToken');
-    const scope = sessionStorage.getItem('scope') ?? localStorage.getItem('scope');
-
-    if (!token) {
-      throw new Error('Customer access token not found');
-    }
-
-    if (!scope?.includes('manage_my_orders') || !scope.includes('customer_id:')) {
-      throw new Error(`Customer token has insufficient scope: ${scope ?? 'empty'}`);
-    }
-
-    return token;
-  }
 
   async ensureCart(): Promise<Cart> {
     const currentCart = this.cart();
     if (currentCart) {
       return currentCart;
     }
-    const token = this.getCustomerToken();
+    const token = getCustomerToken('manage_my_orders');
     try {
       const activeCart = await firstValueFrom(
         this.http.get<CommercetoolsCart>(`${this.baseUrl}/active-cart`, {
@@ -70,7 +59,7 @@ export class CartService {
     }
   }
   async createCart(): Promise<Cart> {
-    const token = this.getCustomerToken();
+    const token = getCustomerToken('manage_my_orders');
     const newCart = await firstValueFrom(
       this.http.post<CommercetoolsCart>(
         `${this.baseUrl}/carts`,
@@ -87,7 +76,7 @@ export class CartService {
     return mappedCart;
   }
   private async updateCart(actions: CommercetoolsCartUpdateAction[]): Promise<Cart> {
-    const token = this.getCustomerToken();
+    const token = getCustomerToken('manage_my_orders');
     const currentCart = await this.ensureCart();
     const updatedCart = await firstValueFrom(
       this.http.post<CommercetoolsCart>(
@@ -163,18 +152,27 @@ export class CartService {
     ]);
   }
   async clearCart(): Promise<void> {
-    const items = this.items();
+    const cart = await this.ensureCart();
+    const removeItemActions: CommercetoolsCartUpdateAction[] = cart.items.map((item) => ({
+      action: 'removeLineItem',
+      lineItemId: item.lineItemId,
+    }));
 
-    if (!items.length) {
+    const removeDiscountActions: CommercetoolsCartUpdateAction[] = cart.discountCodes.map((id) => ({
+      action: 'removeDiscountCode',
+      discountCode: {
+        typeId: 'discount-code',
+        id,
+      },
+    }));
+
+    const actions = [...removeItemActions, ...removeDiscountActions];
+
+    if (!actions.length) {
       return;
     }
 
-    await this.updateCart(
-      items.map((item) => ({
-        action: 'removeLineItem',
-        lineItemId: item.lineItemId,
-      })),
-    );
+    await this.updateCart(actions);
   }
   async removeFromCartByProductId(productId: string): Promise<void> {
     const item = this.items().find((item) => item.productId === productId);
@@ -184,5 +182,20 @@ export class CartService {
     }
 
     await this.removeItem(item.lineItemId);
+  }
+
+  async applyPromoCode(code: string): Promise<void> {
+    const trimmedCode = code.trim();
+
+    if (!trimmedCode) {
+      return;
+    }
+
+    await this.updateCart([
+      {
+        action: 'addDiscountCode',
+        code: trimmedCode,
+      },
+    ]);
   }
 }
