@@ -6,6 +6,7 @@ import {
 } from '@angular/core';
 import { provideHttpClient } from '@angular/common/http';
 import { provideRouter, withComponentInputBinding } from '@angular/router';
+import { PRICE_FORMAT_OPTIONS } from './shared/tokens/price-format-options';
 
 import { routes } from './app.routes';
 import { AuthService } from './features/auth/services/auth.service';
@@ -20,5 +21,12 @@ export const appConfig: ApplicationConfig = {
       const authService = inject(AuthService);
       return authService.initAuth();
     }),
+    {
+      provide: PRICE_FORMAT_OPTIONS,
+      useValue: {
+        currencyCode: 'USD',
+        locale: 'en-US',
+      },
+    },
   ],
 };
