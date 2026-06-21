@@ -96,3 +96,64 @@ export interface FacetResult {
 }
 
 export type ProductFacets = Record<string, FacetResult>;
+
+export interface CommercetoolsMoney {
+  currencyCode: string;
+  centAmount: number;
+}
+
+export interface CommercetoolsCartPrice {
+  value: CommercetoolsMoney;
+  discounted?: {
+    value: CommercetoolsMoney;
+  };
+}
+
+export interface CommercetoolsLineItem {
+  id: string;
+  productId: string;
+  name: LocalizedString;
+  variant: {
+    id: number;
+    sku?: string;
+    images?: ProductImage[];
+  };
+  price: CommercetoolsCartPrice;
+  quantity: number;
+  totalPrice: CommercetoolsMoney;
+}
+
+export interface CommercetoolsCart {
+  id: string;
+  version: number;
+  customerId?: string;
+  lineItems: CommercetoolsLineItem[];
+  totalLineItemQuantity?: number;
+  totalPrice: CommercetoolsMoney;
+  discountCodes?: {
+    discountCode: {
+      id: string;
+    };
+  }[];
+}
+
+export type CommercetoolsCartUpdateAction =
+  | {
+      action: 'changeLineItemQuantity';
+      lineItemId: string;
+      quantity: number;
+    }
+  | {
+      action: 'removeLineItem';
+      lineItemId: string;
+    }
+  | {
+      action: 'addDiscountCode';
+      code: string;
+    }
+  | {
+      action: 'addLineItem';
+      productId: string;
+      variantId: number;
+      quantity: number;
+    };

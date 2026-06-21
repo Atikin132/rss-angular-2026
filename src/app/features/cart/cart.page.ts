@@ -12,6 +12,9 @@ import { CartService } from './services/cart.service';
   styleUrl: './cart.page.scss',
 })
 export class CartPage {
+  constructor() {
+    void this.cartService.ensureCart();
+  }
   private readonly cartService = inject(CartService);
   readonly cartItems = this.cartService.items;
 

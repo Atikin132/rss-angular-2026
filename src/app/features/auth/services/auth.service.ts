@@ -140,7 +140,10 @@ export class AuthService {
 
       const scopedBody = baseBody.set(
         'scope',
-        `manage_my_profile:${environment.commercetools.projectKey}`,
+        [
+          `manage_my_profile:${environment.commercetools.projectKey}`,
+          `manage_my_orders:${environment.commercetools.projectKey}`,
+        ].join(' '),
       );
 
       const tokenUrl = `${environment.commercetools.authUrl}/oauth/${environment.commercetools.projectKey}/customers/token`;

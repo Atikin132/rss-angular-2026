@@ -20,14 +20,14 @@ export class CartItemComponent {
   remove = output<string>();
 
   onIncrease(): void {
-    this.increase.emit(this.item().id);
+    this.increase.emit(this.item().lineItemId);
   }
 
   onDecrease(): void {
-    this.decrease.emit(this.item().id);
+    this.decrease.emit(this.item().lineItemId);
   }
 
   onRemove(): void {
-    this.remove.emit(this.item().id);
+    this.remove.emit(this.item().lineItemId);
   }
 }

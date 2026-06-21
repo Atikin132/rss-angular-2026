@@ -2,7 +2,7 @@ import { Component, computed, inject, input, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { Product } from '../models/product.model';
-import { CartStore } from '../stores/create-selection.store';
+import { CartService } from '../../cart/services/cart.service';
 
 @Component({
   selector: 'app-cart-button',
@@ -11,13 +11,15 @@ import { CartStore } from '../stores/create-selection.store';
   styleUrl: './cart-button.scss',
 })
 export class CartButton {
-  private cartStore = inject(CartStore);
+  private cartService = inject(CartService);
 
   product = input.required<Product>();
 
   hovered = signal(false);
 
-  readonly inCart = computed(() => this.cartStore.productIds().includes(this.product().id));
+  readonly inCart = computed(() =>
+    this.cartService.items().some((item) => item.productId === this.product().id),
+  );
 
   readonly cartButtonState = computed(() => {
     const inCart = this.inCart();
@@ -49,8 +51,14 @@ export class CartButton {
     };
   });
 
-  toggleCart(event: MouseEvent): void {
+  async toggleCart(event: MouseEvent): Promise<void> {
     event.stopPropagation();
-    this.cartStore.toggle(this.product().id);
+
+    if (this.inCart()) {
+      await this.cartService.removeFromCartByProductId(this.product().id);
+      return;
+    }
+
+    await this.cartService.addToCart(this.product().id);
   }
 }
