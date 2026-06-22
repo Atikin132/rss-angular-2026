@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router, RouterLink } from '@angular/router';
+import { RouterLink } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -30,15 +30,23 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginPage {
   private readonly fb = inject(FormBuilder);
-  private readonly router = inject(Router);
   private readonly authService = inject(AuthService);
 
   protected readonly isPasswordVisible = signal(false);
   protected readonly rememberMe = signal(false);
+  protected readonly errorMessage = signal('');
 
   protected readonly loginForm = this.fb.nonNullable.group({
     email: ['', [Validators.required, Validators.email]],
-    password: ['', [Validators.required, Validators.minLength(6)]],
+    password: [
+      '',
+
+      [
+        Validators.required,
+        Validators.minLength(8),
+        Validators.pattern(/^(?=.*[A-Za-z])(?=.*\d).+$/),
+      ],
+    ],
   });
 
   protected togglePasswordVisibility(): void {
@@ -53,17 +61,24 @@ export class LoginPage {
     // eslint-disable-next-line no-console
     console.log('Forgot password clicked');
   }
-  protected submit(): void {
+  protected async submit(): Promise<void> {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;
     }
-    this.authService.login(this.rememberMe());
-    // eslint-disable-next-line no-console
-    console.log({
-      ...this.loginForm.getRawValue(),
-      rememberMe: this.rememberMe(),
-    });
-    void this.router.navigate(['/']);
+
+    this.errorMessage.set('');
+
+    try {
+      await this.authService.login(
+        this.loginForm.getRawValue().email,
+        this.loginForm.getRawValue().password,
+        this.rememberMe(),
+      );
+    } catch (error) {
+      this.errorMessage.set(
+        error instanceof Error ? error.message : 'Login failed. Please try again.',
+      );
+    }
   }
 }

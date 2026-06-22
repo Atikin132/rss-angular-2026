@@ -4,7 +4,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { CartBadgeComponent } from '../../../../features/cart/cart-badge.component/cart-badge.component';
-import { UserService } from '../../../../features/auth/services/user.service';
+import { CustomerService } from '../../../../features/auth/services/customer.service';
+import { AuthService } from '../../../../features/auth/services/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -20,14 +21,15 @@ import { UserService } from '../../../../features/auth/services/user.service';
   styleUrl: './header.scss',
 })
 export class Header {
-  private readonly userService = inject(UserService);
+  private readonly customerService = inject(CustomerService);
+  protected readonly authService = inject(AuthService);
 
   logout = output<void>();
 
   isMenuOpen = signal<boolean>(false);
 
   get username(): string {
-    return this.userService.fullName();
+    return this.customerService.fullName();
   }
 
   toggleMenu(): void {

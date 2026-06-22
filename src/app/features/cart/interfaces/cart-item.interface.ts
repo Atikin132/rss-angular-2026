@@ -1,7 +1,19 @@
 export interface CartItem {
-  id: string;
+  lineItemId: string;
+  productId: string;
+  variantId: number;
+  sku?: string;
+
   name: string;
   imageUrl: string;
-  price: number;
+
+  unitPrice: number;
+  discountedUnitPrice?: number;
+
   quantity: number;
+
+  totalPrice: number;
+  discountedTotalPrice?: number;
+
+  currencyCode: string;
 }

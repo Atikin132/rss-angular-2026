@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { ProfileService } from '../services/profile.service';
@@ -9,6 +9,12 @@ import { ProfileService } from '../services/profile.service';
   templateUrl: './profile.page.html',
   styleUrl: './profile.page.scss',
 })
-export class ProfilePage {
-  readonly profile = inject(ProfileService).profile;
+export class ProfilePage implements OnInit {
+  readonly profileService = inject(ProfileService);
+  readonly user = this.profileService.user;
+  readonly errorMessage = this.profileService.errorMessage;
+
+  ngOnInit(): void {
+    this.profileService.loadUser();
+  }
 }

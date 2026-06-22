@@ -3,10 +3,9 @@ import { Search } from './search/search';
 import { Sort, SortType } from './sort/sort';
 import { CatalogFilters, Filters } from './filters/filters';
 import { ProductsStore } from './stores/products.store';
-import { filterProducts } from './utils/filter-products';
 import { sortMap } from './utils/sort-map';
 import { ProductGrid } from './product-grid/product-grid';
-
+import { CartService } from '../cart/services/cart.service';
 @Component({
   selector: 'app-catalog',
   imports: [ProductGrid, Search, Sort, Filters],
@@ -15,6 +14,7 @@ import { ProductGrid } from './product-grid/product-grid';
 })
 export class CatalogPage implements OnInit {
   private store = inject(ProductsStore);
+  private cartService = inject(CartService);
 
   products = this.store.products;
 
@@ -27,19 +27,18 @@ export class CatalogPage implements OnInit {
   search = signal('');
   sort = signal<SortType>('name-asc');
 
-  filters = signal<CatalogFilters>({
-    categories: [],
-    brands: [],
-    minPrice: null,
-    maxPrice: null,
-  });
+  filters = this.store.filters;
 
   ngOnInit() {
     this.store.loadProducts();
+    this.cartService.ensureCart();
   }
 
   filteredAndSortedProducts = computed(() => {
-    return filterProducts(this.products(), this.search(), this.filters())
+    const q = this.search().toLowerCase().trim();
+
+    return this.products()
+      .filter((p) => !q || p.name.toLowerCase().includes(q))
       .slice()
       .sort(sortMap[this.sort()]);
   });
@@ -50,5 +49,9 @@ export class CatalogPage implements OnInit {
 
   onSortChange(value: SortType) {
     this.sort.set(value);
+  }
+
+  onFiltersChange(filters: CatalogFilters) {
+    this.store.loadProductsByFilters(filters);
   }
 }

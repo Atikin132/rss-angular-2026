@@ -1,20 +1,32 @@
 import { Product } from '../../../features/catalog/models/product.model';
 
-import { CommercetoolsProductProjection, ProductAttribute } from './commercetools.types';
+import {
+  CommercetoolsCategory,
+  CommercetoolsProductProjection,
+  ProductAttribute,
+} from './commercetools.types';
 
-export const mapProduct = (product: CommercetoolsProductProjection): Product => {
+export const mapCategories = (categories: CommercetoolsCategory[]): Map<string, string> => {
+  return new Map(categories.map((category) => [category.id, category.name['en-US'] ?? '']));
+};
+
+export const mapProduct = (
+  product: CommercetoolsProductProjection,
+  categoriesMap: Map<string, string>,
+): Product => {
   const variant = product.masterVariant;
 
-  const attributes = product.attributes || [];
+  const attributes = variant.attributes || [];
 
   const getAttribute = (name: string): ProductAttribute['value'] | undefined =>
     attributes.find((attr) => attr.name === name)?.value;
 
   const brand = getAttribute('brand');
-
   const inStock = getAttribute('inStock');
 
   const priceData = variant.prices?.[0];
+
+  const categoryId = product.categories?.[0]?.id;
 
   return {
     id: product.id,
@@ -37,7 +49,7 @@ export const mapProduct = (product: CommercetoolsProductProjection): Product => 
 
     currency: priceData?.value.currencyCode || 'USD',
 
-    category: product.categories?.[0]?.obj?.name?.['en-US'] || '',
+    category: categoryId ? (categoriesMap.get(categoryId) ?? '') : '',
 
     brand: typeof brand === 'string' ? brand : '',
 

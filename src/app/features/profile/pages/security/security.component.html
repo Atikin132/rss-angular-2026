@@ -37,14 +37,23 @@
         <input matInput type="password" formControlName="confirmPassword" />
         @if (passwordForm.controls.confirmPassword.hasError('required')) {
           <mat-error>Password confirmation is required</mat-error>
-        } @else if (!passwordsMatch()) {
+        } @else if (passwordForm.hasError('passwordMismatch')) {
           <mat-error>Passwords do not match</mat-error>
         }
       </mat-form-field>
 
-      <button mat-flat-button type="button" (click)="savePassword()">
+      @if (errorMessage()) {
+        <p class="security-form__error">{{ errorMessage() }}</p>
+      }
+
+      <button
+        mat-flat-button
+        type="button"
+        [disabled]="isPasswordSaving()"
+        (click)="savePassword()"
+      >
         <mat-icon aria-hidden="true">lock_reset</mat-icon>
-        <span>Update Password</span>
+        <span>{{ isPasswordSaving() ? 'Updating...' : 'Update Password' }}</span>
       </button>
     </form>
   </article>

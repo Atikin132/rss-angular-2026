@@ -1,5 +1,9 @@
 @if (product(); as productItem) {
-  <app-product-breadcrumbs [productName]="productItem.name" [slug]="productItem.slug" />
+  <app-product-breadcrumbs
+    [productName]="productItem.name"
+    [slug]="productItem.slug"
+    [categoryName]="productItem.category"
+  />
   <div class="page-content">
     <app-product-gallery class="gallery" [images]="productItem.images" />
     <div class="info-btns">

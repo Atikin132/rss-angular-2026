@@ -1,18 +1,18 @@
 import { Injectable, signal, computed } from '@angular/core';
-import { User } from '../../../core/models/user.model';
+import { Customer } from '../../../core/models/customer.model';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
-  readonly user = signal<User | null>(null);
+export class CustomerService {
+  readonly user = signal<Customer | null>(null);
 
   readonly fullName = computed(() => {
     const u = this.user();
-    return u ? `${u.firstName} ${u.lastName}` : 'User';
+    return u ? `${u.firstName} ${u.lastName}` : 'Customer';
   });
 
-  setUser(user: User): void {
+  setUser(user: Customer): void {
     this.user.set(user);
   }
 

@@ -75,4 +75,20 @@ export class ApiService {
       ),
     );
   }
+  async post<T>(endpoint: string, body: unknown): Promise<T> {
+    const token = await this.getAccessToken();
+    return firstValueFrom(
+      this.http.post<T>(
+        `${environment.commercetools.apiUrl}/${environment.commercetools.projectKey}${endpoint}`,
+
+        body,
+
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      ),
+    );
+  }
 }

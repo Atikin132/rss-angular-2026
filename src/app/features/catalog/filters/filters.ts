@@ -3,6 +3,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatFormField, MatSelectChange, MatSelectModule } from '@angular/material/select';
 import { MatSliderModule } from '@angular/material/slider';
+import {
+  BrandOption,
+  CategoryOption,
+} from '../../../core/services/commercetools/commercetools.types';
 
 export interface CatalogFilters {
   categories: string[];
@@ -22,15 +26,15 @@ export class Filters {
 
   valueChange = output<CatalogFilters>();
 
-  categories = input<string[]>([]);
-  brands = input<string[]>([]);
+  categories = input<CategoryOption[]>([]);
+  brands = input<BrandOption[]>([]);
 
-  toggleCategory(category: string) {
+  toggleCategory(categoryId: string) {
     const current = this.value();
 
-    const categories = current.categories.includes(category)
-      ? current.categories.filter((c) => c !== category)
-      : [...current.categories, category];
+    const categories = current.categories.includes(categoryId)
+      ? current.categories.filter((id) => id !== categoryId)
+      : [...current.categories, categoryId];
 
     this.valueChange.emit({
       ...current,

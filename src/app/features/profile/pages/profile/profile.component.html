@@ -12,12 +12,17 @@
       </button>
     } @else {
       <div class="edit-actions">
-        <button mat-flat-button type="button" (click)="saveProfile()">
+        <button
+          mat-flat-button
+          type="button"
+          [disabled]="isSaving() || profileForm.invalid"
+          (click)="saveProfile()"
+        >
           <mat-icon aria-hidden="true">save</mat-icon>
-          <span>Save</span>
+          <span>{{ isSaving() ? 'Saving...' : 'Save' }}</span>
         </button>
 
-        <button mat-stroked-button type="button" (click)="cancelEdit()">
+        <button mat-stroked-button type="button" [disabled]="isSaving()" (click)="cancelEdit()">
           <mat-icon aria-hidden="true">close</mat-icon>
           <span>Cancel</span>
         </button>
@@ -29,16 +34,31 @@
     <mat-form-field appearance="outline">
       <mat-label>First Name</mat-label>
       <input matInput type="text" formControlName="firstName" />
+      @if (profileForm.controls.firstName.hasError('required')) {
+        <mat-error>First name is required</mat-error>
+      } @else if (profileForm.controls.firstName.hasError('pattern')) {
+        <mat-error>First name cannot contain numbers</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Last Name</mat-label>
       <input matInput type="text" formControlName="lastName" />
+      @if (profileForm.controls.lastName.hasError('required')) {
+        <mat-error>Last name is required</mat-error>
+      } @else if (profileForm.controls.lastName.hasError('pattern')) {
+        <mat-error>Last name cannot contain numbers</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline">
       <mat-label>Email Address</mat-label>
       <input matInput type="email" formControlName="email" />
+      @if (profileForm.controls.email.hasError('required')) {
+        <mat-error>Email is required</mat-error>
+      } @else if (profileForm.controls.email.hasError('email')) {
+        <mat-error>Enter a valid email address</mat-error>
+      }
     </mat-form-field>
 
     <mat-form-field appearance="outline">
@@ -46,6 +66,15 @@
       <input matInput [matDatepicker]="birthDatePicker" formControlName="dateOfBirth" />
       <mat-datepicker-toggle matIconSuffix [for]="birthDatePicker"></mat-datepicker-toggle>
       <mat-datepicker #birthDatePicker></mat-datepicker>
+      @if (profileForm.controls.dateOfBirth.hasError('required')) {
+        <mat-error>Date of birth is required</mat-error>
+      } @else if (profileForm.controls.dateOfBirth.hasError('tooYoung')) {
+        <mat-error>You must be at least 18 years old</mat-error>
+      }
     </mat-form-field>
+
+    @if (errorMessage()) {
+      <p class="personal-form__error">{{ errorMessage() }}</p>
+    }
   </form>
 </article>

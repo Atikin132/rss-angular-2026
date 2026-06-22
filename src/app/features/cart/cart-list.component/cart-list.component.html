@@ -1,5 +1,5 @@
 <div class="cart-list">
-  @for (item of items(); track item.id) {
+  @for (item of items(); track item.lineItemId) {
     <app-cart-item
       [item]="item"
       (increase)="onIncrease($event)"
