@@ -3,7 +3,7 @@
 
   <div class="cart-summary__row">
     <span>Subtotal</span>
-    <strong>${{ totalPrice() }}</strong>
+    <strong>{{ subtotalPrice() | price }}</strong>
   </div>
 
   <div class="cart-summary__row">
@@ -11,21 +11,21 @@
     <strong class="cart-summary__accent">FREE</strong>
   </div>
 
-  <div class="cart-summary__row">
-    <span>Estimated Tax</span>
-    <strong>$34.32</strong>
-  </div>
-
   <div class="cart-summary__row cart-summary__row--total">
     <span>Total</span>
-    <strong>${{ totalPrice() + 34.32 }}</strong>
+    <strong>{{ totalPrice() | price }}</strong>
   </div>
 
   <label class="cart-summary__promo">
     <span>Promo Code</span>
     <div class="cart-summary__promo-control">
-      <input type="text" placeholder="Enter code" />
-      <button type="button">Apply</button>
+      <input
+        type="text"
+        placeholder="Enter code"
+        [value]="promoCode()"
+        (input)="promoCode.set($any($event.target).value)"
+      />
+      <button type="button" (click)="onApplyPromoCode()">Apply</button>
     </div>
   </label>
 

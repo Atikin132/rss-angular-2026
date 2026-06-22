@@ -5,7 +5,7 @@ import { CatalogFilters, Filters } from './filters/filters';
 import { ProductsStore } from './stores/products.store';
 import { sortMap } from './utils/sort-map';
 import { ProductGrid } from './product-grid/product-grid';
-
+import { CartService } from '../cart/services/cart.service';
 @Component({
   selector: 'app-catalog',
   imports: [ProductGrid, Search, Sort, Filters],
@@ -14,6 +14,7 @@ import { ProductGrid } from './product-grid/product-grid';
 })
 export class CatalogPage implements OnInit {
   private store = inject(ProductsStore);
+  private cartService = inject(CartService);
 
   products = this.store.products;
 
@@ -30,6 +31,7 @@ export class CatalogPage implements OnInit {
 
   ngOnInit() {
     this.store.loadProducts();
+    this.cartService.ensureCart();
   }
 
   filteredAndSortedProducts = computed(() => {

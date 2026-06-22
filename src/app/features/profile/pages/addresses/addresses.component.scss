@@ -34,13 +34,28 @@
 
 .address-item {
   display: grid;
-  grid-template-columns: 56px 1fr;
+  grid-template-columns: 56px 1fr auto auto;
   gap: 20px;
   align-items: center;
   padding: 20px;
   background-color: #fbfaff;
   border: 1px solid #d8d5dd;
   border-radius: 14px;
+}
+
+.address-item > button {
+  justify-self: end;
+}
+
+.address-item__defaults {
+  display: flex;
+  grid-column: 2 / -1;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.address-item__defaults button {
+  min-width: 132px;
 }
 
 .address-item__icon {
@@ -93,6 +108,13 @@
   width: 100%;
 }
 
+.address-form__error {
+  grid-column: 1 / -1;
+  margin: 0;
+  color: #ba1a1a;
+  font-size: 14px;
+}
+
 .edit-actions {
   display: flex;
   gap: 8px;
@@ -114,6 +136,14 @@
 
   .address-item {
     grid-template-columns: 1fr;
+  }
+
+  .address-item > button {
+    justify-self: start;
+  }
+
+  .address-item__defaults {
+    grid-column: auto;
   }
 
   .address-form {

@@ -7,6 +7,7 @@ import { CartButton } from '../cart-button/cart-button';
 import { WishlistButton } from '../wishlist-button/wishlist-button';
 import { CompareButton } from '../compare-button/compare-button';
 import { ProductPrice } from '../product-price/product-price';
+import { CartService } from '../../cart/services/cart.service';
 
 @Component({
   selector: 'app-product-details',
@@ -23,6 +24,7 @@ import { ProductPrice } from '../product-price/product-price';
 })
 export class ProductDetailsPage {
   private store = inject(ProductsStore);
+  private cartService = inject(CartService);
 
   readonly slug = input<string | null>(null);
 
@@ -30,6 +32,7 @@ export class ProductDetailsPage {
   isLoading = this.store.loading;
 
   constructor() {
+    this.cartService.ensureCart();
     effect(async () => {
       const currentSlug = this.slug();
 

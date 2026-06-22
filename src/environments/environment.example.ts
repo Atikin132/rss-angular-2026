@@ -8,6 +8,10 @@ export const environment = {
 
     clientSecret: '',
 
+    spaClientId: '',
+
+    spaClientSecret: '',
+
     authUrl: '',
 
     apiUrl: '',
