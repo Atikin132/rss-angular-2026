@@ -8,6 +8,7 @@ import { environment } from '../../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { CustomerService } from './customer.service';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
@@ -23,6 +24,15 @@ export class AuthService {
   private readonly api = inject(ApiService);
   private readonly customerService = inject(CustomerService);
   private readonly router = inject(Router);
+  private readonly snackBar = inject(MatSnackBar);
+
+  private showWarning(message: string): void {
+    this.snackBar.open(message, 'Close', {
+      duration: 7000,
+      horizontalPosition: 'right',
+      verticalPosition: 'top',
+    });
+  }
 
   private findAddressId(customer: Customer, externalId: string): string {
     const address = customer.addresses.find((a) => a.externalId === externalId);
@@ -43,77 +53,11 @@ export class AuthService {
     this.isAuthenticated.set(!!accessToken && !!expiresAt && Date.now() < Number(expiresAt));
   }
 
-  async register(data: RegisterRequests): Promise<void> {
+  async register(data: RegisterRequests): Promise<Customer> {
     try {
-      const createResponse = await this.api.post<{ customer: Customer }>(
-        '/customers',
-        data.account,
-      );
+      const response = await this.api.post<{ customer: Customer }>('/customers', data.account);
 
-      const customerAfterCreate = createResponse.customer;
-
-      const actions = [
-        {
-          action: 'setDateOfBirth',
-          ...data.dateOfBirth,
-        },
-        {
-          action: 'addAddress',
-          address: {
-            ...data.shippingAddress,
-            externalId: data.useSeparateAddresses ? 'shipping' : 'shipping-billing',
-          },
-        },
-      ];
-
-      if (data.useSeparateAddresses && data.billingAddress) {
-        actions.push({
-          action: 'addAddress',
-          address: {
-            ...data.billingAddress,
-            externalId: 'billing',
-          },
-        });
-      }
-      const updateInfoBody = {
-        version: customerAfterCreate.version,
-        actions,
-      };
-
-      const updateResponse = await this.api.post<Customer>(
-        `/customers/${customerAfterCreate.id}`,
-        updateInfoBody,
-      );
-
-      const updatedCustomer = updateResponse;
-
-      const addressActions = [];
-      addressActions.push({
-        action: 'addShippingAddressId',
-
-        addressId: this.findAddressId(updatedCustomer, 'shipping'),
-      });
-
-      if (data.useSeparateAddresses) {
-        addressActions.push({
-          action: 'addBillingAddressId',
-
-          addressId: this.findAddressId(updatedCustomer, 'billing'),
-        });
-      } else {
-        addressActions.push({
-          action: 'addBillingAddressId',
-
-          addressId: this.findAddressId(updatedCustomer, 'shipping'),
-        });
-      }
-
-      await this.api.post(`/customers/${updatedCustomer.id}`, {
-        version: updatedCustomer.version,
-
-        actions: addressActions,
-      });
-      await this.login(data.account.email, data.account.password, false);
+      return response.customer;
     } catch (error) {
       if (error instanceof HttpErrorResponse) {
         throw new Error(error.error?.message ?? 'Registration failed. Please try again.', {
@@ -122,6 +66,90 @@ export class AuthService {
       }
 
       throw error;
+    }
+  }
+
+  async setDateOfBirthAndAddAddress(data: RegisterRequests, customer: Customer): Promise<Customer> {
+    const actions = [
+      {
+        action: 'setDateOfBirth',
+        ...data.dateOfBirth,
+      },
+      {
+        action: 'addAddress',
+        address: {
+          ...data.shippingAddress,
+          externalId: 'shipping',
+        },
+      },
+    ];
+
+    if (data.useSeparateAddresses && data.billingAddress) {
+      actions.push({
+        action: 'addAddress',
+        address: {
+          ...data.billingAddress,
+          externalId: 'billing',
+        },
+      });
+    }
+    const updateInfoBody = {
+      version: customer.version,
+      actions,
+    };
+
+    const response = await this.api.post<Customer>(`/customers/${customer.id}`, updateInfoBody);
+    return response;
+  }
+
+  async assignShippingAndBillingAddresses(
+    data: RegisterRequests,
+    customer: Customer,
+  ): Promise<Customer> {
+    const addressActions = [];
+    addressActions.push({
+      action: 'addShippingAddressId',
+
+      addressId: this.findAddressId(customer, 'shipping'),
+    });
+
+    if (data.useSeparateAddresses) {
+      addressActions.push({
+        action: 'addBillingAddressId',
+        addressId: this.findAddressId(customer, 'billing'),
+      });
+    } else {
+      addressActions.push({
+        action: 'addBillingAddressId',
+        addressId: this.findAddressId(customer, 'shipping'),
+      });
+    }
+
+    const response = await this.api.post<Customer>(`/customers/${customer.id}`, {
+      version: customer.version,
+      actions: addressActions,
+    });
+
+    return response;
+  }
+
+  async registerAndInitializeProfile(data: RegisterRequests): Promise<void> {
+    const customerAfterCreate = await this.register(data);
+
+    try {
+      const customerAfterUpdate = await this.setDateOfBirthAndAddAddress(data, customerAfterCreate);
+      await this.assignShippingAndBillingAddresses(data, customerAfterUpdate);
+    } catch {
+      this.showWarning(
+        'Account created successfully. Automatic login failed. Please sign in manually.',
+      );
+    }
+
+    try {
+      await this.login(data.account.email, data.account.password, false);
+    } catch {
+      await this.router.navigate(['/login']);
+      this.showWarning('Account created, but Login failed. Please try again.');
     }
   }
 

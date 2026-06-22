@@ -215,7 +215,7 @@ export class RegisterPage implements OnInit {
 
       const requests = mapRegisterFormToRequests(formValue);
 
-      await this.authService.register(requests);
+      await this.authService.registerAndInitializeProfile(requests);
     } catch (error) {
       this.errorMessage.set(
         error instanceof Error ? error.message : 'Registration failed. Please try again.',

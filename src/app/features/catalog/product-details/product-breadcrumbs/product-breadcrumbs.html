@@ -1,14 +1,10 @@
 @if (breadcrumbs().length > 0) {
   <div class="breadcrumbs-container">
     <nav class="breadcrumbs">
-      @for (crumb of breadcrumbs(); track crumb.url; let last = $last) {
+      @for (crumb of breadcrumbs(); track crumb.label; let last = $last) {
         @if (!last) {
-          <a class="link" [routerLink]="crumb.url">
-            @if (fromPage === 'wishlist') {
-              <mat-icon class="catalog-icon">favorite</mat-icon>
-            } @else {
-              <mat-icon class="catalog-icon">menu_book</mat-icon>
-            }
+          <a class="link" [routerLink]="crumb.url" (click)="onCrumbClick(crumb)">
+            <mat-icon class="catalog-icon">{{ crumb.icon }}</mat-icon>
             {{ crumb.label }}</a
           >
           <span>&nbsp;&nbsp;>&nbsp;&nbsp;</span>
