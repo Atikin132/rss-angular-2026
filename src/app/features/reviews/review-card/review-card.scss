@@ -1,0 +1,45 @@
+:host {
+  display: block;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.user {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.date {
+  font-size: 12px;
+  opacity: 0.6;
+}
+
+.rating {
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 20px;
+  color: #cfcfcf;
+}
+
+.star.filled {
+  color: #f8b400;
+}
+
+.comment {
+  font-size: 14px;
+  line-height: 1.4;
+}

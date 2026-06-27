@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, output, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, output, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -28,10 +28,6 @@ export class Header {
 
   isMenuOpen = signal<boolean>(false);
 
-  get username(): string {
-    return this.customerService.fullName();
-  }
-
   toggleMenu(): void {
     this.isMenuOpen.update((v) => !v);
   }
@@ -40,7 +36,7 @@ export class Header {
     this.isMenuOpen.set(false);
   }
 
-  navItems = [
+  navItems = computed(() => [
     {
       type: 'link',
       label: 'Main',
@@ -65,7 +61,7 @@ export class Header {
     },
     {
       type: 'link',
-      label: this.username,
+      label: this.customerService.fullName(),
       icon: 'person',
       route: '/profile',
     },
@@ -75,7 +71,7 @@ export class Header {
       icon: 'info',
       route: '/about',
     },
-  ];
+  ]);
 
   onLogout(): void {
     this.logout.emit();

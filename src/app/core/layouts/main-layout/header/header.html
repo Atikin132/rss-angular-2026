@@ -10,7 +10,7 @@
 
     <nav class="nav" [class.open]="isMenuOpen()">
       <ul class="nav-list">
-        @for (item of navItems; track item.route) {
+        @for (item of navItems(); track item.route) {
           <li>
             @switch (item.type) {
               @case ('link') {

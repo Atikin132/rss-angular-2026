@@ -1,0 +1,40 @@
+:host {
+  display: inline-flex;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+
+  padding: 4px 8px;
+  border-radius: 999px;
+
+  background: rgba(0, 0, 0, 0.04);
+
+  font-size: 13px;
+  font-weight: 500;
+  color: #333;
+
+  transition: background 0.2s ease;
+}
+
+.badge:hover {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.star {
+  font-size: 18px;
+  width: 18px;
+  height: 18px;
+  color: #ffc107;
+}
+
+.value {
+  line-height: 1;
+}
+
+.count {
+  color: rgba(0, 0, 0, 0.5);
+  font-weight: 400;
+}

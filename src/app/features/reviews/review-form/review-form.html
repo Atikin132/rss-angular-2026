@@ -1,0 +1,30 @@
+<form class="form" [formGroup]="form" (ngSubmit)="submit()">
+  <div class="rating-section">
+    <span class="label">Your rating</span>
+
+    <app-rating-stars
+      [(rating)]="form.controls.rating.value"
+      (ratingChange)="form.controls.rating.setValue($event)"
+    />
+
+    <div class="error-space">
+      @if (form.controls.rating.touched && form.controls.rating.hasError('min')) {
+        <mat-error>Please select rating</mat-error>
+      }
+    </div>
+  </div>
+
+  <mat-form-field appearance="outline">
+    <mat-label>Your review</mat-label>
+
+    <textarea matInput rows="5" maxlength="1000" formControlName="comment"></textarea>
+
+    <mat-hint align="end"> {{ form.controls.comment.value.length }}/1000 </mat-hint>
+
+    @if (form.controls.comment.hasError('required') && form.controls.comment.touched) {
+      <mat-error> Review cannot be empty </mat-error>
+    }
+  </mat-form-field>
+
+  <button mat-flat-button color="primary" type="submit">Submit review</button>
+</form>

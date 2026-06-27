@@ -21,6 +21,7 @@
         <app-compare-button class="compare-btn" [product]="productItem" />
       </div>
     </div>
+    <app-product-reviews [productId]="product()!.id" />
   </div>
 } @else {
   <p class="nothing-found-text">Nothing found</p>
