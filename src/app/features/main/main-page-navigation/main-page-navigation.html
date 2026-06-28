@@ -1,0 +1,21 @@
+<section class="navigation-section">
+  <h2>Explore Store</h2>
+
+  <div class="navigation-grid">
+    @for (page of pages; track page.route) {
+      <a class="navigation-link" [routerLink]="page.route">
+        <mat-card appearance="outlined" class="navigation-card">
+          <mat-card-content>
+            <mat-icon class="navigation-icon">
+              {{ page.icon }}
+            </mat-icon>
+
+            <span class="navigation-title">
+              {{ page.label }}
+            </span>
+          </mat-card-content>
+        </mat-card>
+      </a>
+    }
+  </div>
+</section>

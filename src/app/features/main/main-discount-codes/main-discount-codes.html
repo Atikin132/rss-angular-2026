@@ -1,0 +1,19 @@
+<section class="discount-section">
+  @if (discountCodes().length > 0) {
+    <h2>Discount Codes</h2>
+
+    <div class="discount-grid">
+      @for (code of discountCodes(); track code.id) {
+        <mat-card appearance="outlined" class="discount-card" (click)="copyToClipboard(code.code)">
+          <mat-card-content>
+            <mat-icon>local_offer</mat-icon>
+
+            <span class="discount-code">
+              {{ code.code }}
+            </span>
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+  }
+</section>
