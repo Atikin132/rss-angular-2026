@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { ReviewsService } from '../services/reviews.service';
 import { MatIconModule } from '@angular/material/icon';
 import { DecimalPipe } from '@angular/common';
@@ -9,6 +9,7 @@ import { DecimalPipe } from '@angular/common';
   imports: [MatIconModule, DecimalPipe],
   templateUrl: './product-rating-badge.html',
   styleUrl: './product-rating-badge.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductRatingBadge {
   private readonly reviewsService = inject(ReviewsService);

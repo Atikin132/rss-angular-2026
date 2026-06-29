@@ -1,4 +1,10 @@
-import { ChangeDetectorRef, Component, inject, output } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  inject,
+  output,
+} from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -12,6 +18,7 @@ import { RawProductReview } from '../models/product-review.model';
   imports: [ReactiveFormsModule, MatFormFieldModule, MatInputModule, MatButtonModule, RatingStars],
   templateUrl: './review-form.html',
   styleUrl: './review-form.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReviewForm {
   readonly reviewSubmitted = output<RawProductReview>();

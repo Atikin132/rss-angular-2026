@@ -1,4 +1,4 @@
-import { Component, computed, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { ReviewsService } from '../services/reviews.service';
 import { ReviewForm } from '../review-form/review-form';
 import { ReviewCard } from '../review-card/review-card';
@@ -11,6 +11,7 @@ import { CustomerService } from '../../auth/services/customer.service';
   imports: [ReviewForm, ReviewCard],
   templateUrl: './product-reviews-block.html',
   styleUrl: './product-reviews-block.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ProductReviewsBlock {
   private readonly reviewsService = inject(ReviewsService);

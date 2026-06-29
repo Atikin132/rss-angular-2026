@@ -1,4 +1,4 @@
-import { Component, input } from '@angular/core';
+import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { ProductReview } from '../models/product-review.model';
@@ -9,6 +9,7 @@ import { ProductReview } from '../models/product-review.model';
   imports: [MatCardModule, MatIconModule],
   templateUrl: './review-card.html',
   styleUrl: './review-card.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ReviewCard {
   readonly review = input.required<ProductReview>();
