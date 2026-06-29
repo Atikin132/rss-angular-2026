@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -11,6 +11,7 @@ import { DiscountCodesResponse } from '../models/discountcodes.response.model';
   imports: [MatCardModule, MatIconModule],
   templateUrl: './main-discount-codes.html',
   styleUrl: './main-discount-codes.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainDiscountCodes {
   private readonly api = inject(ApiService);

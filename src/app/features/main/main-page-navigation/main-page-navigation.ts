@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
@@ -8,6 +8,7 @@ import { RouterLink } from '@angular/router';
   imports: [MatCardModule, MatIconModule, RouterLink],
   templateUrl: './main-page-navigation.html',
   styleUrl: './main-page-navigation.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainPageNavigation {
   pages = [

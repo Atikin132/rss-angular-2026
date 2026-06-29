@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { ApiService } from '../../../core/services/commercetools/commercetools-api.service';
 import { ProductResponse } from '../models/product.response.model';
 import { Product } from '../../../core/models/product.model';
@@ -11,6 +11,7 @@ import { RouterLink } from '@angular/router';
   imports: [CurrencyPipe, RouterLink],
   templateUrl: './main-new-arrivals.html',
   styleUrl: './main-new-arrivals.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainNewArrivals {
   private readonly api = inject(ApiService);

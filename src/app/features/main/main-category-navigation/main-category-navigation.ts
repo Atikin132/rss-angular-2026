@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { MatIconModule } from '@angular/material/icon';
 import { MatCardModule } from '@angular/material/card';
@@ -10,6 +10,7 @@ import { CATEGORY_ICONS } from '../../catalog/product-details/product-breadcrumb
   imports: [MatIconModule, MatCardModule],
   templateUrl: './main-category-navigation.html',
   styleUrl: './main-category-navigation.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainCategoryNavigation implements OnInit {
   private readonly router = inject(Router);
