@@ -8,7 +8,18 @@
       <h3>{{ item().name }}</h3>
       <p class="cart-item__meta">Color: Blue</p>
 
-      <p class="cart-item__price">{{ item().totalPrice | price: item().currencyCode }}</p>
+      @if (hasDiscount()) {
+        <p class="cart-item__price">
+          <span class="cart-item__price-current">
+            {{ displayTotalPrice() | price: item().currencyCode }}
+          </span>
+          <span class="cart-item__price-old">
+            {{ item().totalPrice | price: item().currencyCode }}
+          </span>
+        </p>
+      } @else {
+        <p class="cart-item__price">{{ item().totalPrice | price: item().currencyCode }}</p>
+      }
     </div>
   </div>
 
