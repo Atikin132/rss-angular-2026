@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { CartListComponent } from './cart-list.component/cart-list.component';
 import { CartSummaryComponent } from './cart-summary.component/cart-summary.component';
 import { EmptyCartComponent } from './empty-cart.component/empty-cart.component';
@@ -10,6 +10,7 @@ import { CartService } from './services/cart.service';
   imports: [CartListComponent, CartSummaryComponent, EmptyCartComponent],
   templateUrl: './cart.page.html',
   styleUrl: './cart.page.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CartPage {
   constructor() {
