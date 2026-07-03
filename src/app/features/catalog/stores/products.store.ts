@@ -12,6 +12,12 @@ import {
 } from '../../../core/services/commercetools/commercetools.types';
 import { CatalogFilters } from '../filters/filters';
 import { buildFilters } from '../utils/build-filters';
+import { SortType } from '../sort/sort';
+
+const BRAND_FACET_ENDPOINT = '&facet=variants.attributes.brand as brand';
+const PRODUCTS_ENDPOINT = '/product-projections/search';
+const CATEGORIES_ENDPOINT = '/categories';
+export const PRODUCTS_ON_PAGE = 6;
 
 interface ProductsState {
   products: Product[];
@@ -21,6 +27,11 @@ interface ProductsState {
   filters: CatalogFilters;
   loading: boolean;
   error: string | null;
+  total: number;
+  currentPage: number;
+  pageSize: number;
+  searchQuery: string;
+  sortType: SortType;
 }
 
 const initialState: ProductsState = {
@@ -36,6 +47,11 @@ const initialState: ProductsState = {
   },
   loading: false,
   error: null,
+  total: 0,
+  currentPage: 1,
+  pageSize: PRODUCTS_ON_PAGE,
+  searchQuery: '',
+  sortType: 'name-asc',
 };
 
 function mapCategoryOptions(categories: CommercetoolsCategory[]): CategoryOption[] {
@@ -54,6 +70,21 @@ function mapBrandFacets(productsData: PagedResponse<CommercetoolsProductProjecti
       count: term.count,
     })) ?? []
   ).sort((a, b) => a.name.localeCompare(b.name));
+}
+
+function getSortParam(sortType: string): string {
+  switch (sortType) {
+    case 'name-asc':
+      return 'name.en-US asc';
+    case 'name-desc':
+      return 'name.en-US desc';
+    case 'price-asc':
+      return 'price asc';
+    case 'price-desc':
+      return 'price desc';
+    default:
+      return 'name.en-US asc';
+  }
 }
 
 async function loadCategoriesIfNeeded(
@@ -75,11 +106,6 @@ async function loadCategoriesIfNeeded(
   };
 }
 
-const PRODUCTS_ENDPOINT = '/product-projections/search';
-const PRODUCTS_LIMIT_PER_PAGE = '?limit=30';
-const CATEGORIES_ENDPOINT = '/categories';
-const BRAND_FACET_ENDPOINT = '&facet=variants.attributes.brand as brand';
-
 export const ProductsStore = signalStore(
   { providedIn: 'root' },
 
@@ -87,58 +113,21 @@ export const ProductsStore = signalStore(
 
   withMethods((store, apiService = inject(ApiService)) => ({
     async loadProducts() {
-      if (store.loading()) {
-        return;
-      }
-
-      try {
-        patchState(store, {
-          loading: true,
-          error: null,
-        });
-
-        const productsPromise = apiService.request<PagedResponse<CommercetoolsProductProjection>>(
-          PRODUCTS_ENDPOINT + PRODUCTS_LIMIT_PER_PAGE + BRAND_FACET_ENDPOINT,
-        );
-
-        const categoriesPromise = loadCategoriesIfNeeded(store.categories(), apiService);
-
-        const [productsData, categoriesResult] = await Promise.all([
-          productsPromise,
-          categoriesPromise,
-        ]);
-
-        const categoriesMap = categoriesResult?.categoriesMap ?? store.categoriesMap();
-
-        patchState(store, {
-          products: productsData.results.map((product) => mapProduct(product, categoriesMap)),
-          brands: mapBrandFacets(productsData),
-          ...(categoriesResult ?? {}),
-        });
-      } catch {
-        patchState(store, {
-          error: 'Failed to load products',
-        });
-      } finally {
-        patchState(store, {
-          loading: false,
-        });
-      }
+      await this.loadProductsPage(1, '', 'name-asc');
+    },
+    async loadProductsByFilters(filters: CatalogFilters) {
+      patchState(store, { filters });
+      await this.loadProductsPage(1, '', store.sortType());
     },
     async loadProductBySlug(slug: string): Promise<Product | null> {
       try {
-        patchState(store, {
-          loading: true,
-          error: null,
-        });
+        patchState(store, { loading: true, error: null });
 
         let categoriesMap = store.categoriesMap();
 
         const categoriesResult = await loadCategoriesIfNeeded(store.categories(), apiService);
-
         if (categoriesResult) {
           categoriesMap = categoriesResult.categoriesMap;
-
           patchState(store, categoriesResult);
         }
 
@@ -147,51 +136,85 @@ export const ProductsStore = signalStore(
         );
 
         if (!data.results.length) {
-          patchState(store, {
-            error: 'Product not found',
-          });
-
+          patchState(store, { error: 'Product not found' });
           return null;
         }
 
         return mapProduct(data.results[0], categoriesMap);
       } catch {
-        patchState(store, {
-          error: 'Failed to load product',
-        });
-
+        patchState(store, { error: 'Failed to load product' });
         return null;
       } finally {
-        patchState(store, {
-          loading: false,
-        });
+        patchState(store, { loading: false });
       }
     },
-    async loadProductsByFilters(filters: CatalogFilters) {
+    async loadProductsPage(
+      page = 1,
+      search = '',
+      sort: SortType = 'name-asc',
+      clearFiltersOnSearch = true,
+    ) {
+      if (store.loading()) {
+        return;
+      }
+
+      const pageSize = store.pageSize();
+      const offset = (page - 1) * pageSize;
+
       try {
         patchState(store, {
           loading: true,
           error: null,
-          filters,
+          currentPage: page,
+          searchQuery: search,
+          sortType: sort,
         });
 
-        const query = buildFilters(filters);
+        if (search.trim() && clearFiltersOnSearch) {
+          const emptyFilters: CatalogFilters = {
+            categories: [],
+            brands: [],
+            minPrice: null,
+            maxPrice: null,
+          };
 
-        const data = await apiService.request<PagedResponse<CommercetoolsProductProjection>>(
-          `${PRODUCTS_ENDPOINT}?limit=30&${query}`,
-        );
+          patchState(store, { filters: emptyFilters });
+        }
+
+        let endpoint = `${PRODUCTS_ENDPOINT}?limit=${pageSize}&offset=${offset}`;
+
+        if (search.trim()) {
+          endpoint += `&text.en-US="${encodeURIComponent(search.trim())}"`;
+        }
+
+        const sortParam = getSortParam(sort);
+        endpoint += `&sort=${sortParam}`;
+
+        const currentFilters = store.filters();
+        const filterQuery = buildFilters(currentFilters);
+        if (filterQuery) {
+          endpoint += `&${filterQuery}`;
+        }
+
+        endpoint += BRAND_FACET_ENDPOINT;
+
+        const data =
+          await apiService.request<PagedResponse<CommercetoolsProductProjection>>(endpoint);
+
+        const categoriesResult = await loadCategoriesIfNeeded(store.categories(), apiService);
 
         patchState(store, {
-          products: data.results.map((p) => mapProduct(p, store.categoriesMap())),
+          products: data.results.map((p) =>
+            mapProduct(p, categoriesResult?.categoriesMap ?? store.categoriesMap()),
+          ),
+          total: data.total ?? 0,
+          brands: mapBrandFacets(data),
+          ...(categoriesResult ?? {}),
         });
       } catch {
-        patchState(store, {
-          error: 'Failed to load products',
-        });
+        patchState(store, { error: 'Failed to load products' });
       } finally {
-        patchState(store, {
-          loading: false,
-        });
+        patchState(store, { loading: false });
       }
     },
   })),
