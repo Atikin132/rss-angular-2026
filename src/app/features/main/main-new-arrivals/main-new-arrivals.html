@@ -1,0 +1,30 @@
+<section class="discount-section">
+  <h2>New Arrivals</h2>
+
+  <div class="discount-grid">
+    @for (product of newArrivals(); track product.id) {
+      @let current = product.masterData.current;
+      @let variant = current.masterVariant;
+      @let image = variant.images[0];
+      @let price = variant.prices[0].value.centAmount;
+
+      <div class="card" [routerLink]="['/catalog/product', current.slug['en-US']]">
+        <img class="poster" [src]="image.url" [alt]="current.name['en-US']" />
+
+        <div class="card-info">
+          <h3 class="product-name">
+            {{ current.name['en-US'] }}
+          </h3>
+
+          <p class="product-description">
+            {{ current.description['en-US'] }}
+          </p>
+
+          <div class="price">
+            {{ price / 100 | currency: 'USD' }}
+          </div>
+        </div>
+      </div>
+    }
+  </div>
+</section>

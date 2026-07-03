@@ -1,0 +1,19 @@
+<section class="categories-section">
+  <h2>Browse Categories</h2>
+
+  <div class="categories-grid">
+    @for (category of categories(); track category.id) {
+      <mat-card class="category-card" appearance="outlined" (click)="openCategory(category.id)">
+        <mat-card-content>
+          <mat-icon class="category-icon">
+            {{ categoryIcons[category.name] }}
+          </mat-icon>
+
+          <span class="category-title">
+            {{ category.name }}
+          </span>
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+</section>
