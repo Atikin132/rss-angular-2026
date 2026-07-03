@@ -13,11 +13,36 @@
     transform: scale(1.02);
   }
 
-  .poster {
-    width: 100%;
-    height: 215px;
-    object-fit: cover;
-    flex-shrink: 0;
+  .image-wrapper {
+    position: relative;
+    display: block;
+    .poster {
+      width: 100%;
+      height: 215px;
+      display: block;
+      object-fit: cover;
+      flex-shrink: 0;
+    }
+
+    .compare-btn,
+    .wishlist-btn {
+      position: absolute;
+      top: 10px;
+    }
+
+    .compare-btn {
+      left: 10px;
+    }
+
+    .wishlist-btn {
+      right: 10px;
+    }
+
+    .rating-badge {
+      position: absolute;
+      bottom: 10px;
+      left: 10px;
+    }
   }
 
   .card-info {
@@ -56,20 +81,6 @@
     min-height: calc(1.3em * 2);
     overflow: hidden;
     text-overflow: ellipsis;
-  }
-
-  .compare-btn,
-  .wishlist-btn {
-    position: absolute;
-    top: 10px;
-  }
-
-  .compare-btn {
-    left: 10px;
-  }
-
-  .wishlist-btn {
-    right: 10px;
   }
 }
 

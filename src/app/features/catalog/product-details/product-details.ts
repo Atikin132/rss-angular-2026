@@ -8,6 +8,7 @@ import { WishlistButton } from '../wishlist-button/wishlist-button';
 import { CompareButton } from '../compare-button/compare-button';
 import { ProductPrice } from '../product-price/product-price';
 import { CartService } from '../../cart/services/cart.service';
+import { ProductReviewsBlock } from '../../reviews/product-reviews-block/product-reviews-block';
 
 @Component({
   selector: 'app-product-details',
@@ -18,6 +19,7 @@ import { CartService } from '../../cart/services/cart.service';
     WishlistButton,
     CompareButton,
     ProductPrice,
+    ProductReviewsBlock,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
@@ -39,6 +41,8 @@ export class ProductDetailsPage {
       if (currentSlug !== null) {
         const fetchedProduct = await this.store.loadProductBySlug(currentSlug);
         this.product.set(fetchedProduct);
+        // eslint-disable-next-line
+        console.log(this.product());
       }
     });
   }
