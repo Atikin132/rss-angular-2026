@@ -269,9 +269,25 @@ p {
   justify-content: center;
   gap: 42px;
   margin-top: 28px;
-  color: #737b86;
   font-size: 20px;
   font-weight: 600;
+}
+
+.tools a {
+  color: #737b86;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.tools a:hover,
+.tools a:focus-visible {
+  color: #005eb8;
+}
+
+.tools a:focus-visible {
+  border-radius: 4px;
+  outline: 2px solid #0077df;
+  outline-offset: 4px;
 }
 
 @media (max-width: 900px) {
