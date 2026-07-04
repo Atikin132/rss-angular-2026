@@ -1,7 +1,7 @@
 import { Component, effect, inject, input, signal } from '@angular/core';
 import { ProductsStore } from '../stores/products.store';
 import { ProductGallery } from './product-gallery/product-gallery';
-import { Product } from '../models/product.model';
+import { Product, Variant } from '../models/product.model';
 import { ProductBreadcrumbs } from './product-breadcrumbs/product-breadcrumbs';
 import { CartButton } from '../cart-button/cart-button';
 import { WishlistButton } from '../wishlist-button/wishlist-button';
@@ -10,6 +10,7 @@ import { ProductPrice } from '../product-price/product-price';
 import { CartService } from '../../cart/services/cart.service';
 import { ProductReviewsBlock } from '../../reviews/product-reviews-block/product-reviews-block';
 import { ProductImageModal } from './product-image-modal/product-image-modal';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'app-product-details',
@@ -22,6 +23,7 @@ import { ProductImageModal } from './product-image-modal/product-image-modal';
     ProductPrice,
     ProductReviewsBlock,
     ProductImageModal,
+    MatButtonModule,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
@@ -29,6 +31,7 @@ import { ProductImageModal } from './product-image-modal/product-image-modal';
 export class ProductDetailsPage {
   private store = inject(ProductsStore);
   private cartService = inject(CartService);
+  readonly selectedVariant = signal<Variant | null>(null);
 
   readonly slug = input<string | null>(null);
 
@@ -43,6 +46,11 @@ export class ProductDetailsPage {
       if (currentSlug !== null) {
         const fetchedProduct = await this.store.loadProductBySlug(currentSlug);
         this.product.set(fetchedProduct);
+        if (fetchedProduct) {
+          this.selectedVariant.set(fetchedProduct.variants[0] ?? null);
+        } else {
+          this.selectedVariant.set(null);
+        }
       }
     });
   }
@@ -58,5 +66,9 @@ export class ProductDetailsPage {
 
   closeGallery(): void {
     this.modalOpened.set(false);
+  }
+
+  selectVariant(variant: Variant) {
+    this.selectedVariant.set(variant);
   }
 }

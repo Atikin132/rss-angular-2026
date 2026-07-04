@@ -5,8 +5,6 @@
   width: 100%;
   box-sizing: border-box;
   gap: 50px;
-  max-width: 1200px;
-  margin: 0 auto;
 }
 
 .page-content {
@@ -59,6 +57,17 @@ app-product-reviews {
 app-product-price {
   --product-price-size: 24px;
   --product-old-price-size: 19px;
+}
+
+.variant-btn {
+  margin-right: 8px;
+  background-color: var(--mat-sys-inverse-on-surface);
+  border: 2px solid transparent;
+  color: #616265;
+}
+
+.variant-btn.active {
+  border-color: var(--mat-sys-primary);
 }
 
 .btns {

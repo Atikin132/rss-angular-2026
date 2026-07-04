@@ -4,7 +4,7 @@
   </button>
 
   <div class="thumbnails">
-    @for (image of images(); track image) {
+    @for (image of images(); track $index) {
       <button
         class="thumbnail"
         [class.active]="selectedImage() === image"
