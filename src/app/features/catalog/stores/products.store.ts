@@ -217,5 +217,23 @@ export const ProductsStore = signalStore(
         patchState(store, { loading: false });
       }
     },
+    async loadProductsByIds(ids: string[]): Promise<Product[]> {
+      if (!ids.length) {
+        return [];
+      }
+
+      let categoriesMap = store.categoriesMap();
+      const categoriesResult = await loadCategoriesIfNeeded(store.categories(), apiService);
+      if (categoriesResult) {
+        categoriesMap = categoriesResult.categoriesMap;
+        patchState(store, categoriesResult);
+      }
+      const products = await Promise.all(
+        ids.map((id) =>
+          apiService.request<CommercetoolsProductProjection>(`/product-projections/${id}`),
+        ),
+      );
+      return products.map((product) => mapProduct(product, categoriesMap));
+    },
   })),
 );
