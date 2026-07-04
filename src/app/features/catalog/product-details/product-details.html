@@ -5,7 +5,15 @@
     [categoryName]="productItem.category"
   />
   <div class="page-content">
-    <app-product-gallery class="gallery" [images]="productItem.images" />
+    <app-product-gallery [images]="productItem.images" (imageClick)="openGallery($event)" />
+
+    @if (modalOpened()) {
+      <app-product-image-modal
+        [images]="productItem.images"
+        [startIndex]="selectedImageIndex()"
+        (closed)="closeGallery()"
+      />
+    }
     <div class="info-btns">
       <div class="info">
         <div>

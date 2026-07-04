@@ -1,7 +1,7 @@
 <div class="gallery">
-  <div class="main-image">
+  <button class="main-image" (click)="openModal()">
     <img [src]="selectedImage()" alt="" />
-  </div>
+  </button>
 
   <div class="thumbnails">
     @for (image of images(); track image) {

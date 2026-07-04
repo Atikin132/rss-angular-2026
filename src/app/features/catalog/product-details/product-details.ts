@@ -9,6 +9,7 @@ import { CompareButton } from '../compare-button/compare-button';
 import { ProductPrice } from '../product-price/product-price';
 import { CartService } from '../../cart/services/cart.service';
 import { ProductReviewsBlock } from '../../reviews/product-reviews-block/product-reviews-block';
+import { ProductImageModal } from './product-image-modal/product-image-modal';
 
 @Component({
   selector: 'app-product-details',
@@ -20,6 +21,7 @@ import { ProductReviewsBlock } from '../../reviews/product-reviews-block/product
     CompareButton,
     ProductPrice,
     ProductReviewsBlock,
+    ProductImageModal,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
@@ -41,9 +43,20 @@ export class ProductDetailsPage {
       if (currentSlug !== null) {
         const fetchedProduct = await this.store.loadProductBySlug(currentSlug);
         this.product.set(fetchedProduct);
-        // eslint-disable-next-line
-        console.log(this.product());
       }
     });
+  }
+
+  modalOpened = signal(false);
+
+  selectedImageIndex = signal(0);
+
+  openGallery(index: number): void {
+    this.selectedImageIndex.set(index);
+    this.modalOpened.set(true);
+  }
+
+  closeGallery(): void {
+    this.modalOpened.set(false);
   }
 }

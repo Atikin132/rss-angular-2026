@@ -1,0 +1,22 @@
+<div
+  class="overlay"
+  tabindex="0"
+  (click)="onOverlayClick($event)"
+  (keydown)="onOverlayKeydown($event)"
+>
+  <div class="modal" role="dialog" aria-modal="true">
+    <button mat-icon-button class="close" (click)="close()">
+      <mat-icon>close</mat-icon>
+    </button>
+
+    <button mat-icon-button class="prev" (click)="previous()">
+      <mat-icon>arrow_back_ios</mat-icon>
+    </button>
+
+    <img class="image" [src]="currentImage()" alt="" />
+
+    <button mat-icon-button class="next" (click)="next()">
+      <mat-icon>arrow_forward_ios</mat-icon>
+    </button>
+  </div>
+</div>
