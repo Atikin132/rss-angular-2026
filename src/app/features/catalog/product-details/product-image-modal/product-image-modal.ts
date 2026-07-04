@@ -59,6 +59,10 @@ export class ProductImageModal implements OnInit, OnDestroy {
     this.currentIndex.update((index) => (index - 1 + this.images().length) % this.images().length);
   }
 
+  selectImage(index: number): void {
+    this.currentIndex.set(index);
+  }
+
   @HostListener('window:keydown.arrowright')
   onRight(): void {
     this.next();
