@@ -7,10 +7,18 @@
   />
   <div class="catalog-page">
     <div class="sort-search">
-      <app-sort [value]="sort()" (valueChange)="onSortChange($event)" />
-      <app-search [value]="search()" (valueChange)="onSearchChange($event)" />
+      <app-sort [value]="store.sortType()" (valueChange)="onSortChange($event)" />
+      <app-search [value]="store.searchQuery()" (valueChange)="onSearchChange($event)" />
     </div>
 
-    <app-product-grid [products]="filteredAndSortedProducts()" />
+    <app-product-grid [products]="products()" />
+
+    <app-pagination
+      [currentPage]="currentPage()"
+      [total]="total()"
+      [pageSize]="pageSize"
+      [loading]="loading()"
+      (pageChange)="onPageChange($event)"
+    />
   </div>
 </div>
