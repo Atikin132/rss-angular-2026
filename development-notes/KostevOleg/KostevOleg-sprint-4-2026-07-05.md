@@ -1,4 +1,4 @@
-# Sprint 5 Global Error Handling - 2026-07-05
+# Sprint 4 Global Error Handling - 2026-07-05
 
 ### Запись в дневник
 
