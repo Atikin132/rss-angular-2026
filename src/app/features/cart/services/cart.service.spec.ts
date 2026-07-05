@@ -5,6 +5,7 @@ import { vi } from 'vitest';
 import { Cart } from '../interfaces/cart.interface';
 import { CommercetoolsCart } from '../../../core/services/commercetools/commercetools.types';
 import { CartService } from './cart.service';
+import { SUPPRESS_ERROR_TOAST } from '../../../core/interceptors/error.interceptor';
 
 describe('CartService', () => {
   let service: CartService;
@@ -138,10 +139,16 @@ describe('CartService', () => {
     expect(cart.id).toBe('cart-id');
     expect(service.totalItems()).toBe(2);
     expect(httpMock.get).toHaveBeenCalledWith(expect.stringContaining('/active-cart'), {
+      context: expect.anything(),
       headers: {
         Authorization: 'Bearer token',
       },
     });
+    const [, options] = httpMock.get.mock.calls[0];
+
+    expect(options.context.get(SUPPRESS_ERROR_TOAST)(new HttpErrorResponse({ status: 404 }))).toBe(
+      true,
+    );
   });
 
   it('should create cart when active cart is not found', async () => {

@@ -41,3 +41,9 @@ body {
   min-height: 100vh;
   margin: 0;
 }
+
+.error-toast {
+  --mdc-snackbar-container-color: #b3261e;
+  --mdc-snackbar-supporting-text-color: #ffffff;
+  --mat-snack-bar-button-color: #ffffff;
+}
