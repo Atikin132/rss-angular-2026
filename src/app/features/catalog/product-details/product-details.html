@@ -5,15 +5,39 @@
     [categoryName]="productItem.category"
   />
   <div class="page-content">
-    <app-product-gallery class="gallery" [images]="productItem.images" />
+    <app-product-gallery
+      [images]="selectedVariant()?.images || productItem.images"
+      (imageClick)="openGallery($event)"
+    />
+    @if (modalOpened()) {
+      <app-product-image-modal
+        [images]="selectedVariant()?.images || productItem.images"
+        [startIndex]="selectedImageIndex()"
+        (closed)="closeGallery()"
+      />
+    }
     <div class="info-btns">
       <div class="info">
         <div>
           <p class="brand-name">{{ productItem.brand }}</p>
           <h2 class="product-name">{{ productItem.name }}</h2>
         </div>
-        <app-product-price [product]="productItem" />
+        @if (selectedVariant(); as variant) {
+          <app-product-price [product]="variant" />
+        }
         <p>{{ productItem.description }}</p>
+        <div class="variants">
+          @for (variant of productItem.variants; track variant.id) {
+            <button
+              mat-flat-button
+              class="variant-btn"
+              [class.active]="selectedVariant()?.id === variant.id"
+              (click)="selectVariant(variant)"
+            >
+              {{ variant.attributes['color'] || variant.sku }}
+            </button>
+          }
+        </div>
       </div>
       <div class="btns">
         <app-cart-button class="add-to-cart-btn" [product]="productItem" />

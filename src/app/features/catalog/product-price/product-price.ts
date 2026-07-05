@@ -1,5 +1,5 @@
 import { Component, computed, input } from '@angular/core';
-import { Product } from '../models/product.model';
+import { Variant } from '../models/product.model';
 import { CurrencyPipe } from '@angular/common';
 
 @Component({
@@ -9,7 +9,7 @@ import { CurrencyPipe } from '@angular/common';
   styleUrl: './product-price.scss',
 })
 export class ProductPrice {
-  product = input.required<Product>();
+  product = input.required<Variant>();
 
   readonly actualPrice = computed(() => this.product().discountedPrice ?? this.product().price);
 

@@ -15,7 +15,7 @@
         <h3 class="product-name">{{ productItem.name }}</h3>
         <p class="product-description">{{ productItem.description }}</p>
       </div>
-      <app-product-price [product]="productItem" />
+      <app-product-price [product]="productItem.variants[0]" />
     </div>
     <app-cart-button [product]="productItem" />
   </div>
