@@ -57,10 +57,6 @@ export class LoginPage {
     this.rememberMe.update((v) => !v);
   }
 
-  protected forgotPassword(): void {
-    // eslint-disable-next-line no-console
-    console.log('Forgot password clicked');
-  }
   protected async submit(): Promise<void> {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
