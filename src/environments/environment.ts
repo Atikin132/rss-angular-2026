@@ -4,9 +4,9 @@ export const environment = {
   commercetools: {
     projectKey: 'rss-angular-2026',
 
-    clientId: 'mjmEC5j9pQOKY51RM_ogYjwu',
+    clientId: 'xtQl3yHA10aukFQpW6ChG9II',
 
-    clientSecret: '2_cYPifx07oSb7JYLCv1o1ot1Z_gBr4H',
+    clientSecret: 'hoTFRolxdrAO2vahSbt8ACE7gYQ94d9x',
 
     spaClientId: 'RtIERiMEpIwvWuVdH5i0arbw',
 
