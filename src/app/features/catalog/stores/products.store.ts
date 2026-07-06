@@ -222,18 +222,27 @@ export const ProductsStore = signalStore(
         return [];
       }
 
-      let categoriesMap = store.categoriesMap();
-      const categoriesResult = await loadCategoriesIfNeeded(store.categories(), apiService);
-      if (categoriesResult) {
-        categoriesMap = categoriesResult.categoriesMap;
-        patchState(store, categoriesResult);
+      try {
+        patchState(store, { loading: true, error: null });
+
+        let categoriesMap = store.categoriesMap();
+        const categoriesResult = await loadCategoriesIfNeeded(store.categories(), apiService);
+        if (categoriesResult) {
+          categoriesMap = categoriesResult.categoriesMap;
+          patchState(store, categoriesResult);
+        }
+        const products = await Promise.all(
+          ids.map((id) =>
+            apiService.request<CommercetoolsProductProjection>(`/product-projections/${id}`),
+          ),
+        );
+        return products.map((product) => mapProduct(product, categoriesMap));
+      } catch {
+        patchState(store, { error: 'Failed to load products' });
+        return [];
+      } finally {
+        patchState(store, { loading: false });
       }
-      const products = await Promise.all(
-        ids.map((id) =>
-          apiService.request<CommercetoolsProductProjection>(`/product-projections/${id}`),
-        ),
-      );
-      return products.map((product) => mapProduct(product, categoriesMap));
     },
   })),
 );

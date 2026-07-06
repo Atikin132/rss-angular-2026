@@ -11,6 +11,7 @@ import { CartService } from '../../cart/services/cart.service';
 import { ProductReviewsBlock } from '../../reviews/product-reviews-block/product-reviews-block';
 import { ProductImageModal } from './product-image-modal/product-image-modal';
 import { MatButtonModule } from '@angular/material/button';
+import { Loader } from '../../../shared/components/loader/loader';
 
 @Component({
   selector: 'app-product-details',
@@ -24,6 +25,7 @@ import { MatButtonModule } from '@angular/material/button';
     ProductReviewsBlock,
     ProductImageModal,
     MatButtonModule,
+    Loader,
   ],
   templateUrl: './product-details.html',
   styleUrl: './product-details.scss',
@@ -36,7 +38,7 @@ export class ProductDetailsPage {
   readonly slug = input<string | null>(null);
 
   readonly product = signal<Product | null>(null);
-  isLoading = this.store.loading;
+  loading = this.store.loading;
 
   constructor() {
     this.cartService.ensureCart();

@@ -11,14 +11,18 @@
       <app-search [value]="store.searchQuery()" (valueChange)="onSearchChange($event)" />
     </div>
 
-    <app-product-grid [products]="products()" />
+    @if (loading()) {
+      <app-loader />
+    } @else {
+      <app-product-grid [products]="products()" />
 
-    <app-pagination
-      [currentPage]="currentPage()"
-      [total]="total()"
-      [pageSize]="pageSize"
-      [loading]="loading()"
-      (pageChange)="onPageChange($event)"
-    />
+      <app-pagination
+        [currentPage]="currentPage()"
+        [total]="total()"
+        [pageSize]="pageSize"
+        [loading]="loading()"
+        (pageChange)="onPageChange($event)"
+      />
+    }
   </div>
 </div>

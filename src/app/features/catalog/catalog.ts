@@ -6,9 +6,10 @@ import { PRODUCTS_ON_PAGE, ProductsStore } from './stores/products.store';
 import { ProductGrid } from './product-grid/product-grid';
 import { CartService } from '../cart/services/cart.service';
 import { Pagination } from './pagination/pagination';
+import { Loader } from '../../shared/components/loader/loader';
 @Component({
   selector: 'app-catalog',
-  imports: [ProductGrid, Search, Sort, Filters, Pagination],
+  imports: [ProductGrid, Search, Sort, Filters, Pagination, Loader],
   templateUrl: './catalog.html',
   styleUrl: './catalog.scss',
 })

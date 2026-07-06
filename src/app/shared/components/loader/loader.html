@@ -1,0 +1,6 @@
+<div class="loader" [class.fullscreen]="fullscreen()">
+  <div class="spinner"></div>
+  @if (text()) {
+    <p class="loader-text">{{ text() }}</p>
+  }
+</div>
