@@ -1,4 +1,6 @@
-@if (product(); as productItem) {
+@if (loading()) {
+  <app-loader />
+} @else if (product(); as productItem) {
   <app-product-breadcrumbs
     [productName]="productItem.name"
     [slug]="productItem.slug"
