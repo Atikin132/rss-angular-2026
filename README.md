@@ -1,7 +1,18 @@
-
 # NovaKrama
 ## Deploy
 [Deploy link](https://rss-angular-2026.vercel.app/)
+
+## Screenshots
+<img width="1279" height="742" alt="1" src="https://github.com/user-attachments/assets/6ca29190-2ae9-494f-9054-9b37b16d31a4" />
+<img width="1272" height="1333" alt="2" src="https://github.com/user-attachments/assets/e7ac01de-dfca-4eb6-a4a3-303b1e9fee54" />
+<img width="1271" height="1266" alt="10" src="https://github.com/user-attachments/assets/6ed037f3-908a-47c9-b018-5186979a0cf5" />
+<img width="1280" height="739" alt="3" src="https://github.com/user-attachments/assets/d530164d-ca0c-4aa3-bde4-cb9d77fe4470" />
+<img width="1280" height="740" alt="4" src="https://github.com/user-attachments/assets/f66eeb8e-488f-4565-a2f8-f35bdaa61d7b" />
+<img width="1280" height="1433" alt="5" src="https://github.com/user-attachments/assets/c896899c-5136-432f-9948-9a08475172db" />
+<img width="1280" height="743" alt="6" src="https://github.com/user-attachments/assets/507d7b4e-46d8-433c-ae3a-fb9da7fb6858" />
+<img width="1280" height="740" alt="7" src="https://github.com/user-attachments/assets/93c0a459-44bc-47df-a3a4-f86de40aac80" />
+<img width="1280" height="741" alt="8" src="https://github.com/user-attachments/assets/48452285-397a-4339-8f79-3fadbe69c63a" />
+<img width="1280" height="742" alt="9" src="https://github.com/user-attachments/assets/fc0f7716-fd08-478b-ba30-163cb6431266" />
 
 ## About
 This app is a **Rolling Scopes School Angular 2026 Q2 course** [team task](https://github.com/rolling-scopes-school/tasks/tree/master/angular/tasks/angular-team-task).
@@ -22,6 +33,9 @@ The platform allows users to browse products, search and filter catalog items, m
 ## Meeting Notes
 - [Meeting — 2026-05-16](https://github.com/Atikin132/rss-angular-2026/blob/main/meetings-notes/meeting-2026-05-16.md)
 - [Meeting — 2026-05-19](https://github.com/Atikin132/rss-angular-2026/blob/main/meetings-notes/meeting-2026-05-19.md)
+
+## Demonstration videos
+- [Error, loading, 404](https://youtu.be/uudT4OrPhUg)
 
 ## Tech stack
 
