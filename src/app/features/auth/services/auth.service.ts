@@ -2,13 +2,14 @@ import { Injectable, signal, inject } from '@angular/core';
 import { ApiService } from '../../../core/services/commercetools/commercetools-api.service';
 import { RegisterRequests } from '../models/api/register-request.model';
 import { Customer } from '../../../core/models/customer.model';
-import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { LoginResponse } from '../models/api/login-response.model';
 import { environment } from '../../../../environments/environment';
 import { firstValueFrom } from 'rxjs';
 import { CustomerService } from './customer.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SUPPRESS_ERROR_TOAST } from '../../../core/interceptors/error.interceptor';
 
 const ACCESS_TOKEN_KEY = 'accessToken';
 const REFRESH_TOKEN_KEY = 'refreshToken';
@@ -32,6 +33,16 @@ export class AuthService {
       horizontalPosition: 'right',
       verticalPosition: 'top',
     });
+  }
+
+  private isScopeError(error: unknown): boolean {
+    return (
+      error instanceof HttpErrorResponse &&
+      (error.error?.error === 'invalid_scope' ||
+        String(error.error?.error_description ?? error.error?.message ?? '')
+          .toLowerCase()
+          .includes('scope'))
+    );
   }
 
   private findAddressId(customer: Customer, externalId: string): string {
@@ -181,20 +192,19 @@ export class AuthService {
           'Content-Type': 'application/x-www-form-urlencoded',
         },
       };
+      const scopedTokenRequestOptions = {
+        ...tokenRequestOptions,
+        context: new HttpContext().set(SUPPRESS_ERROR_TOAST, (error) => this.isScopeError(error)),
+      };
 
       let response: LoginResponse;
 
       try {
         response = await firstValueFrom(
-          this.http.post<LoginResponse>(tokenUrl, scopedBody.toString(), tokenRequestOptions),
+          this.http.post<LoginResponse>(tokenUrl, scopedBody.toString(), scopedTokenRequestOptions),
         );
       } catch (error) {
-        const scopeError =
-          error instanceof HttpErrorResponse &&
-          (error.error?.error === 'invalid_scope' ||
-            String(error.error?.error_description ?? error.error?.message ?? '')
-              .toLowerCase()
-              .includes('scope'));
+        const scopeError = this.isScopeError(error);
 
         if (!scopeError) {
           throw error;
