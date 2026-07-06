@@ -1,0 +1,27 @@
+:host {
+  display: block;
+  margin-top: 40px;
+}
+
+.reviews-block {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.title {
+  font-size: 20px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.empty {
+  opacity: 0.6;
+  font-size: 14px;
+}

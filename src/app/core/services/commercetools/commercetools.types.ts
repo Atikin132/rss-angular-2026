@@ -46,6 +46,7 @@ export interface CommercetoolsProductProjection {
   categories?: CategoryReference[];
   masterVariant: ProductVariant;
   attributes?: ProductAttribute[];
+  variants: ProductVariant[];
 }
 
 export interface PagedResponse<T> {

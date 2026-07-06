@@ -1,4 +1,4 @@
-import { Component, HostListener, inject, output, signal } from '@angular/core';
+import { Component, computed, HostListener, inject, output, signal } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatToolbarModule } from '@angular/material/toolbar';
@@ -24,13 +24,13 @@ export class Header {
   private readonly customerService = inject(CustomerService);
   protected readonly authService = inject(AuthService);
 
+  protected readonly exact = {
+    exact: true,
+  };
+
   logout = output<void>();
 
   isMenuOpen = signal<boolean>(false);
-
-  get username(): string {
-    return this.customerService.fullName();
-  }
 
   toggleMenu(): void {
     this.isMenuOpen.update((v) => !v);
@@ -40,7 +40,7 @@ export class Header {
     this.isMenuOpen.set(false);
   }
 
-  navItems = [
+  private readonly commonItems = [
     {
       type: 'link',
       label: 'Main',
@@ -65,17 +65,41 @@ export class Header {
     },
     {
       type: 'link',
-      label: this.username,
-      icon: 'person',
-      route: '/profile',
-    },
-    {
-      type: 'link',
       label: 'About',
       icon: 'info',
       route: '/about',
     },
   ];
+
+  protected readonly navItems = computed(() => {
+    const items = [...this.commonItems];
+
+    if (this.authService.isAuthenticated()) {
+      items.push({
+        type: 'link',
+        label: this.customerService.fullName(),
+        icon: 'person',
+        route: '/profile',
+      });
+    } else {
+      items.push(
+        {
+          type: 'link',
+          label: 'Login',
+          icon: 'login',
+          route: '/login',
+        },
+        {
+          type: 'link',
+          label: 'Register',
+          icon: 'person_add',
+          route: '/register',
+        },
+      );
+    }
+
+    return items;
+  });
 
   onLogout(): void {
     this.logout.emit();

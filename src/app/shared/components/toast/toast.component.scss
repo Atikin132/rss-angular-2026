@@ -1,0 +1,26 @@
+:host {
+  display: block;
+}
+
+.toast {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr) 40px;
+  align-items: center;
+  gap: 12px;
+  min-width: min(420px, calc(100vw - 48px));
+  max-width: 560px;
+  color: #ffffff;
+}
+
+.toast__icon {
+  color: #ffffff;
+}
+
+.toast__message {
+  overflow-wrap: anywhere;
+  line-height: 1.35;
+}
+
+.toast__close {
+  color: #ffffff;
+}

@@ -50,10 +50,24 @@
 }
 
 .cart-item__price {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
   margin: 8px 0 0;
   color: #0074d9;
   font-size: 18px;
   font-weight: 700;
+}
+
+.cart-item__price-current {
+  color: #0074d9;
+  font-weight: 700;
+}
+
+.cart-item__price-old {
+  color: #777777;
+  font-size: 14px;
+  text-decoration: line-through;
 }
 
 .cart-item__actions {

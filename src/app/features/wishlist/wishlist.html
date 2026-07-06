@@ -1,5 +1,9 @@
 <div class="page-content">
   <div class="wishlist-page">
-    <app-product-grid [products]="wishlistProducts()" />
+    @if (loading()) {
+      <app-loader />
+    } @else {
+      <app-product-grid [products]="wishlistProducts()" />
+    }
   </div>
 </div>

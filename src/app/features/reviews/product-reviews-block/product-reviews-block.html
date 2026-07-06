@@ -1,0 +1,17 @@
+<div class="reviews-block">
+  <h3 class="title">Reviews</h3>
+
+  @if (userId()) {
+    <app-review-form (reviewSubmitted)="addReview($event)" />
+  }
+
+  <div class="list">
+    @if (reviews().length === 0) {
+      <p class="empty">No reviews yet</p>
+    } @else {
+      @for (review of reviews(); track review.id) {
+        <app-review-card [review]="review" />
+      }
+    }
+  </div>
+</div>

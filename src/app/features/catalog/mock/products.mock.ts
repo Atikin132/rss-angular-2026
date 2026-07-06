@@ -14,6 +14,21 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'smartphones',
     brand: 'Apple',
     inStock: true,
+    variants: [
+      {
+        id: 1,
+        sku: 'IPHONE-15-PRO-001',
+        image: 'https://placehold.co/300x450?text=iPhone%2015%20Pro',
+        images: [],
+        price: 1499,
+        discountedPrice: 1299,
+        currency: 'USD',
+        attributes: {
+          color: 'Natural Titanium',
+          storage: '256 GB',
+        },
+      },
+    ],
   },
   {
     id: '2',
@@ -27,6 +42,7 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'smartphones',
     brand: 'Samsung',
     inStock: true,
+    variants: [],
   },
   {
     id: '3',
@@ -41,6 +57,7 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'laptops',
     brand: 'Apple',
     inStock: true,
+    variants: [],
   },
   {
     id: '4',
@@ -54,6 +71,7 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'audio',
     brand: 'Sony',
     inStock: true,
+    variants: [],
   },
   {
     id: '5',
@@ -67,6 +85,7 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'peripherals',
     brand: 'Logitech',
     inStock: true,
+    variants: [],
   },
   {
     id: '6',
@@ -81,6 +100,7 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'watch',
     brand: 'Apple',
     inStock: true,
+    variants: [],
   },
   {
     id: '7',
@@ -94,6 +114,7 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'laptops',
     brand: 'ASUS',
     inStock: false,
+    variants: [],
   },
   {
     id: '8',
@@ -107,6 +128,7 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'peripherals',
     brand: 'Keychron',
     inStock: true,
+    variants: [],
   },
   {
     id: '9',
@@ -121,6 +143,7 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'shoes',
     brand: 'Nike',
     inStock: true,
+    variants: [],
   },
   {
     id: '10',
@@ -134,6 +157,7 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'clothing',
     brand: 'Uniqlo',
     inStock: true,
+    variants: [],
   },
   {
     id: '11',
@@ -148,6 +172,7 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'clothing',
     brand: "Levi's",
     inStock: true,
+    variants: [],
   },
   {
     id: '12',
@@ -161,6 +186,7 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'accessories',
     brand: 'Zara',
     inStock: true,
+    variants: [],
   },
   {
     id: '13',
@@ -174,6 +200,7 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'decor',
     brand: 'HomeComfort',
     inStock: true,
+    variants: [],
   },
   {
     id: '14',
@@ -188,6 +215,7 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'furniture',
     brand: 'ErgoSeat',
     inStock: true,
+    variants: [],
   },
   {
     id: '15',
@@ -201,5 +229,6 @@ export const PRODUCTS_MOCK: Product[] = [
     category: 'accessories',
     brand: 'HydroFlask',
     inStock: false,
+    variants: [],
   },
 ];

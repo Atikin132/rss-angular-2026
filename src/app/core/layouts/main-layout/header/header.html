@@ -1,6 +1,6 @@
 <header class="header">
   <mat-toolbar class="toolbar">
-    <div class="app-name">NovaKrama</div>
+    <a class="app-name" [routerLink]="'/'">NovaKrama</a>
 
     <button class="burger" mat-icon-button (click)="toggleMenu()">
       <mat-icon>
@@ -10,7 +10,7 @@
 
     <nav class="nav" [class.open]="isMenuOpen()">
       <ul class="nav-list">
-        @for (item of navItems; track item.route) {
+        @for (item of navItems(); track item.route) {
           <li>
             @switch (item.type) {
               @case ('link') {
@@ -19,7 +19,7 @@
                   mat-button
                   [routerLink]="item.route"
                   routerLinkActive="active-link"
-                  [routerLinkActiveOptions]="{ exact: true }"
+                  [routerLinkActiveOptions]="exact"
                   (click)="closeMenu()"
                 >
                   <mat-icon>
@@ -32,7 +32,7 @@
                 </a>
               }
               @case ('cart') {
-                <app-cart-badge (click)="closeMenu()"> </app-cart-badge>
+                <app-cart-badge (click)="closeMenu()" />
               }
             }
           </li>

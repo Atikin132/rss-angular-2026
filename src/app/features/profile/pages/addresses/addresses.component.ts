@@ -1,4 +1,11 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import {
   AbstractControl,
   FormControl,
@@ -31,6 +38,7 @@ const allowedCountryCodes = ['US', 'DE', 'FR', 'PL', 'GB', 'BY', 'RU'];
   ],
   templateUrl: './addresses.component.html',
   styleUrl: './addresses.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AddressesComponent {
   private readonly profileService = inject(ProfileService);

@@ -1,0 +1,9 @@
+<div class="toast" [class.toast_error]="data.type === 'error'">
+  <mat-icon class="toast__icon" aria-hidden="true">error</mat-icon>
+
+  <span class="toast__message">{{ data.message }}</span>
+
+  <button mat-icon-button type="button" class="toast__close" aria-label="Close" (click)="close()">
+    <mat-icon aria-hidden="true">close</mat-icon>
+  </button>
+</div>

@@ -1,7 +1,13 @@
 @let productItem = product();
 
 <div class="card" [routerLink]="['product', productItem.slug]">
-  <img class="poster" [src]="productItem.image" [alt]="productItem.name" />
+  <div class="image-wrapper">
+    <img class="poster" [src]="productItem.image" [alt]="productItem.name" />
+
+    <app-compare-button class="compare-btn" [product]="productItem" />
+    <app-wishlist-button class="wishlist-btn" [product]="productItem" />
+    <app-product-rating-badge class="rating-badge" [productId]="productItem.id" />
+  </div>
 
   <div class="card-info">
     <div class="info">
@@ -9,11 +15,8 @@
         <h3 class="product-name">{{ productItem.name }}</h3>
         <p class="product-description">{{ productItem.description }}</p>
       </div>
-      <app-product-price [product]="productItem" />
+      <app-product-price [product]="productItem.variants[0]" />
     </div>
     <app-cart-button [product]="productItem" />
   </div>
-
-  <app-compare-button class="compare-btn" [product]="productItem" />
-  <app-wishlist-button class="wishlist-btn" [product]="productItem" />
 </div>

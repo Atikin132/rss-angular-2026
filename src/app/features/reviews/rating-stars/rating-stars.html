@@ -1,0 +1,9 @@
+<div class="stars" (mouseleave)="leaveStars()">
+  @for (star of stars; track star) {
+    <button type="button" class="star" (mouseenter)="hoverStar(star)" (click)="selectRating(star)">
+      <mat-icon [class.filled]="isFilled(star)">
+        {{ isFilled(star) ? 'star' : 'star_border' }}
+      </mat-icon>
+    </button>
+  }
+</div>

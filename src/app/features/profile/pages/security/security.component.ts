@@ -1,4 +1,4 @@
-import { Component, effect, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -18,6 +18,7 @@ import { ProfileService } from '../../services/profile.service';
   ],
   templateUrl: './security.component.html',
   styleUrl: './security.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SecurityComponent {
   private readonly profileService = inject(ProfileService);

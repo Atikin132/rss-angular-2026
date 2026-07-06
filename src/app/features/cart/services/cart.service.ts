@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Cart } from '../interfaces/cart.interface';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpContext, HttpErrorResponse } from '@angular/common/http';
 import { firstValueFrom } from 'rxjs';
 import { environment } from '../../../../environments/environment';
 import {
@@ -9,6 +9,7 @@ import {
 } from '../../../core/services/commercetools/commercetools.types';
 import { mapCart } from '../mappers/cart.mapper';
 import { getCustomerToken } from '../../../shared/utils/customer-token';
+import { SUPPRESS_ERROR_TOAST } from '../../../core/interceptors/error.interceptor';
 
 @Injectable({
   providedIn: 'root',
@@ -42,6 +43,7 @@ export class CartService {
     try {
       const activeCart = await firstValueFrom(
         this.http.get<CommercetoolsCart>(`${this.baseUrl}/active-cart`, {
+          context: new HttpContext().set(SUPPRESS_ERROR_TOAST, (error) => error.status === 404),
           headers: {
             Authorization: `Bearer ${token}`,
           },

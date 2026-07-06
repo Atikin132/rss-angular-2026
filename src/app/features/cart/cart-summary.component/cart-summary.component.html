@@ -5,7 +5,12 @@
     <span>Subtotal</span>
     <strong>{{ subtotalPrice() | price }}</strong>
   </div>
-
+  @if (subtotalPrice() > totalPrice()) {
+    <div class="cart-summary__row cart-summary__row--discount">
+      <span>Discount</span>
+      <strong>-{{ subtotalPrice() - totalPrice() | price }}</strong>
+    </div>
+  }
   <div class="cart-summary__row">
     <span>Shipping</span>
     <strong class="cart-summary__accent">FREE</strong>

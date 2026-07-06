@@ -2,6 +2,11 @@
   padding: 1rem;
 }
 
+.app-name {
+  text-decoration: none;
+  color: var(--mat-sys-on-primary-container);
+}
+
 .toolbar {
   display: flex;
   justify-content: space-between;
