@@ -17,7 +17,7 @@ import { SortType } from '../sort/sort';
 const BRAND_FACET_ENDPOINT = '&facet=variants.attributes.brand as brand';
 const PRODUCTS_ENDPOINT = '/product-projections/search';
 const CATEGORIES_ENDPOINT = '/categories';
-export const PRODUCTS_ON_PAGE = 6;
+export const PRODUCTS_ON_PAGE = 12;
 
 interface ProductsState {
   products: Product[];

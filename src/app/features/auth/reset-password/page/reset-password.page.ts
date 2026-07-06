@@ -36,10 +36,6 @@ export class ResetPasswordPage {
       this.form.markAllAsTouched();
       return;
     }
-
-    // eslint-disable-next-line no-console
-    console.log('Reset password email:', this.form.getRawValue());
-
     void this.router.navigate(['/login']);
   }
 }

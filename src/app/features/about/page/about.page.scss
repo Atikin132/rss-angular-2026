@@ -113,6 +113,12 @@ p {
   text-transform: uppercase;
 }
 
+.github-link {
+  text-decoration: none;
+  color: var(--mat-sys-on-primary-container);
+  cursor: pointer;
+}
+
 .mentor-card {
   background: #61798e;
   color: #ffffff;
@@ -141,6 +147,10 @@ p {
 
 .avatar {
   border-radius: 50%;
+}
+
+.yauhen-logo {
+  background-image: url('/assets/yauhen-logo.jfif');
 }
 
 .nikita-logo {
@@ -238,11 +248,16 @@ p {
   background: #b8d9f6;
 }
 
-.review-card button {
-  display: block;
+.review-card .review-link {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-decoration: none;
   width: 124px;
   height: 36px;
-  margin: 34px 0 0 auto;
+  position: absolute;
+  right: 40px;
+  margin-top: 34px;
   border: 0;
   border-radius: 999px;
   background: #0077df;
