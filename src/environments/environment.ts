@@ -4,16 +4,16 @@ export const environment = {
   commercetools: {
     projectKey: 'rss-angular-2026',
 
-    clientId: 'xtQl3yHA10aukFQpW6ChG9II',
+    clientId: 'buQ8eBmg3Ypt0eohLuHCUJm2',
 
-    clientSecret: 'hoTFRolxdrAO2vahSbt8ACE7gYQ94d9x',
+    clientSecret: 'Qr_Z8xPCuaLoI8w78A5RdwzQhQJf29Ly',
 
-    spaClientId: 'RtIERiMEpIwvWuVdH5i0arbw',
+    spaClientId: 'buQ8eBmg3Ypt0eohLuHCUJm2',
 
-    spaClientSecret: '9SNh8yaQJCfH5GFpDYHGVDj6NL166rnR',
+    spaClientSecret: 'Qr_Z8xPCuaLoI8w78A5RdwzQhQJf29Ly',
 
-    authUrl: 'https://auth.europe-west1.gcp.commercetools.com',
+    authUrl: 'https://auth.eu-central-1.aws.commercetools.com',
 
-    apiUrl: 'https://api.europe-west1.gcp.commercetools.com',
+    apiUrl: 'https://api.eu-central-1.aws.commercetools.com',
   },
 };
